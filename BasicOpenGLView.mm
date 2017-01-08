@@ -5,7 +5,7 @@
 //
 // Version:		1.1 - minor fixes.
 //				1.0 - Original release.
-//				
+//
 //
 // Disclaimer:	IMPORTANT:  This Apple software is supplied to you by Apple Inc. ("Apple")
 //				in consideration of your agreement to the following terms, and your use,
@@ -122,7 +122,7 @@ static CFAbsoluteTime gStartTime = 0.0f;
 
 // set app start time
 static void setStartTime (void)
-{	
+{
 	gStartTime = CFAbsoluteTimeGetCurrent ();
 }
 
@@ -130,7 +130,7 @@ static void setStartTime (void)
 
 // return float elpased time in seconds since app start
 static CFAbsoluteTime getElapsedTime (void)
-{	
+{
 	return CFAbsoluteTimeGetCurrent () - gStartTime;
 }
 
@@ -207,7 +207,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 {
     //glColor3f (0.0, 0.0, 0.0);
     //drawFace(fSize, faceInd);
-    
+
     //glPushMatrix() ;
     //glTranslatef(, , );
 
@@ -220,7 +220,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
         case orange :   glColor3f (1.0, 0.5, 0.0); break;
         case green :    glColor3f (0.0, 1.0, 0.0); break;
     }
-    
+
     drawFace(fSize*0.92, faceInd);
 
 }
@@ -245,52 +245,52 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
             AngleAxisf ax(_curAngle, getVectorFromColor(_rotatingSide).cast<float>());
             rotMatRotating.block<3,3>(0,0) = ax.matrix();
         }
-        
+
         const float cubieSize = 0.4;
         cubeToUse.makeCanon();
-        
+
         const EdgeList& edges = cubeToUse.getEdges();
         for (EdgeList::const_iterator it = edges.begin(); it != edges.end() && true; ++it)
         {
             glPushMatrix();
-            
+
             // check if we are rotating this side.
             if (_isRotating && std::find(it->getPosition().begin(), it->getPosition().end(), _rotatingSide) != it->getPosition().end())
                 glMultMatrix(rotMatRotating);
-            
+
             Vector3f xAxis(1,0,0);
             Vector3f yAxis(0,1,0);
             Vector3f firstColPos = getVectorFromColor(it->getPosition()[0]).cast<float>();
             Vector3f secondColPos = getVectorFromColor(it->getPosition()[1]).cast<float>();
             Vector3f cubePos = firstColPos + secondColPos;
-            
+
             glTranslate(cubePos*cubieSize);
-            
-            
+
+
             // generate rotation so first color is x and second color is y.
             Matrix3f rotMat;
             rotMat.col(0) = firstColPos;
             rotMat.col(1) = secondColPos;
             rotMat.col(2) = secondColPos.cross(firstColPos);
-            
+
             //printf("trans(%f, %f, %f) %s\n", cubePos.x(), cubePos.y(), cubePos.z(), colorName(it->getColor()[1]).c_str());
-            
+
             Matrix4f rotMat4 = Matrix4f::Identity();
             rotMat4.block<3,3>(0,0) = rotMat;
             glMultMatrix(rotMat4);
-            
+
             drawCubFace(cubieSize/2.0, 2, it->getColor()[0]);
             drawCubFace(cubieSize/2.0, 3, it->getColor()[1]);
-            
+
             glPopMatrix();
         }
-        
-        
+
+
         const CornerList& corners = cubeToUse.getCorners();
         for (CornerList::const_iterator it = corners.begin(); it != corners.end()  && true; ++it)
         {
             glPushMatrix();
-            
+
             // check if we are rotating this side.
             if (_isRotating &&
                 std::find(it->getPosition().begin(), it->getPosition().end(), _rotatingSide) != it->getPosition().end())
@@ -303,62 +303,62 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
             Vector3f secondColPos = getVectorFromColor(it->getPosition()[1]).cast<float>();
             Vector3f thirdColPos = getVectorFromColor(it->getPosition()[2]).cast<float>();
             Vector3f cubePos = firstColPos + secondColPos + thirdColPos;
-            
+
             glTranslate(cubePos*cubieSize);
-            
-            
+
+
             // generate rotation so first color is x and second color is y.
             Matrix3f rotMat;
             rotMat.col(0) = firstColPos;
             rotMat.col(1) = secondColPos;
             rotMat.col(2) = thirdColPos;
-            
+
             //printf("trans(%f, %f, %f) %s\n", cubePos.x(), cubePos.y(), cubePos.z(), colorName(it->getColor()[1]).c_str());
-            
+
             Matrix4f rotMat4 = Matrix4f::Identity();
             rotMat4.block<3,3>(0,0) = rotMat;
             glMultMatrix(rotMat4);
-            
+
             drawCubFace(cubieSize/2.0, 2, it->getColor()[0]);
             drawCubFace(cubieSize/2.0, 3, it->getColor()[1]);
             drawCubFace(cubieSize/2.0, 0, it->getColor()[2]);
-            
+
             glPopMatrix();
         }
-        
-        for (auto rotCol : RubikColors())
+
+        for (auto rotCol : RubikBase::RubikColors)
         {
             glPushMatrix();
-            
+
             // check if we are rotating this side.
-            if (_isRotating && rotCol == _rotatingSide) 
+            if (_isRotating && rotCol == _rotatingSide)
                 glMultMatrix(rotMatRotating);
 
-            
+
             Vector3f xAxis(1,0,0);
             Vector3f firstColPos = getVectorFromColor(rotCol).cast<float>();
             Vector3f cubePos = firstColPos;
-            
+
             glTranslate(cubePos*cubieSize);
-            
+
             // generate rotation so first color is x and second color is y.
             Matrix3f rotMat;
             rotMat.col(0) = firstColPos;
             rotMat.col(1) = Vector3f(firstColPos.y(), firstColPos.z(), firstColPos.x());
             rotMat.col(2) = rotMat.col(1).cross(firstColPos);
-            
+
             //printf("trans(%f, %f, %f) %s\n", cubePos.x(), cubePos.y(), cubePos.z(), colorName(it->getColor()[1]).c_str());
-            
+
             Matrix4f rotMat4 = Matrix4f::Identity();
             rotMat4.block<3,3>(0,0) = rotMat;
             glMultMatrix(rotMat4);
-            
+
             drawCubFace(cubieSize/2.0, 2, rotCol);
-            
+
             glPopMatrix();
-            
+
         }
-        
+
     }
 }
 
@@ -368,7 +368,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
     {
         ColMove curMove = _moveSeq.front();
         _moveSeq.pop_front();
-        
+
         _isRotating = true;
         _cubeSrc = _cube;
         _rotatingSide = curMove.first;
@@ -420,19 +420,19 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	far = -camera.viewPos.z + shapeSize * 0.5;
 	if (far < 1.0)
 		far = 1.0;
-	radians = 0.0174532925 * camera.aperture / 2; // half aperture degrees to radians 
+	radians = 0.0174532925 * camera.aperture / 2; // half aperture degrees to radians
 	wd2 = near * tan(radians);
 	ratio = camera.viewWidth / (float) camera.viewHeight;
 	if (ratio >= 1.0) {
 		left  = -ratio * wd2;
 		right = ratio * wd2;
 		top = wd2;
-		bottom = -wd2;	
+		bottom = -wd2;
 	} else {
 		left  = -wd2;
 		right = wd2;
 		top = wd2 / ratio;
-		bottom = -wd2 / ratio;	
+		bottom = -wd2 / ratio;
 	}
 	glFrustum (left, right, bottom, top, near, far);
 	[self updateCameraString];
@@ -444,7 +444,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 - (void) updateModelView
 {
     [[self openGLContext] makeCurrentContext];
-	
+
 	// move view
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity ();
@@ -453,9 +453,9 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 			   camera.viewPos.y + camera.viewDir.y,
 			   camera.viewPos.z + camera.viewDir.z,
 			   camera.viewUp.x, camera.viewUp.y ,camera.viewUp.z);
-			
+
 	// if we have trackball rotation to map (this IS the test I want as it can be explicitly 0.0f)
-	if ((gTrackingViewInfo == self) && gTrackBallRotation[0] != 0.0f) 
+	if ((gTrackingViewInfo == self) && gTrackBallRotation[0] != 0.0f)
 		glRotatef (gTrackBallRotation[0], gTrackBallRotation[1], gTrackBallRotation[2], gTrackBallRotation[3]);
 	else {
 	}
@@ -476,13 +476,13 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 - (void) resizeGL
 {
 	NSRect rectView = [self bounds];
-	
+
 	// ensure camera knows size changed
 	if ((camera.viewHeight != rectView.size.height) ||
 	    (camera.viewWidth != rectView.size.width)) {
 		camera.viewHeight = rectView.size.height;
 		camera.viewWidth = rectView.size.width;
-		
+
 		glViewport (0, 0, camera.viewWidth, camera.viewHeight);
 		[self updateProjection];  // update projection matrix
 		[self updateInfoString];
@@ -501,9 +501,9 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	gDollyPanStartPoint[0] = location.x;
 	gDollyPanStartPoint[1] = location.y;
 }
-	
+
 // ---------------------------------
-	
+
 // move camera in x/y plane
 - (void)mousePan: (NSPoint) location
 {
@@ -526,12 +526,12 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
    camera.viewPos.x = 0.0;
    camera.viewPos.y = 0.0;
    camera.viewPos.z = -10.0;
-   camera.viewDir.x = -camera.viewPos.x; 
-   camera.viewDir.y = -camera.viewPos.y; 
+   camera.viewDir.x = -camera.viewPos.x;
+   camera.viewDir.y = -camera.viewPos.y;
    camera.viewDir.z = -camera.viewPos.z;
 
-   camera.viewUp.x = 0;  
-   camera.viewUp.y = 1; 
+   camera.viewUp.x = 0;
+   camera.viewUp.y = 1;
    camera.viewUp.z = 0;
 }
 
@@ -547,7 +547,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	// do velocities
 	for (i = 0; i < 3; i++) {
 		rVel[i] += rAccel[i] * deltaTime * 30.0;
-		
+
 		if (rVel[i] > fVMax) {
 			rAccel[i] *= -1.0;
 			rVel[i] = fVMax;
@@ -555,9 +555,9 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 			rAccel[i] *= -1.0;
 			rVel[i] = -fVMax;
 		}
-		
+
 		rRot[i] += rVel[i] * deltaTime * 30.0;
-		
+
 		while (rRot[i] > 360.0)
 			rRot[i] -= 360.0;
 		while (rRot[i] < -360.0)
@@ -582,7 +582,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	BOOL shouldDraw = NO;
     CFTimeInterval deltaTime = CFAbsoluteTimeGetCurrent () - time;
 	if (fAnimate) {
-			
+
 		if (deltaTime > 10.0) // skip pauses
 			return;
 		else {
@@ -615,18 +615,18 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
                 _curAngle = _dstAngle;
             }
         }
-        
+
         [self checkRotationBuffer];
 
         shouldDraw = YES; // force redraw
     }
-    
+
 	time = CFAbsoluteTimeGetCurrent (); //reset time in all cases
 	// if we have current messages
 	if (((getElapsedTime () - msgTime) < gMsgPresistance) || ((getElapsedTime () - gErrorTime) < gMsgPresistance))
 		shouldDraw = YES; // force redraw
-    
-	if (YES == shouldDraw) 
+
+	if (YES == shouldDraw)
 		[self drawRect:[self bounds]]; // redraw now instead dirty to enable updates during live resize
 }
 
@@ -664,14 +664,14 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 
 - (void) updateCameraString
 { // update info string texture
-	static recCamera savedCamera; 
-	
+	static recCamera savedCamera;
+
 	// This is a compromise between a heavy comparison
 	// and updating the camera texture when not needed
 	// what is faster the comparison or the texture update
 	// only empirical data on a particular configuration
 	// will yield a real answer
-	
+
 	if  ( (savedCamera.viewPos.x == camera.viewPos.x) &&
 		  (savedCamera.viewPos.y == camera.viewPos.y) &&
 		  (savedCamera.viewPos.z == camera.viewPos.z) &&
@@ -691,7 +691,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 			camStringTex = [[GLString alloc] initWithString:string withAttributes:stanStringAttrib withTextColor:[NSColor colorWithDeviceRed:1.0f green:1.0f blue:1.0f alpha:1.0f] withBoxColor:[NSColor colorWithDeviceRed:0.5f green:0.5f blue:0.5f alpha:0.5f] withBorderColor:[NSColor colorWithDeviceRed:0.8f green:0.8f blue:0.8f alpha:0.8f]];
 		}
 	}
-	
+
 	savedCamera = camera;
     savedNbMove =  curNbMove;
 }
@@ -700,14 +700,14 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 
 // draw text info using our GLString class for much more optimized text drawing
 - (void) drawInfo
-{	
+{
 	GLint matrixMode;
 	GLboolean depthTest = glIsEnabled (GL_DEPTH_TEST);
 	GLfloat height, width, messageTop = 10.0f;
-	
+
 	height = camera.viewHeight;
 	width = camera.viewWidth;
-		
+
 	// set orthograhic 1:1  pixel transform in local view coords
 	glGetIntegerv (GL_MATRIX_MODE, &matrixMode);
 	glMatrixMode (GL_PROJECTION);
@@ -718,7 +718,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 			glLoadIdentity ();
 			glScalef (2.0f / width, -2.0f /  height, 1.0f);
 			glTranslatef (-width / 2.0f, -height / 2.0f, 0.0f);
-			
+
 			glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
 			[infoStringTex drawAtPoint:NSMakePoint (10.0f, height - [infoStringTex frameSize].height - 10.0f)];
 			[camStringTex drawAtPoint:NSMakePoint (10.0f, messageTop)];
@@ -726,7 +726,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 
 			if (fDrawHelp)
 				[helpStringTex drawAtPoint:NSMakePoint (floor ((width - [helpStringTex frameSize].width) / 2.0f), floor ((height - [helpStringTex frameSize].height) / 3.0f))];
-			
+
 			if (fDrawCaps) {
 				GLint renderer;
 				[[self pixelFormat] getValues:&renderer forAttribute:NSOpenGLPFARendererID forVirtualScreen:[[self openGLContext] currentVirtualScreen]];
@@ -768,7 +768,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	fAnimate = 1 - fAnimate;
 	if (fAnimate)
 		[animateMenuItem setState: NSOnState];
-	else 
+	else
 		[animateMenuItem setState: NSOffState];
 }
 
@@ -803,7 +803,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 				fDrawCaps = 1 - fDrawCaps;
 				[self setNeedsDisplay: YES];
 				break;
-                
+
             case '1':
                 curNbMove = 0;
                 [self updateCameraString];
@@ -890,7 +890,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 		gTrackBallRotation [0] = gTrackBallRotation [1] = gTrackBallRotation [2] = gTrackBallRotation [3] = 0.0f;
 	}
 	gDolly = GL_FALSE; // no dolly
-	gPan = GL_TRUE; 
+	gPan = GL_TRUE;
 	gTrackball = GL_FALSE; // no trackball
 	gDollyPanStartPoint[0] = location.x;
 	gDollyPanStartPoint[1] = location.y;
@@ -929,7 +929,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 		if (gTrackBallRotation[0] != 0.0)
 			addToRotationTrackball (gTrackBallRotation, worldRotation);
 		gTrackBallRotation [0] = gTrackBallRotation [1] = gTrackBallRotation [2] = gTrackBallRotation [3] = 0.0f;
-	} 
+	}
 	gTrackingViewInfo = NULL;
 }
 
@@ -1000,22 +1000,22 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 
 
 - (void) drawRect:(NSRect)rect
-{		
+{
 	// setup viewport and prespective
 	[self resizeGL]; // forces projection matrix update (does test for size changes)
 	[self updateModelView];  // update model view matrix for object
 
 	// clear our drawable
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	// model view and projection matricies already set
-    
+
     [self drawCubies];
 
 	//drawCube (1.5f); // draw scene
     if (fInfo)
 		[self drawInfo];
-		
+
 	if ([self inLiveResize] && !fAnimate)
 		glFlush ();
 	else
@@ -1036,11 +1036,11 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	// init GL stuff here
 	glEnable(GL_DEPTH_TEST);
 
-	glShadeModel(GL_SMOOTH);    
+	glShadeModel(GL_SMOOTH);
 	//glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
 	glPolygonOffset (1.0f, 1.0f);
-	
+
 	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
 	[self resetCamera];
 	shapeSize = 7.0f; // max radius of of objects
@@ -1051,7 +1051,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 	[stanStringAttrib setObject:font forKey:NSFontAttributeName];
 	[stanStringAttrib setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
 	[font release];
-	
+
 	// ensure strings are created
 	[self createHelpString];
 	[self createMessageString];
@@ -1120,9 +1120,9 @@ msgTime	= getElapsedTime ();
 {
 	setStartTime (); // get app start time
 	getCurrentCaps (); // get current GL capabilites for all displays
-	
+
 	// set start values...
-	rVel[0] = 0.3; rVel[1] = 0.1; rVel[2] = 0.2; 
+	rVel[0] = 0.3; rVel[1] = 0.1; rVel[2] = 0.2;
 	rAccel[0] = 0.003; rAccel[1] = -0.005; rAccel[2] = 0.004;
 	fInfo = 1;
 	fAnimate = 0;

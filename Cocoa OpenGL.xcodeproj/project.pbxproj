@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		4B7777D716BCA6E700708A32 /* DetectRubik.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B7777D516BCA6E700708A32 /* DetectRubik.mm */; };
-		4B92832119DBB7AD0099A7E2 /* libopencv_core.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832019DBB7AD0099A7E2 /* libopencv_core.3.0.dylib */; };
-		4B92832319DBB7BA0099A7E2 /* libopencv_highgui.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832219DBB7BA0099A7E2 /* libopencv_highgui.3.0.dylib */; };
-		4B92832519DBB7CE0099A7E2 /* libopencv_features2d.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832419DBB7CE0099A7E2 /* libopencv_features2d.3.0.dylib */; };
-		4B92832719DBB7D90099A7E2 /* libopencv_imgproc.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832619DBB7D90099A7E2 /* libopencv_imgproc.3.0.dylib */; };
-		4B92832919DBBE9E0099A7E2 /* libopencv_imgcodecs.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832819DBBE9E0099A7E2 /* libopencv_imgcodecs.3.0.dylib */; };
-		4BC6F32416A7751800920F30 /* RubikUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BC6F32316A7751800920F30 /* RubikUtil.mm */; };
+		4B92832119DBB7AD0099A7E2 /* libopencv_core.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832019DBB7AD0099A7E2 /* libopencv_core.3.2.dylib */; };
+		4B92832319DBB7BA0099A7E2 /* libopencv_highgui.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832219DBB7BA0099A7E2 /* libopencv_highgui.3.2.dylib */; };
+		4B92832519DBB7CE0099A7E2 /* libopencv_features2d.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832419DBB7CE0099A7E2 /* libopencv_features2d.3.2.dylib */; };
+		4B92832719DBB7D90099A7E2 /* libopencv_imgproc.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832619DBB7D90099A7E2 /* libopencv_imgproc.3.2.dylib */; };
+		4B92832919DBBE9E0099A7E2 /* libopencv_imgcodecs.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B92832819DBBE9E0099A7E2 /* libopencv_imgcodecs.3.2.dylib */; };
+		4BB03EEA1E218B96008A4628 /* RubikBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EE91E218B96008A4628 /* RubikBase.cpp */; };
+		4BB03EEE1E219E51008A4628 /* ColorPermutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */; };
+		4BB03EF11E229E28008A4628 /* ColorPermMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */; };
+		4BC6F32416A7751800920F30 /* RubikUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BC6F32316A7751800920F30 /* RubikUtil.cpp */; };
 		740959030CC8255A00261DBF /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 740959010CC8255A00261DBF /* AppDelegate.mm */; };
 		7409592A0CC826D800261DBF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 740959290CC826D800261DBF /* Credits.rtf */; };
 		745217950CA98A790067AF41 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 745217940CA98A790067AF41 /* OpenGL.framework */; };
@@ -38,13 +41,19 @@
 		4B7777D516BCA6E700708A32 /* DetectRubik.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DetectRubik.mm; sourceTree = "<group>"; };
 		4B7777D616BCA6E700708A32 /* DetectRubik.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectRubik.h; sourceTree = "<group>"; };
 		4B7777E116BF310B00708A32 /* libexif.12.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libexif.12.dylib; path = /opt/local/lib/libexif.12.dylib; sourceTree = "<absolute>"; };
-		4B92832019DBB7AD0099A7E2 /* libopencv_core.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.0.dylib; path = /usr/local/lib/libopencv_core.3.0.dylib; sourceTree = "<absolute>"; };
-		4B92832219DBB7BA0099A7E2 /* libopencv_highgui.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.0.dylib; path = /usr/local/lib/libopencv_highgui.3.0.dylib; sourceTree = "<absolute>"; };
-		4B92832419DBB7CE0099A7E2 /* libopencv_features2d.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.3.0.dylib; path = /usr/local/lib/libopencv_features2d.3.0.dylib; sourceTree = "<absolute>"; };
-		4B92832619DBB7D90099A7E2 /* libopencv_imgproc.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.0.dylib; path = /usr/local/lib/libopencv_imgproc.3.0.dylib; sourceTree = "<absolute>"; };
-		4B92832819DBBE9E0099A7E2 /* libopencv_imgcodecs.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.3.0.dylib; path = /usr/local/lib/libopencv_imgcodecs.3.0.dylib; sourceTree = "<absolute>"; };
+		4B92832019DBB7AD0099A7E2 /* libopencv_core.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.3.2.dylib; path = /usr/local/lib/libopencv_core.3.2.dylib; sourceTree = "<absolute>"; };
+		4B92832219DBB7BA0099A7E2 /* libopencv_highgui.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.3.2.dylib; path = /usr/local/lib/libopencv_highgui.3.2.dylib; sourceTree = "<absolute>"; };
+		4B92832419DBB7CE0099A7E2 /* libopencv_features2d.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.3.2.dylib; path = /usr/local/lib/libopencv_features2d.3.2.dylib; sourceTree = "<absolute>"; };
+		4B92832619DBB7D90099A7E2 /* libopencv_imgproc.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.3.2.dylib; path = /usr/local/lib/libopencv_imgproc.3.2.dylib; sourceTree = "<absolute>"; };
+		4B92832819DBBE9E0099A7E2 /* libopencv_imgcodecs.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.3.2.dylib; path = /usr/local/lib/libopencv_imgcodecs.3.2.dylib; sourceTree = "<absolute>"; };
+		4BB03EE91E218B96008A4628 /* RubikBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RubikBase.cpp; sourceTree = "<group>"; };
+		4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermutation.cpp; sourceTree = "<group>"; };
+		4BB03EEC1E219E51008A4628 /* ColorPermutation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermutation.h; sourceTree = "<group>"; };
+		4BB03EED1E219E51008A4628 /* RubikBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikBase.h; sourceTree = "<group>"; };
+		4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermMap.cpp; sourceTree = "<group>"; };
+		4BB03EF01E229E28008A4628 /* ColorPermMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermMap.h; sourceTree = "<group>"; };
 		4BC6F32216A7751800920F30 /* RubikUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikUtil.h; sourceTree = "<group>"; };
-		4BC6F32316A7751800920F30 /* RubikUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RubikUtil.mm; sourceTree = "<group>"; };
+		4BC6F32316A7751800920F30 /* RubikUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RubikUtil.cpp; sourceTree = "<group>"; };
 		740959010CC8255A00261DBF /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		740959020CC8255A00261DBF /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		740959290CC826D800261DBF /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -70,13 +79,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B92832319DBB7BA0099A7E2 /* libopencv_highgui.3.0.dylib in Frameworks */,
-				4B92832919DBBE9E0099A7E2 /* libopencv_imgcodecs.3.0.dylib in Frameworks */,
-				4B92832119DBB7AD0099A7E2 /* libopencv_core.3.0.dylib in Frameworks */,
+				4B92832319DBB7BA0099A7E2 /* libopencv_highgui.3.2.dylib in Frameworks */,
+				4B92832919DBBE9E0099A7E2 /* libopencv_imgcodecs.3.2.dylib in Frameworks */,
+				4B92832119DBB7AD0099A7E2 /* libopencv_core.3.2.dylib in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				4B92832719DBB7D90099A7E2 /* libopencv_imgproc.3.0.dylib in Frameworks */,
+				4B92832719DBB7D90099A7E2 /* libopencv_imgproc.3.2.dylib in Frameworks */,
 				745217950CA98A790067AF41 /* OpenGL.framework in Frameworks */,
-				4B92832519DBB7CE0099A7E2 /* libopencv_features2d.3.0.dylib in Frameworks */,
+				4B92832519DBB7CE0099A7E2 /* libopencv_features2d.3.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +95,14 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */,
+				4BB03EF01E229E28008A4628 /* ColorPermMap.h */,
+				4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */,
+				4BB03EEC1E219E51008A4628 /* ColorPermutation.h */,
+				4BB03EED1E219E51008A4628 /* RubikBase.h */,
+				4BB03EE91E218B96008A4628 /* RubikBase.cpp */,
 				4BC6F32216A7751800920F30 /* RubikUtil.h */,
-				4BC6F32316A7751800920F30 /* RubikUtil.mm */,
+				4BC6F32316A7751800920F30 /* RubikUtil.cpp */,
 				74E01FB50CAC4E510030A4D8 /* GL Utilities */,
 				74F0EC5B0CA989F9009E924F /* BasicOpenGLView.mm */,
 				74F0EC5C0CA989F9009E924F /* BasicOpenGLView.h */,
@@ -171,11 +186,11 @@
 			isa = PBXGroup;
 			children = (
 				4B7777E116BF310B00708A32 /* libexif.12.dylib */,
-				4B92832019DBB7AD0099A7E2 /* libopencv_core.3.0.dylib */,
-				4B92832219DBB7BA0099A7E2 /* libopencv_highgui.3.0.dylib */,
-				4B92832419DBB7CE0099A7E2 /* libopencv_features2d.3.0.dylib */,
-				4B92832619DBB7D90099A7E2 /* libopencv_imgproc.3.0.dylib */,
-				4B92832819DBBE9E0099A7E2 /* libopencv_imgcodecs.3.0.dylib */,
+				4B92832019DBB7AD0099A7E2 /* libopencv_core.3.2.dylib */,
+				4B92832219DBB7BA0099A7E2 /* libopencv_highgui.3.2.dylib */,
+				4B92832419DBB7CE0099A7E2 /* libopencv_features2d.3.2.dylib */,
+				4B92832619DBB7D90099A7E2 /* libopencv_imgproc.3.2.dylib */,
+				4B92832819DBBE9E0099A7E2 /* libopencv_imgcodecs.3.2.dylib */,
 			);
 			name = libs;
 			sourceTree = "<group>";
@@ -263,10 +278,13 @@
 				745217CC0CA98B160067AF41 /* GLCheck.cpp in Sources */,
 				745217CD0CA98B160067AF41 /* GLString.mm in Sources */,
 				745217CE0CA98B160067AF41 /* trackball.cpp in Sources */,
+				4BB03EEE1E219E51008A4628 /* ColorPermutation.cpp in Sources */,
 				8D11072D0486CEB800E47090 /* main.mm in Sources */,
+				4BB03EF11E229E28008A4628 /* ColorPermMap.cpp in Sources */,
 				74F0EC5D0CA989F9009E924F /* BasicOpenGLView.mm in Sources */,
 				740959030CC8255A00261DBF /* AppDelegate.mm in Sources */,
-				4BC6F32416A7751800920F30 /* RubikUtil.mm in Sources */,
+				4BC6F32416A7751800920F30 /* RubikUtil.cpp in Sources */,
+				4BB03EEA1E218B96008A4628 /* RubikBase.cpp in Sources */,
 				4B7777D716BCA6E700708A32 /* DetectRubik.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

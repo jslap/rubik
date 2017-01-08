@@ -62,7 +62,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    initRubik();
     // Insert code here to initialize your application
     Cube cube1;
     
@@ -72,28 +71,6 @@
     //CubeHandler hdl(cube1, white, blue);
     //testcv();
     //return;
-    
-    Cube cube2;
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    cube2.rotate(white, true);
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    cube2.rotate(white, true);
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    cube2.rotate(white, true);
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    cube2.rotate(white, true);
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    EdgePosList edgeDiff;
-    CornerPosList cornerDiff;
-    cube1.diff(cube2, edgeDiff, cornerDiff);
-    
-    
-    cube2 = Cube();
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    cube2.rotate(white, true);
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
-    cube2.rotate(white, false);
-    NSLog(@"cube1 == cube2 ? %d", (int)(cube1 == cube2));
     
 }
 
