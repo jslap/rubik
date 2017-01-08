@@ -7,7 +7,7 @@
 //
 
 #include "DetectRubik.h"
-#include "RubikUtil.h"
+#include "Cube.h"
 
 
 #include <algorithm>

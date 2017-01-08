@@ -49,7 +49,7 @@
 #import "BasicOpenGLView.h"
 #import "AppDelegate.h"
 
-#include "RubikUtil.h"
+#include "Cube.h"
 #include "DetectRubik.h"
 
 @implementation AppDelegate

@@ -19,37 +19,3 @@ TEST(CubeTest, moveCubeTest) {
     EXPECT_EQ(c1, c3) << "cube should be equal after 4 identical rot";
 
 }
-TEST(CubeTest, solveCubeTest) {
-    const Cube solvedCube;
-
-    Cube mixedCube;
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-
-    Cube cubeToSolve = mixedCube;
-
-    ColMoveSeq fullRes;
-    for (int i = 0; i < 10; i++)
-    {
-        auto res = cubeToSolve.solve(10);
-        fullRes.insert(fullRes.end(), res.begin(), res.end());
-    }
-    EXPECT_NE(fullRes.size(), 0) << "Should need some move to solve.";
-
-    EXPECT_EQ(cubeToSolve, solvedCube) << "cube should be solved";
-
-    Cube cubeToSolveIter = mixedCube;
-    for (auto m : fullRes)
-        cubeToSolveIter.rotate(m);
-
-    EXPECT_EQ(cubeToSolveIter, solvedCube) << "cube should be solved";
-    EXPECT_NE(mixedCube, solvedCube) << "after one rot, should not be equal";
-
-}

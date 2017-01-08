@@ -10,6 +10,6 @@ add_subdirectory (../  ./_Lib)
 add_subdirectory (../third/googletest ./_gtest)
 
 # add the executable
-add_executable (Rubik-Test Rubik-Test.cpp CubeTests.cpp)
+add_executable (Rubik-Test Rubik-Test.cpp CubeTests.cpp DummySolveTests.cpp)
 target_link_libraries (Rubik-Test RubikLib)
 target_link_libraries (Rubik-Test gtest)

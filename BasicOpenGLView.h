@@ -54,7 +54,8 @@
 
 #import "GLString.h"
 
-#include "RubikUtil.h"
+#include "Cube.h"
+#include "DummyCubeSolver.h"
 
 
 typedef struct {

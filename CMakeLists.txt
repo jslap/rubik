@@ -10,4 +10,6 @@ add_library(RubikLib
     ColorPermMap.cpp
     Cubelet.cpp
     Cube.cpp
-    CubeHandler.cpp)
+    CubeHandler.cpp
+CubeSolver.cpp
+DummyCubeSolver.cpp)

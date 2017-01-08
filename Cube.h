@@ -18,7 +18,10 @@ public:
     const CornerList &getCorners() const {return corners;}
 
     void rotate(const ColMove & move);
+    void apply(const ColMoveSeq & moves);
     void rotate(RubikColor side, bool clockWise);
+
+    bool isSolved() const {return false;}
 
     // technically does not change the cube, make it easier to compare.
     void makeCanon();
@@ -37,33 +40,7 @@ public:
 
     const EdgeCube &findPositionCube(const EdgeCoord & col) const;
     const CornerCube &findPositionCube(const CornerCoord & col) const;
-
-    ColMoveSeq solve(int step) ;
-
 private:
-    ColMoveSeq _solveSingleStep(int step) ;
-
-    ColMoveSeq _solveStepCross() ;
-    ColMoveSeq _solveStepCrossElt(RubikColor col);
-
-    ColMoveSeq _solveStepWhiteLayer() ;
-    ColMoveSeq _solveStepWhiteLayerElt(const CornerCoord& piece);
-
-    ColMoveSeq _solveStepMiddleLayer() ;
-    ColMoveSeq _solveStepMiddleLayerElt(const EdgeCoord& piece);
-
-    ColMoveSeq _solveStepTopCross() ;
-
-    ColMoveSeq _solveStepTopCorners() ;
-
-    ColMoveSeq _solveStepTopCornersPos() ;
-
-    ColMoveSeq _solveStepTopEdges() ;
-
-    void _addAndApply(ColMove aMove, ColMoveSeq &seq);
-    void _addAndApply(const CubeHandler& handler, PosMove aMove, ColMoveSeq &seq);
-
-
     static const int NbEdge = 12;
     static const int NbCorner = 8;
 

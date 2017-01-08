@@ -53,6 +53,10 @@
 #import "drawinfo.h"
 
 #include <Eigen/OpenGLSupport>
+using namespace Eigen;
+
+#include "CubeHandler.h"
+
 
 // ==================================
 
@@ -249,8 +253,8 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
         const float cubieSize = 0.4;
         cubeToUse.makeCanon();
 
-        const EdgeList& edges = cubeToUse.getEdges();
-        for (EdgeList::const_iterator it = edges.begin(); it != edges.end() && true; ++it)
+        const Cube::EdgeList& edges = cubeToUse.getEdges();
+        for (Cube::EdgeList::const_iterator it = edges.begin(); it != edges.end() && true; ++it)
         {
             glPushMatrix();
 
@@ -286,8 +290,8 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
         }
 
 
-        const CornerList& corners = cubeToUse.getCorners();
-        for (CornerList::const_iterator it = corners.begin(); it != corners.end()  && true; ++it)
+        const Cube::CornerList& corners = cubeToUse.getCorners();
+        for (Cube::CornerList::const_iterator it = corners.begin(); it != corners.end()  && true; ++it)
         {
             glPushMatrix();
 
@@ -820,10 +824,16 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 
             case 's':
             {
-                Cube cubeCopy = _cube;
-                ColMoveSeq solveSeq = cubeCopy.solve(9);
-                for (ColMoveSeq::iterator it = solveSeq.begin(); it != solveSeq.end(); ++it)
-                    [self rotateCubeFace:it->first withCW:it->second];
+                DummyCubeSolver solver;
+                solver.setStartingCube(_cube);
+                bool solveResult = solver.solve();
+
+                if (solver.getNbSteps() > 0)
+                {
+                    ColMoveSeq solveSeq = solver.getStepSolution(0);
+                    for (ColMoveSeq::iterator it = solveSeq.begin(); it != solveSeq.end(); ++it)
+                        [self rotateCubeFace:it->first withCW:it->second];
+                }
             }
                 break;
 

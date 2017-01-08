@@ -16,7 +16,11 @@
 		4BB03EEA1E218B96008A4628 /* RubikBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EE91E218B96008A4628 /* RubikBase.cpp */; };
 		4BB03EEE1E219E51008A4628 /* ColorPermutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */; };
 		4BB03EF11E229E28008A4628 /* ColorPermMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */; };
-		4BC6F32416A7751800920F30 /* RubikUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BC6F32316A7751800920F30 /* RubikUtil.cpp */; };
+		4BB03EFC1E22FD86008A4628 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF21E22FD86008A4628 /* Cube.cpp */; };
+		4BB03EFD1E22FD86008A4628 /* CubeHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF41E22FD86008A4628 /* CubeHandler.cpp */; };
+		4BB03EFE1E22FD86008A4628 /* Cubelet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF61E22FD86008A4628 /* Cubelet.cpp */; };
+		4BB03EFF1E22FD86008A4628 /* CubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF81E22FD86008A4628 /* CubeSolver.cpp */; };
+		4BB03F001E22FD86008A4628 /* DummyCubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EFA1E22FD86008A4628 /* DummyCubeSolver.cpp */; };
 		740959030CC8255A00261DBF /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 740959010CC8255A00261DBF /* AppDelegate.mm */; };
 		7409592A0CC826D800261DBF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 740959290CC826D800261DBF /* Credits.rtf */; };
 		745217950CA98A790067AF41 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 745217940CA98A790067AF41 /* OpenGL.framework */; };
@@ -52,8 +56,16 @@
 		4BB03EED1E219E51008A4628 /* RubikBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikBase.h; sourceTree = "<group>"; };
 		4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermMap.cpp; sourceTree = "<group>"; };
 		4BB03EF01E229E28008A4628 /* ColorPermMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermMap.h; sourceTree = "<group>"; };
-		4BC6F32216A7751800920F30 /* RubikUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikUtil.h; sourceTree = "<group>"; };
-		4BC6F32316A7751800920F30 /* RubikUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RubikUtil.cpp; sourceTree = "<group>"; };
+		4BB03EF21E22FD86008A4628 /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
+		4BB03EF31E22FD86008A4628 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		4BB03EF41E22FD86008A4628 /* CubeHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeHandler.cpp; sourceTree = "<group>"; };
+		4BB03EF51E22FD86008A4628 /* CubeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeHandler.h; sourceTree = "<group>"; };
+		4BB03EF61E22FD86008A4628 /* Cubelet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cubelet.cpp; sourceTree = "<group>"; };
+		4BB03EF71E22FD86008A4628 /* Cubelet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cubelet.h; sourceTree = "<group>"; };
+		4BB03EF81E22FD86008A4628 /* CubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeSolver.cpp; sourceTree = "<group>"; };
+		4BB03EF91E22FD86008A4628 /* CubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeSolver.h; sourceTree = "<group>"; };
+		4BB03EFA1E22FD86008A4628 /* DummyCubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyCubeSolver.cpp; sourceTree = "<group>"; };
+		4BB03EFB1E22FD86008A4628 /* DummyCubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyCubeSolver.h; sourceTree = "<group>"; };
 		740959010CC8255A00261DBF /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		740959020CC8255A00261DBF /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		740959290CC826D800261DBF /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -95,14 +107,22 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4BB03EF21E22FD86008A4628 /* Cube.cpp */,
+				4BB03EF31E22FD86008A4628 /* Cube.h */,
+				4BB03EF41E22FD86008A4628 /* CubeHandler.cpp */,
+				4BB03EF51E22FD86008A4628 /* CubeHandler.h */,
+				4BB03EF61E22FD86008A4628 /* Cubelet.cpp */,
+				4BB03EF71E22FD86008A4628 /* Cubelet.h */,
+				4BB03EF81E22FD86008A4628 /* CubeSolver.cpp */,
+				4BB03EF91E22FD86008A4628 /* CubeSolver.h */,
+				4BB03EFA1E22FD86008A4628 /* DummyCubeSolver.cpp */,
+				4BB03EFB1E22FD86008A4628 /* DummyCubeSolver.h */,
 				4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */,
 				4BB03EF01E229E28008A4628 /* ColorPermMap.h */,
 				4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */,
 				4BB03EEC1E219E51008A4628 /* ColorPermutation.h */,
 				4BB03EED1E219E51008A4628 /* RubikBase.h */,
 				4BB03EE91E218B96008A4628 /* RubikBase.cpp */,
-				4BC6F32216A7751800920F30 /* RubikUtil.h */,
-				4BC6F32316A7751800920F30 /* RubikUtil.cpp */,
 				74E01FB50CAC4E510030A4D8 /* GL Utilities */,
 				74F0EC5B0CA989F9009E924F /* BasicOpenGLView.mm */,
 				74F0EC5C0CA989F9009E924F /* BasicOpenGLView.h */,
@@ -274,16 +294,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BB03EFF1E22FD86008A4628 /* CubeSolver.cpp in Sources */,
+				4BB03EFC1E22FD86008A4628 /* Cube.cpp in Sources */,
 				745217CB0CA98B160067AF41 /* drawInfo.mm in Sources */,
 				745217CC0CA98B160067AF41 /* GLCheck.cpp in Sources */,
+				4BB03EFD1E22FD86008A4628 /* CubeHandler.cpp in Sources */,
+				4BB03EFE1E22FD86008A4628 /* Cubelet.cpp in Sources */,
 				745217CD0CA98B160067AF41 /* GLString.mm in Sources */,
 				745217CE0CA98B160067AF41 /* trackball.cpp in Sources */,
 				4BB03EEE1E219E51008A4628 /* ColorPermutation.cpp in Sources */,
 				8D11072D0486CEB800E47090 /* main.mm in Sources */,
+				4BB03F001E22FD86008A4628 /* DummyCubeSolver.cpp in Sources */,
 				4BB03EF11E229E28008A4628 /* ColorPermMap.cpp in Sources */,
 				74F0EC5D0CA989F9009E924F /* BasicOpenGLView.mm in Sources */,
 				740959030CC8255A00261DBF /* AppDelegate.mm in Sources */,
-				4BC6F32416A7751800920F30 /* RubikUtil.cpp in Sources */,
 				4BB03EEA1E218B96008A4628 /* RubikBase.cpp in Sources */,
 				4B7777D716BCA6E700708A32 /* DetectRubik.mm in Sources */,
 			);
