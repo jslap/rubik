@@ -48,14 +48,16 @@
 //
 
 #import "BasicOpenGLView.h"
-#import "GLCheck.h"
+//#import "GLCheck.h"
 #import "trackball.h"
-#import "drawinfo.h"
+//#import "drawinfo.h"
 
 #include <Eigen/OpenGLSupport>
 using namespace Eigen;
 
 #include "CubeHandler.h"
+#include "DummyCubeSolver.h"
+#include "FridrichSolver.h"
 
 
 // ==================================
@@ -229,6 +231,12 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
 
 }
 
+class OpenGLCubeDrawer
+{
+public:
+    OpenGLCubeDrawer(Cube c);
+}
+
 // ===================================
 
 @implementation BasicOpenGLView
@@ -251,7 +259,7 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
         }
 
         const float cubieSize = 0.4;
-        cubeToUse.makeCanon();
+//        cubeToUse.makeCanon();
 
         const Cube::EdgeList& edges = cubeToUse.getEdges();
         for (Cube::EdgeList::const_iterator it = edges.begin(); it != edges.end() && true; ++it)
@@ -813,6 +821,21 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
                 [self updateCameraString];
                 [self setNeedsDisplay: YES];
                 break;
+            case '2':
+            {
+                std::time_t randSeed = std::time(0);
+                randSeed = 1484414607;
+                printf("Random seed  %lld\n", (long long) randSeed);
+                std::srand(randSeed); // use current time as seed for random generator
+                int nbMove = 10 + std::rand()%20;
+                for (int i = 0; i< nbMove; i++)
+                {
+                    RubikColor c = (RubikColor)(std::rand()%6);
+                    bool ccw = std::rand()%2 == 0;
+                    [self rotateCubeFace:c withCW:ccw];
+                }
+            }
+                break;
             case 'q':
             {
                 CubeHandler handler = CubeHandler::fromTopFront(white, red);
@@ -823,16 +846,22 @@ static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
                 break;
 
             case 's':
+            case 'S':
             {
-                DummyCubeSolver solver;
+                DummyCubeSolver solverDummy;
+                FridrichCubeSolver solver;
                 solver.setStartingCube(_cube);
+                solverDummy.setStartingCube(_cube);
                 bool solveResult = solver.solve();
+                bool solveResult2 = solverDummy.solve();
 
-                if (solver.getNbSteps() > 0)
+                if (solverDummy.getNbSteps() > 0)
                 {
                     ColMoveSeq solveSeq = solver.getStepSolution(0);
-                    for (ColMoveSeq::iterator it = solveSeq.begin(); it != solveSeq.end(); ++it)
-                        [self rotateCubeFace:it->first withCW:it->second];
+                    ColMoveSeq solveSeq2 = solverDummy.getStepSolution(0);
+                    printf("Fridrich: %llu  Dummy: %llu \n", solveSeq.size(), solveSeq2.size());
+                    for (const auto & m : solveSeq2)
+                        [self rotateCubeFace:m.first withCW:m.second];
                 }
             }
                 break;

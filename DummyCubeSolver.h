@@ -8,6 +8,8 @@ public:
 
 protected:
     virtual void computeSolution();
+    virtual bool whiteCrossSolveAvail() const {return true;};
+    virtual void computeWhiteCross();
 
 private:
     void _addAndApply(ColMove aMove, ColMoveSeq &seq);

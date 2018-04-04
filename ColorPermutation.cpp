@@ -2,17 +2,17 @@
 
 namespace
 {
-    RubikPerm::Func _defaultFunc()
+    RubikPerm::InternalFunc _defaultFunc()
     {
-        RubikPerm::Func ret;
+        RubikPerm::InternalFunc ret(RubikBase::RubikColors.size());
         for (auto i : RubikBase::RubikColors)
             ret[i] = i;
         return ret;
     }
 
-    RubikPerm::Func _computeInverse(RubikPerm::Func forwardFunc)
+    RubikPerm::InternalFunc _computeInverse(RubikPerm::InternalFunc forwardFunc)
     {
-        RubikPerm::Func ret;
+        RubikPerm::InternalFunc ret(RubikBase::RubikColors.size());
         for (auto i : RubikBase::RubikColors)
             ret[forwardFunc[i]] = i;
         return ret;
@@ -42,16 +42,8 @@ RubikPerm& RubikPerm::operator=(const RubikPerm& rhs)
 
 void RubikPerm::setForward(Func forwardFunc)
 {
-    forward = forwardFunc;
-    inverse = _computeInverse(forwardFunc);
-}
-
-RubikColor RubikPerm::nextColor(RubikColor col) const
-{
-    return forward.at(col);
-}
-
-RubikColor RubikPerm::prevColor(RubikColor col) const
-{
-    return inverse.at(col);
+    forward.resize(RubikBase::RubikColors.size());
+    for (auto i : RubikBase::RubikColors)
+        forward[i] = forwardFunc[i];
+    inverse = _computeInverse(forward);
 }

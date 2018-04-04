@@ -4,16 +4,22 @@
 #include <list>
 #include <map>
 #include <Eigen/Dense>
-#include <boost/array.hpp>
+#include <array>
 
 void AsertFunc(const std::string & reason );
+#ifdef NDEBUG
+#define RASSERT(pred, str) nullptr
+#else // NDEBUG
 #define RASSERT(pred, str) if (!(pred)) {AsertFunc(str);}
+#endif // NDEBUG
 
 using Eigen::Vector3i;
 using Eigen::Vector3f;
 
-enum RubikColor {white = 0, green, red , blue ,orange,    yellow, noColor};
-enum RubikFace  {Up    = 0, Right, Front,   Left, Back ,  Down};
+// Do not change the order.
+enum RubikColor  : unsigned char {white = 0, green, red ,  yellow, blue , orange, noColor};
+enum RubikFace   : unsigned char {Up    = 0, Right, Front, Down,   Left,  Back,  };
+enum RubikOrientation : unsigned char {WellOriented = 0, Twist1, Twist2};
 
 class RubikBase {
 public:
@@ -22,7 +28,29 @@ public:
     static const std::map < RubikColor , Vector3i > colorVecMap;
 };
 
+inline RubikColor oppositeColor(RubikColor c) { return RubikColor((c + 3) % 6);}
+
 std::string colorName( RubikColor col);
+RubikColor colorFromName( const std::string& s);
+inline std::ostream& operator<<(std::ostream & os, RubikColor c) {os << "col(" << colorName(c) << ")"; return os;}
+std::string orientationName( RubikOrientation col);
+inline std::ostream& operator<<(std::ostream & os,  RubikOrientation o) {os << orientationName(o); return os;}
+
+namespace cereal
+{
+  template <class Archive> inline
+  std::string save_minimal( Archive const &, RubikColor const & t )
+  {
+    return colorName( t );
+  }
+
+  template <class Archive> inline
+  void load_minimal( Archive const &, RubikColor & t, std::string const & value )
+  {
+    t = colorFromName( value );
+  }
+}
+
 Vector3i getVectorFromColor(RubikColor col);
 
 Vector3i roundVec(const Vector3f & rhs);
@@ -30,11 +58,19 @@ RubikColor getColorFromVeci(const Vector3i &vec);
 RubikColor getColorFromVecf(const Vector3f &vec);
 
 template <int cubeDim>
-using CubeCoord = boost::array<RubikColor, cubeDim>;
+using CubeCoord = std::array<RubikColor, cubeDim>;
 
 
 typedef CubeCoord< 2 >  EdgeCoord;
 typedef CubeCoord< 3 >  CornerCoord;
+
+template <int cubeDim>
+CubeCoord<cubeDim> getInvalidCoord()
+{
+    CubeCoord<cubeDim> c;
+    c.fill(noColor);
+    return c;
+}
 
 template <int cubeDim>
 Vector3i getVectorFromCoord(CubeCoord< cubeDim > coord)

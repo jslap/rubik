@@ -116,14 +116,14 @@ const EdgeCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, RubikFa
 {
     EdgeCube edgeCube(_getCol(face1), _getCol(face2));
     EdgeCoord edgeCoord = edgeCube.getPosition();
-    return cube.findPositionCube(edgeCoord);
+    return cube.findCubieByPosition(edgeCoord);
 }
 
 const CornerCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, RubikFace face2, RubikFace face3)
 {
     CornerCube cornerCube(_getCol(face1), _getCol(face2), _getCol(face3));
     CornerCoord cornerCoord = cornerCube.getPosition();
-    return cube.findPositionCube(cornerCoord);
+    return cube.findCubieByPosition(cornerCoord);
 }
 
 std::list< CubeHandler > CubeHandler::genHandlerList;

@@ -1,4 +1,6 @@
 #include "RubikBase.h"
+#include <boost/bimap.hpp>
+#include <boost/assign.hpp>
 
 void AsertFunc(const std::string & reason )
 {
@@ -20,27 +22,52 @@ const std::map < RubikColor , Vector3i > RubikBase::colorVecMap({
     std::begin(RubikBase::ColorVecPairs),
     std::end(RubikBase::ColorVecPairs)});
 
+namespace
+{
+    typedef boost::bimap<RubikColor, std::string> ColorNameBimap;
+    ColorNameBimap colorNameBimap = boost::assign::list_of< ColorNameBimap::relation >
+    ( white,    "white")
+    ( green,    "green")
+    ( blue,     "blue")
+    ( yellow,   "yellow")
+    ( orange,   "orange")
+    ( red,      "red")
+    ( noColor,  "no Color");
+}
 std::string colorName( RubikColor col)
 {
-    switch (col )
-    {
-        case white:
-            return "white";
-        case green:
-            return "green";
-        case blue:
-            return "blue";
-        case yellow:
-            return "yellow";
-        case orange:
-            return "orange";
-        case red:
-            return "red";
-        case noColor:
-            return "noColor";
-    }
+    auto iter = colorNameBimap.left.find(col);
+    if (iter != colorNameBimap.left.end())
+        return iter->second;
+
+    RASSERT(false, "undefined color.");
     return "error";
 }
+
+std::string orientationName( RubikOrientation o)
+{
+    switch(o)
+    {
+        case WellOriented:
+            return "WellOrient";
+        case Twist1:
+            return "Twist1";
+        case Twist2:
+            return "Twist2";
+    }
+    return "noOrientation";
+}
+
+RubikColor colorFromName( const std::string& s)
+{
+    auto iter = colorNameBimap.right.find(s);
+    if (iter != colorNameBimap.right.end())
+        return iter->second;
+
+    RASSERT(false, "undefined color.");
+    return noColor;
+}
+
 
 Vector3i getVectorFromColor(RubikColor col)
 {

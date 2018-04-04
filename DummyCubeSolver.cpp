@@ -37,6 +37,16 @@ void DummyCubeSolver::computeSolution()
         m_StepSolution.push_back(stepSol);
 }
 
+void DummyCubeSolver::computeWhiteCross()
+{
+    m_CurrentCubeState = m_CubeToSolve;
+    ColMoveSeq stepSol;
+    stepSol = _solveStepCross();
+    if (!stepSol.empty())
+        m_StepSolution.push_back(stepSol);
+}
+
+
 void DummyCubeSolver::_addAndApply(ColMove aMove, ColMoveSeq &seq)
 {
     seq.push_back(aMove);
@@ -51,18 +61,17 @@ void DummyCubeSolver::_addAndApply(const CubeHandler& handler, PosMove aMove, Co
 
 ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
 {
+    const Cube defCube;
     ColMoveSeq retVal;
 
     RubikColor otherCol = col;
-    EdgeCube fisrtElt(white, otherCol);
-    fisrtElt.makeCanon();
-    EdgeCube curCubie = m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor());
-    curCubie.makeCanon();
+    EdgeCube fisrtElt = defCube.findCubieByColor(EdgeCoord({{white, otherCol}}));
+    EdgeCube curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
     if (curCubie != fisrtElt)
     {
         if (curCubie.hasInPosition(white) && curCubie.hasInPosition(otherCol))
         {
-
+            //do nothing, we are ok.
         }
         else
         {
@@ -81,7 +90,7 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
                     RubikColor otherFacePos = curCubie.getPosition()[0];
 
                     cubeCopy.rotate(otherFacePos, true);
-                    bool clockwiseOk = cubeCopy.findColorCubePosition(fisrtElt.getColor()).hasInPosition(yellow);
+                    bool clockwiseOk = cubeCopy.findCubieByColor(fisrtElt.getColor()).hasInPosition(yellow);
 
 
                     _addAndApply(ColMove(otherFacePos, clockwiseOk), retVal);
@@ -91,21 +100,20 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
                 }
             }
 
-            curCubie = m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor());
-            RASSERT(m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor()).hasInPosition(yellow), "");
+            curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
+            RASSERT(m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(yellow), "");
 
             // turn yellow face untill it is on the right side.
             while (!curCubie.hasInPosition(otherCol))
             {
                 _addAndApply(ColMove(yellow, true), retVal);
 
-                curCubie = m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor());
-                curCubie.makeCanon();
+                curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
             }
 
-            curCubie = m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor());
-            RASSERT(m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor()).hasInPosition(otherCol) &&
-                    m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor()).hasInPosition(yellow),
+            curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
+            RASSERT(m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(otherCol) &&
+                    m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(yellow),
                     "");
 
             // make it on the white side;
@@ -113,12 +121,10 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
             _addAndApply(ColMove(otherCol, true), retVal);
         }
 
-        curCubie = m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor());
-        RASSERT(m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor()).hasInPosition(otherCol) &&
-            m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor()).hasInPosition(white),"");
+        curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
+        RASSERT(m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(otherCol) &&
+            m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(white),"");
 
-        //if (!retVal.empty()) return retVal;
-        curCubie.makeCanon();
         if (curCubie != fisrtElt)
         {
             CubeHandler handler = CubeHandler::fromTopRight(white, otherCol);
@@ -128,8 +134,7 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
             _addAndApply(handler, PosMove(Up, false), retVal);
         }
 
-        curCubie = m_CurrentCubeState.findColorCubePosition(fisrtElt.getColor());
-        curCubie.makeCanon();
+        curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
         RASSERT(curCubie == fisrtElt,"");
     }
 
@@ -159,12 +164,12 @@ ColMoveSeq DummyCubeSolver::_solveStepWhiteLayer()
     ColMoveSeq retVal;
 
     Cube defCube;
-    Cube::CornerList whiteLayerCorners;
+    std::vector<CornerCube> whiteLayerCorners;
     for (Cube::CornerList::const_iterator it = defCube.getCorners().begin(); it != defCube.getCorners().end(); ++it)
         if (it->hasInColor(white))
             whiteLayerCorners.push_back(*it);
 
-    for (Cube::CornerList::const_iterator it = whiteLayerCorners.begin(); it != whiteLayerCorners.end(); ++it)
+    for (auto it = whiteLayerCorners.begin(); it != whiteLayerCorners.end(); ++it)
     {
         ColMoveSeq tmpMoveSeq = _solveStepWhiteLayerElt(it->getColor());
         retVal.insert(retVal.end(), tmpMoveSeq.begin(), tmpMoveSeq.end());
@@ -185,10 +190,8 @@ ColMoveSeq DummyCubeSolver::_solveStepWhiteLayerElt(const CornerCoord& piece)
     RASSERT(otherColVec.size() == 2, "");
 
     CornerCube wantedCubie(piece);
-    wantedCubie.makeCanon();
 
-    CornerCube curCubie = m_CurrentCubeState.findColorCubePositionCorner(piece);
-    curCubie.makeCanon();
+    CornerCube curCubie = m_CurrentCubeState.findCubieByColor(piece);
 
     //Check that it is not at the right pos already...
     while (curCubie != wantedCubie)
@@ -202,8 +205,7 @@ ColMoveSeq DummyCubeSolver::_solveStepWhiteLayerElt(const CornerCoord& piece)
             _addAndApply(handler, PosMove(Down, false), retVal);
             _addAndApply(handler, PosMove(Right, true), retVal);
 
-            curCubie = m_CurrentCubeState.findColorCubePositionCorner(piece);
-            curCubie.makeCanon();
+            curCubie = m_CurrentCubeState.findCubieByColor(piece);
         }
         RASSERT(curCubie.hasInPosition(yellow), "");
 
@@ -211,7 +213,7 @@ ColMoveSeq DummyCubeSolver::_solveStepWhiteLayerElt(const CornerCoord& piece)
         while ( ! (curCubie.hasInPosition(otherColVec[0]) && curCubie.hasInPosition(otherColVec[1]) ) )
         {
             _addAndApply(ColMove(yellow, true), retVal);
-            curCubie = m_CurrentCubeState.findColorCubePositionCorner(piece);
+            curCubie = m_CurrentCubeState.findCubieByColor(piece);
         }
 
         RASSERT(curCubie.hasInPosition(yellow) && curCubie.hasInPosition(otherColVec[0]) && curCubie.hasInPosition(otherColVec[1]), "");
@@ -225,8 +227,7 @@ ColMoveSeq DummyCubeSolver::_solveStepWhiteLayerElt(const CornerCoord& piece)
             _addAndApply(handler, PosMove(Right, true), retVal);
             _addAndApply(handler, PosMove(Down, true), retVal);
 
-            curCubie = m_CurrentCubeState.findColorCubePositionCorner(piece);
-            curCubie.makeCanon();
+            curCubie = m_CurrentCubeState.findCubieByColor(piece);
         }
 
         RASSERT(curCubie.hasInPosition(white) && curCubie.hasInPosition(otherColVec[0]) && curCubie.hasInPosition(otherColVec[1]), "");
@@ -241,12 +242,12 @@ ColMoveSeq DummyCubeSolver::_solveStepMiddleLayer()
     ColMoveSeq retVal;
 
     Cube defCube;
-    Cube::EdgeList middleLayerEdges;
+    std::vector<EdgeCube> middleLayerEdges;
     for (Cube::EdgeList::const_iterator it = defCube.getEdges().begin(); it != defCube.getEdges().end(); ++it)
         if (!it->hasInColor(white) && !it->hasInColor(yellow))
             middleLayerEdges.push_back(*it);
 
-    for (Cube::EdgeList::const_iterator it = middleLayerEdges.begin(); it != middleLayerEdges.end(); ++it)
+    for (auto it = middleLayerEdges.begin(); it != middleLayerEdges.end(); ++it)
     {
         ColMoveSeq tmpMoveSeq = _solveStepMiddleLayerElt(it->getColor());
         retVal.insert(retVal.end(), tmpMoveSeq.begin(), tmpMoveSeq.end());
@@ -262,10 +263,8 @@ ColMoveSeq DummyCubeSolver::_solveStepMiddleLayerElt(const EdgeCoord& piece)
 
 
     EdgeCube wantedCubie(piece);
-    wantedCubie.makeCanon();
 
-    EdgeCube curCubie = m_CurrentCubeState.findColorCubePosition(piece);
-    curCubie.makeCanon();
+    EdgeCube curCubie = m_CurrentCubeState.findCubieByColor(piece);
 
     if (wantedCubie != curCubie)
     {
@@ -282,8 +281,7 @@ ColMoveSeq DummyCubeSolver::_solveStepMiddleLayerElt(const EdgeCoord& piece)
             _addAndApply(handler, PosMove(Up, true), retVal);
             _addAndApply(handler, PosMove(Front, true), retVal);
 
-            curCubie = m_CurrentCubeState.findColorCubePosition(piece);
-            curCubie.makeCanon();
+            curCubie = m_CurrentCubeState.findCubieByColor(piece);
         }
 
         RASSERT(curCubie.hasInPosition(yellow), "");
@@ -299,9 +297,7 @@ ColMoveSeq DummyCubeSolver::_solveStepMiddleLayerElt(const EdgeCoord& piece)
                 break;
 
             _addAndApply(ColMove(yellow, true), retVal);
-            curCubie = m_CurrentCubeState.findColorCubePosition(piece);
-            curCubie.makeCanon();
-
+            curCubie = m_CurrentCubeState.findCubieByColor(piece);
         } while (1);
 
         // Apply one of the two patern, depending on which side it must go.
@@ -342,12 +338,9 @@ ColMoveSeq DummyCubeSolver::_solveStepMiddleLayerElt(const EdgeCoord& piece)
             _addAndApply(handler, PosMove(Front, true), retVal);
 
         }
-        curCubie = m_CurrentCubeState.findColorCubePosition(piece);
-        curCubie.makeCanon();
-
-        //RASSERT(wantedCubie == curCubie,"");
-
+        curCubie = m_CurrentCubeState.findCubieByColor(piece);
     }
+    RASSERT(wantedCubie == curCubie,"");
 
     return retVal;
 }
@@ -357,7 +350,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCross()
     ColMoveSeq retVal;
 
     Cube defCube;
-    Cube::EdgeList topLayerEdges;
+    std::vector<EdgeCube> topLayerEdges;
     for (Cube::EdgeList::const_iterator it = defCube.getEdges().begin(); it != defCube.getEdges().end(); ++it)
         if (it->hasInColor(yellow))
             topLayerEdges.push_back(*it);
@@ -366,11 +359,9 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCross()
     {
         // check the orientation of the yellow edges.
         std::vector< RubikColor > goodOrientation;
-        for (Cube::EdgeList::const_iterator it = topLayerEdges.begin(); it != topLayerEdges.end(); ++it)
+        for (auto it = topLayerEdges.begin(); it != topLayerEdges.end(); ++it)
         {
-            EdgeCube curEdge = m_CurrentCubeState.findPositionCube(it->getPosition());
-            curEdge.makeCanon();
-
+            EdgeCube curEdge = m_CurrentCubeState.findCubieByPosition(it->getPosition());
 
             RubikColor yellowPos = curEdge.positionForColor(yellow);
             bool isGoodOrient = (yellowPos == yellow);
@@ -436,7 +427,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCorners()
     ColMoveSeq retVal;
 
     Cube defCube;
-    Cube::CornerList topLayerCorners;
+    std::vector<CornerCube> topLayerCorners;
     for (Cube::CornerList::const_iterator it = defCube.getCorners().begin(); it != defCube.getCorners().end(); ++it)
         if (it->hasInColor(yellow))
             topLayerCorners.push_back(*it);
@@ -444,13 +435,11 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCorners()
     while (1)
     {
         // check the orientation of the yellow edges.
-        Cube::CornerList goodOrientation;
-        Cube::CornerList badOrientation;
-        for (Cube::CornerList::const_iterator it = topLayerCorners.begin(); it != topLayerCorners.end(); ++it)
+        std::vector<CornerCube> goodOrientation;
+        std::vector<CornerCube> badOrientation;
+        for (auto it = topLayerCorners.begin(); it != topLayerCorners.end(); ++it)
         {
-            CornerCube curCorner = m_CurrentCubeState.findPositionCube(it->getPosition());
-            curCorner.makeCanon();
-
+            CornerCube curCorner = m_CurrentCubeState.findCubieByPosition(it->getPosition());
 
             RubikColor yellowPos = curCorner.positionForColor(yellow);
             bool isGoodOrient = (yellowPos == yellow);
@@ -466,7 +455,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCorners()
             CubeHandler handler = CubeHandler::fromTopFront(yellow, red);
             if (goodOrientation.size() == 0)
             {
-                for (Cube::CornerList::const_iterator it = badOrientation.begin(); it != badOrientation.end(); ++it)
+                for (auto it = badOrientation.begin(); it != badOrientation.end(); ++it)
                 {
                     CornerCube curCorner = *it;
                     handler = CubeHandler::genHandler(curCorner, Up , Front, Left);
@@ -482,7 +471,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCorners()
             }
             else // if (goodOrientation.size() == 2)
             {
-                for (Cube::CornerList::const_iterator it = badOrientation.begin(); it != badOrientation.end(); ++it)
+                for (auto it = badOrientation.begin(); it != badOrientation.end(); ++it)
                 {
                     CornerCube curCorner = *it;
                     handler = CubeHandler::genHandler(curCorner, Up , Front, Left);
@@ -513,7 +502,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCornersPos()
     ColMoveSeq retVal;
 
     Cube defCube;
-    Cube::CornerList topLayerCorners;
+    std::vector<CornerCube> topLayerCorners;
     for (Cube::CornerList::const_iterator it = defCube.getCorners().begin(); it != defCube.getCorners().end(); ++it)
         if (it->hasInColor(yellow))
             topLayerCorners.push_back(*it);
@@ -521,11 +510,11 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCornersPos()
     while (1)
     {
         // check the orientation of the yellow edges.
-        Cube::CornerList goodOrientation;
-        Cube::CornerList badOrientation;
-        for (Cube::CornerList::const_iterator it = topLayerCorners.begin(); it != topLayerCorners.end(); ++it)
+        std::vector<CornerCube> goodOrientation;
+        std::vector<CornerCube> badOrientation;
+        for (auto it = topLayerCorners.begin(); it != topLayerCorners.end(); ++it)
         {
-            CornerCube curCorner = m_CurrentCubeState.findPositionCube(it->getPosition());
+            CornerCube curCorner = m_CurrentCubeState.findCubieByPosition(it->getPosition());
 
             if (isSameCubeColor(curCorner.getColor(), curCorner.getPosition()))
                 goodOrientation.push_back(curCorner);
@@ -604,7 +593,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopEdges()
     ColMoveSeq retVal;
 
     Cube defCube;
-    Cube::EdgeList topLayerEdges;
+    std::vector<EdgeCube> topLayerEdges;
     for (Cube::EdgeList::const_iterator it = defCube.getEdges().begin(); it != defCube.getEdges().end(); ++it)
         if (it->hasInColor(yellow))
             topLayerEdges.push_back(*it);
@@ -613,10 +602,9 @@ ColMoveSeq DummyCubeSolver::_solveStepTopEdges()
     {
         // check the orientation of the yellow edges.
         std::vector< RubikColor > goodOrientation;
-        for (Cube::EdgeList::const_iterator it = topLayerEdges.begin(); it != topLayerEdges.end(); ++it)
+        for (auto it = topLayerEdges.begin(); it != topLayerEdges.end(); ++it)
         {
-            EdgeCube curEdge = m_CurrentCubeState.findPositionCube(it->getPosition());
-            curEdge.makeCanon();
+            EdgeCube curEdge = m_CurrentCubeState.findCubieByPosition(it->getPosition());
 
             if (isSameCubeColor(curEdge.getColor(), curEdge.getPosition()))
                 goodOrientation.push_back(curEdge.getPositionNot(yellow));

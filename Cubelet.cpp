@@ -1,48 +1,62 @@
 #include "Cubelet.h"
 #include "ColorPermMap.h"
 
-namespace {
-    // position rotation
-    RubikColor rotateCubeletPos(RubikColor RotatingFace, bool clockWise, RubikColor cubeletPosMoving)
-    {
-        const auto& permToUse = PermutationMap::permutationBySideRotation(RotatingFace);
-        if (clockWise)
-            return permToUse.nextColor(cubeletPosMoving);
-        else
-            return permToUse.prevColor(cubeletPosMoving);
-    }    
-}
-
 
 template <int cubeDim>
-void Cubelet<cubeDim>::rotate(RubikColor side, bool clockWise)
+Cubelet<cubeDim> Cubelet<cubeDim>::getRotate(RubikColor side, bool clockWise) const
 {
-    bool isMemeberOfRotatingSide = false;
-    for (int i = 0; i< cubeDim && !isMemeberOfRotatingSide; i++)
-        isMemeberOfRotatingSide = (side == position[i]);
-    if (isMemeberOfRotatingSide)
-        for (int i = 0; i< cubeDim; i++)
-            position[i] = rotateCubeletPos( side, clockWise, position[i]);
+    _MyCubelet ret = *this;
+    ret.rotate(side, clockWise);
+    return ret;
 }
 
 template <int cubeDim>
-void Cubelet<cubeDim>::makeCanon()
+void Cubelet<cubeDim>::rotateSinglePiece(bool cw)
 {
-    bool contSort = true;
-    for(int i = 1; (i <= cubeDim) && contSort; i++)
+    // orientation will be screwed after this call.
+    if (cubeDim == 2)
     {
-        contSort = false;
-        for (int j=0; j < (cubeDim -1); j++)
+        std::swap(position[0], position[1]);
+    }
+    else
+    {
+        if (cw)
         {
-            if (position[j+1] < position[j])      // ascending order simply changes to <
-            {
-                std::swap(position[j+1], position[j]);
-                std::swap(color[j+1], color[j]);
-                contSort = true;               // indicates that a swap occurred.
-            }
+            std::swap(position[0], position[1]);
+            std::swap(position[0], position[2]);
+        }
+        else
+        {
+            std::swap(position[0], position[2]);
+            std::swap(position[0], position[1]);
         }
     }
 }
+
+template <int cubeDim>
+void Cubelet<cubeDim>::swapPositionWith(_MyCubelet other)
+{
+    // orientation will be screwed after this call.
+    std::swap(position, other.position);
+}
+
+
+template <int cubeDim>
+void Cubelet<cubeDim>::swapSinglePiece(RubikColor c1, RubikColor c2)
+{
+    // orientation will be screwed after this call.
+    if (cubeDim == 2)
+        std::swap(position[0], position[1]);
+    else
+    {
+        if ( (color[0] == c1 && color[1] == c2) ||
+            (color[1] == c2 && color[0] == c1))
+            std::swap(position[0], position[1]);
+        else
+            std::swap(position[2], position[1]);
+    }
+}
+
 
 template class Cubelet< 2 >;
 template class Cubelet< 3 >;

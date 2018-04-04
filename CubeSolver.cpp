@@ -3,6 +3,7 @@
 
 bool CubeSolver::solve()
 {
+    m_StepSolution.clear();
     if (!m_CubeToSolve.isSolved())
     {
         computeSolution();
@@ -10,7 +11,22 @@ bool CubeSolver::solve()
     }
     else
     {
-        m_StepSolution.clear();
+        return true;
+    }
+}
+
+bool CubeSolver::solveWhiteCross()
+{
+    m_StepSolution.clear();
+    if (!whiteCrossSolveAvail())
+        return false;
+    else if (!m_CubeToSolve.isSolved())
+    {
+        computeSolution();
+        return m_StepSolution.size() > 0;
+    }
+    else
+    {
         return true;
     }
 }

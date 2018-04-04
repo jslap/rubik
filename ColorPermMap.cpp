@@ -4,25 +4,9 @@
 
 using namespace Eigen;
 
-
-PermutationMap* PermutationMap::getInstance()
-{
-    static PermutationMap instance;
-    return &instance;
-}
-
-const RubikPerm& PermutationMap::_permutationBySideRotation(RubikColor col) const
-{
-    return m_PermutationBySideRotation.at(col);
-}
-
-const RubikPerm& PermutationMap::permutationBySideRotation(RubikColor col)
-{
-    return getInstance()->_permutationBySideRotation(col);
-}
-
 PermutationMap::PermutationMap()
 {
+    m_PermutationBySideRotation.resize(RubikBase::RubikColors.size());
     for (auto rotCol : RubikBase::RubikColors)
     {
         RubikPerm::Func forwFunc;

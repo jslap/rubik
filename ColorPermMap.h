@@ -17,13 +17,25 @@
 class PermutationMap
 {
 public:
-    static PermutationMap* getInstance();
-    static const RubikPerm& permutationBySideRotation(RubikColor col);
+    static PermutationMap* getInstance()
+    {
+        static PermutationMap instance;
+        return &instance;
+    }
+
+    static const RubikPerm& PermutationBySideRotation(RubikColor col)
+    {
+        return getInstance()->permutationBySideRotation(col);
+    }
+
+    const RubikPerm& permutationBySideRotation(RubikColor col) const
+    {
+        return m_PermutationBySideRotation[col];
+    }
 
 protected:
     PermutationMap();
 
-    const RubikPerm& _permutationBySideRotation(RubikColor col) const;
 
-    std::map < RubikColor , RubikPerm > m_PermutationBySideRotation;
+    std::vector < RubikPerm > m_PermutationBySideRotation;
 };
