@@ -4,13 +4,19 @@
 #include <list>
 #include <map>
 #include <Eigen/Dense>
+#include <iostream>
 #include <array>
 
-void AsertFunc(const std::string & reason );
+template <class F, class L>
+inline void AsertFunc(const std::string & reason, F&& f, L&& l)
+{
+    std::cout << "Assert at " << f << ":" << l << " ; " << reason << std::endl;; 
+    assert(false);
+}
 #ifdef NDEBUG
 #define RASSERT(pred, str) nullptr
 #else // NDEBUG
-#define RASSERT(pred, str) if (!(pred)) {AsertFunc(str);}
+#define RASSERT(pred, str) if (!(pred)) {AsertFunc(str, __FILE__, __LINE__);}
 #endif // NDEBUG
 
 using Eigen::Vector3i;
@@ -33,7 +39,7 @@ inline RubikColor oppositeColor(RubikColor c) { return RubikColor((c + 3) % 6);}
 std::string colorName( RubikColor col);
 RubikColor colorFromName( const std::string& s);
 inline std::ostream& operator<<(std::ostream & os, RubikColor c) {os << "col(" << colorName(c) << ")"; return os;}
-std::string orientationName( RubikOrientation col);
+std::string orientationName( RubikOrientation o);
 inline std::ostream& operator<<(std::ostream & os,  RubikOrientation o) {os << orientationName(o); return os;}
 
 namespace cereal

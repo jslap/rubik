@@ -2,7 +2,7 @@
 
 #include "ColorPermMap.h"
 
-using namespace Eigen;
+using Eigen::Vector3f;
 
 PermutationMap::PermutationMap()
 {
@@ -10,7 +10,7 @@ PermutationMap::PermutationMap()
     for (auto rotCol : RubikBase::RubikColors)
     {
         RubikPerm::Func forwFunc;
-        AngleAxis<float> ax  = AngleAxis<float>(-3.1416/2.0, getVectorFromColor(rotCol).cast<float>());
+        auto ax  = Eigen::AngleAxis<float>(-3.1416/2.0, getVectorFromColor(rotCol).cast<float>());
         for (auto faceCol : RubikBase::RubikColors)
         {
             Vector3f faceAsVec = getVectorFromColor(faceCol).cast<float>();

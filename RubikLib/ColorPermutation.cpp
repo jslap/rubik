@@ -6,7 +6,9 @@ namespace
     {
         RubikPerm::InternalFunc ret(RubikBase::RubikColors.size());
         for (auto i : RubikBase::RubikColors)
+        {
             ret[i] = i;
+        }
         return ret;
     }
 
@@ -14,10 +16,12 @@ namespace
     {
         RubikPerm::InternalFunc ret(RubikBase::RubikColors.size());
         for (auto i : RubikBase::RubikColors)
+        {
             ret[forwardFunc[i]] = i;
+        }
         return ret;
     }
-}
+} // namespace
 
 RubikPerm::RubikPerm()
 {
@@ -44,6 +48,8 @@ void RubikPerm::setForward(Func forwardFunc)
 {
     forward.resize(RubikBase::RubikColors.size());
     for (auto i : RubikBase::RubikColors)
+    {
         forward[i] = forwardFunc[i];
+    }
     inverse = _computeInverse(forward);
 }

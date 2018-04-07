@@ -2,7 +2,7 @@
 
 #include "RubikBase.h"
 #include "ColorPermMap.h"
-#include <cereal/types/array.hpp>
+#include "cereal/types/array.hpp"
 
 // A cubelet has 2 or 3 sides.
 // It is defined by the color of the facet, that appear on the cubelet, and the position it has in the cube.

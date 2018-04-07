@@ -2,7 +2,7 @@
 
 #include "RubikBase.h"
 #include "Cubelet.h"
-#include <cereal/types/vector.hpp>
+#include "cereal/types/vector.hpp"
 
 class CubeHandler;
 class PermutationMap;

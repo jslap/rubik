@@ -114,9 +114,8 @@ typedef struct {
     ColMoveSeq _moveSeq;
     bool _isRotating;
     Cube _cubeSrc;
-    RubikColor _rotatingSide;
-    float _curAngle;
-    float _dstAngle;
+    ColMove _currentMove;
+    float _curRotationStep;
     
     int savedNbMove;
     int curNbMove;

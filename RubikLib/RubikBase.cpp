@@ -1,12 +1,8 @@
 #include "RubikBase.h"
-#include <boost/bimap.hpp>
-#include <boost/assign.hpp>
 
-void AsertFunc(const std::string & reason )
-{
-    printf("Assert failed %s\n", reason.c_str());
-    assert(false);
-}
+#include <boost/assign.hpp>
+#include <boost/bimap.hpp>
+
 
 const std::vector< RubikColor > RubikBase::RubikColors({white, green, red, blue, orange, yellow});
 const std::vector<std::pair< RubikColor, Vector3i >> RubikBase::ColorVecPairs({
@@ -24,7 +20,7 @@ const std::map < RubikColor , Vector3i > RubikBase::colorVecMap({
 
 namespace
 {
-    typedef boost::bimap<RubikColor, std::string> ColorNameBimap;
+    using ColorNameBimap = boost::bimap<RubikColor, std::string>;
     ColorNameBimap colorNameBimap = boost::assign::list_of< ColorNameBimap::relation >
     ( white,    "white")
     ( green,    "green")
@@ -33,12 +29,15 @@ namespace
     ( orange,   "orange")
     ( red,      "red")
     ( noColor,  "no Color");
-}
+} //namespace
+
 std::string colorName( RubikColor col)
 {
     auto iter = colorNameBimap.left.find(col);
     if (iter != colorNameBimap.left.end())
+    {
         return iter->second;
+    }
 
     RASSERT(false, "undefined color.");
     return "error";
@@ -62,7 +61,9 @@ RubikColor colorFromName( const std::string& s)
 {
     auto iter = colorNameBimap.right.find(s);
     if (iter != colorNameBimap.right.end())
+    {
         return iter->second;
+    }
 
     RASSERT(false, "undefined color.");
     return noColor;
@@ -81,12 +82,11 @@ RubikColor getColorFromVecf(const Vector3f &vec)
 }
 RubikColor getColorFromVeci(const Vector3i &vec)
 {
-    for (auto& kv : RubikBase::colorVecMap)
-    {
-        if (kv.second == vec)
-            return kv.first;
-    }
-    return noColor;
+    auto foundIter = std::find_if(RubikBase::colorVecMap.begin(), RubikBase::colorVecMap.end(),
+        [&vec] (const decltype(RubikBase::colorVecMap)::value_type& cv ) {
+            return cv.second == vec;
+        });
+    return (foundIter != RubikBase::colorVecMap.end()) ? foundIter->first : noColor;
 }
 
 

@@ -1,56 +1,9 @@
-//
-// File:		BasicOpenGLView.m
-//
-// Abstract:	Basic OpenGL View with Renderer information
-//
-// Version:		1.1 - minor fixes.
-//				1.0 - Original release.
-//
-//
-// Disclaimer:	IMPORTANT:  This Apple software is supplied to you by Apple Inc. ("Apple")
-//				in consideration of your agreement to the following terms, and your use,
-//				installation, modification or redistribution of this Apple software
-//				constitutes acceptance of these terms.  If you do not agree with these
-//				terms, please do not use, install, modify or redistribute this Apple
-//				software.
-//
-//				In consideration of your agreement to abide by the following terms, and
-//				subject to these terms, Apple grants you a personal, non - exclusive
-//				license, under Apple's copyrights in this original Apple software ( the
-//				"Apple Software" ), to use, reproduce, modify and redistribute the Apple
-//				Software, with or without modifications, in source and / or binary forms;
-//				provided that if you redistribute the Apple Software in its entirety and
-//				without modifications, you must retain this notice and the following text
-//				and disclaimers in all such redistributions of the Apple Software. Neither
-//				the name, trademarks, service marks or logos of Apple Inc. may be used to
-//				endorse or promote products derived from the Apple Software without specific
-//				prior written permission from Apple.  Except as expressly stated in this
-//				notice, no other rights or licenses, express or implied, are granted by
-//				Apple herein, including but not limited to any patent rights that may be
-//				infringed by your derivative works or by other works in which the Apple
-//				Software may be incorporated.
-//
-//				The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
-//				WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
-//				WARRANTIES OF NON - INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
-//				PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION
-//				ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
-//
-//				IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
-//				CONSEQUENTIAL DAMAGES ( INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-//				SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-//				INTERRUPTION ) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION
-//				AND / OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER
-//				UNDER THEORY OF CONTRACT, TORT ( INCLUDING NEGLIGENCE ), STRICT LIABILITY OR
-//				OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Copyright ( C ) 2003-2007 Apple Inc. All Rights Reserved.
-//
+
 
 #import "BasicOpenGLView.h"
-//#import "GLCheck.h"
+#import "GLCheck.h"
 #import "trackball.h"
-//#import "drawinfo.h"
+#import "drawinfo.h"
 
 #include <Eigen/OpenGLSupport>
 using namespace Eigen;
@@ -58,25 +11,12 @@ using namespace Eigen;
 #include "CubeHandler.h"
 #include "DummyCubeSolver.h"
 #include "FridrichSolver.h"
+#include "CubeGLDrawer.h"
 
+const float nbFramePerRotation = 30.0f;
+const float deltaRotationStep = 1.0f/nbFramePerRotation;
 
 // ==================================
-
-// simple cube data
-GLint cube_num_vertices = 8;
-
-GLfloat cube_vertices [8][3] = {
-{1.0, 1.0, 1.0}, {1.0, -1.0, 1.0}, {-1.0, -1.0, 1.0}, {-1.0, 1.0, 1.0},
-{1.0, 1.0, -1.0}, {1.0, -1.0, -1.0}, {-1.0, -1.0, -1.0}, {-1.0, 1.0, -1.0} };
-
-GLfloat cube_vertex_colors [8][3] = {
-{1.0, 1.0, 1.0}, {1.0, 1.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0, 1.0},
-{1.0, 0.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 1.0} };
-
-GLint num_faces = 6;
-
-short cube_faces [6][4] = {
-{3, 2, 1, 0}, {2, 3, 7, 6}, {0, 1, 5, 4}, {3, 0, 4, 7}, {1, 2, 6, 5}, {4, 5, 6, 7} };
 
 recVec gOrigin = {0.0, 0.0, 0.0};
 
@@ -170,73 +110,6 @@ GLenum glReportError (void)
 	return err;
 }
 
-#pragma mark ---- OpenGL Utils ----
-
-// ---------------------------------
-
-// draw our simple cube based on current modelview and projection matrices
-static void drawCube (GLfloat fSize)
-{
-	long f, i;
-	if (1) {
-		glColor3f (1.0, 0.5, 0.0);
-		glBegin (GL_QUADS);
-		for (f = 0; f < num_faces; f++)
-			for (i = 0; i < 4; i++) {
-				glColor3f (cube_vertex_colors[cube_faces[f][i]][0], cube_vertex_colors[cube_faces[f][i]][1], cube_vertex_colors[cube_faces[f][i]][2]);
-				glVertex3f(cube_vertices[cube_faces[f][i]][0] * fSize, cube_vertices[cube_faces[f][i]][1] * fSize, cube_vertices[cube_faces[f][i]][2] * fSize);
-			}
-		glEnd ();
-	}
-	if (1) {
-		glColor3f (0.0, 0.0, 0.0);
-		for (f = 0; f < num_faces; f++) {
-			glBegin (GL_LINE_LOOP);
-				for (i = 0; i < 4; i++)
-					glVertex3f(cube_vertices[cube_faces[f][i]][0] * fSize, cube_vertices[cube_faces[f][i]][1] * fSize, cube_vertices[cube_faces[f][i]][2] * fSize);
-			glEnd ();
-		}
-	}
-}
-
-static void drawFace(GLfloat fSize, int faceInd)
-{
-    glBegin (GL_QUADS);
-    for (int i = 0; i < 4; i++)
-    {
-        glVertex3f(cube_vertices[cube_faces[faceInd][i]][0] * fSize, cube_vertices[cube_faces[faceInd][i]][1] * fSize, cube_vertices[cube_faces[faceInd][i]][2] * fSize);
-    }
-    glEnd ();
-}
-
-static void drawCubFace(GLfloat fSize, int faceInd, RubikColor col)
-{
-    //glColor3f (0.0, 0.0, 0.0);
-    //drawFace(fSize, faceInd);
-
-    //glPushMatrix() ;
-    //glTranslatef(, , );
-
-    switch (col)
-    {
-        case white :    glColor3f (1.0, 1.0, 1.0); break;
-        case yellow :   glColor3f (1.0, 1.0, 0.0); break;
-        case blue :     glColor3f (0.0, 0.0, 1.0); break;
-        case red :      glColor3f (1.0, 0.0, 0.0); break;
-        case orange :   glColor3f (1.0, 0.5, 0.0); break;
-        case green :    glColor3f (0.0, 1.0, 0.0); break;
-    }
-
-    drawFace(fSize*0.92, faceInd);
-
-}
-
-class OpenGLCubeDrawer
-{
-public:
-    OpenGLCubeDrawer(Cube c);
-}
-
 // ===================================
 
 @implementation BasicOpenGLView
@@ -250,127 +123,17 @@ public:
 
     if (_cubeIsSet)
     {
+        const float cubieSize = 0.7;
         Cube & cubeToUse = _isRotating ? _cubeSrc : _cube;
-        Matrix4f rotMatRotating = Matrix4f::Identity();
+        CubeGLDrawer drawer(cubeToUse, cubieSize);
         if (_isRotating)
         {
-            AngleAxisf ax(_curAngle, getVectorFromColor(_rotatingSide).cast<float>());
-            rotMatRotating.block<3,3>(0,0) = ax.matrix();
+            drawer.draw(_currentMove.first, _currentMove.second, _curRotationStep);
         }
-
-        const float cubieSize = 0.4;
-//        cubeToUse.makeCanon();
-
-        const Cube::EdgeList& edges = cubeToUse.getEdges();
-        for (Cube::EdgeList::const_iterator it = edges.begin(); it != edges.end() && true; ++it)
+        else
         {
-            glPushMatrix();
-
-            // check if we are rotating this side.
-            if (_isRotating && std::find(it->getPosition().begin(), it->getPosition().end(), _rotatingSide) != it->getPosition().end())
-                glMultMatrix(rotMatRotating);
-
-            Vector3f xAxis(1,0,0);
-            Vector3f yAxis(0,1,0);
-            Vector3f firstColPos = getVectorFromColor(it->getPosition()[0]).cast<float>();
-            Vector3f secondColPos = getVectorFromColor(it->getPosition()[1]).cast<float>();
-            Vector3f cubePos = firstColPos + secondColPos;
-
-            glTranslate(cubePos*cubieSize);
-
-
-            // generate rotation so first color is x and second color is y.
-            Matrix3f rotMat;
-            rotMat.col(0) = firstColPos;
-            rotMat.col(1) = secondColPos;
-            rotMat.col(2) = secondColPos.cross(firstColPos);
-
-            //printf("trans(%f, %f, %f) %s\n", cubePos.x(), cubePos.y(), cubePos.z(), colorName(it->getColor()[1]).c_str());
-
-            Matrix4f rotMat4 = Matrix4f::Identity();
-            rotMat4.block<3,3>(0,0) = rotMat;
-            glMultMatrix(rotMat4);
-
-            drawCubFace(cubieSize/2.0, 2, it->getColor()[0]);
-            drawCubFace(cubieSize/2.0, 3, it->getColor()[1]);
-
-            glPopMatrix();
+            drawer.draw();
         }
-
-
-        const Cube::CornerList& corners = cubeToUse.getCorners();
-        for (Cube::CornerList::const_iterator it = corners.begin(); it != corners.end()  && true; ++it)
-        {
-            glPushMatrix();
-
-            // check if we are rotating this side.
-            if (_isRotating &&
-                std::find(it->getPosition().begin(), it->getPosition().end(), _rotatingSide) != it->getPosition().end())
-                glMultMatrix(rotMatRotating);
-
-            Vector3f xAxis(1,0,0);
-            Vector3f yAxis(0,1,0);
-            Vector3f zAxis(0,0,1);
-            Vector3f firstColPos = getVectorFromColor(it->getPosition()[0]).cast<float>();
-            Vector3f secondColPos = getVectorFromColor(it->getPosition()[1]).cast<float>();
-            Vector3f thirdColPos = getVectorFromColor(it->getPosition()[2]).cast<float>();
-            Vector3f cubePos = firstColPos + secondColPos + thirdColPos;
-
-            glTranslate(cubePos*cubieSize);
-
-
-            // generate rotation so first color is x and second color is y.
-            Matrix3f rotMat;
-            rotMat.col(0) = firstColPos;
-            rotMat.col(1) = secondColPos;
-            rotMat.col(2) = thirdColPos;
-
-            //printf("trans(%f, %f, %f) %s\n", cubePos.x(), cubePos.y(), cubePos.z(), colorName(it->getColor()[1]).c_str());
-
-            Matrix4f rotMat4 = Matrix4f::Identity();
-            rotMat4.block<3,3>(0,0) = rotMat;
-            glMultMatrix(rotMat4);
-
-            drawCubFace(cubieSize/2.0, 2, it->getColor()[0]);
-            drawCubFace(cubieSize/2.0, 3, it->getColor()[1]);
-            drawCubFace(cubieSize/2.0, 0, it->getColor()[2]);
-
-            glPopMatrix();
-        }
-
-        for (auto rotCol : RubikBase::RubikColors)
-        {
-            glPushMatrix();
-
-            // check if we are rotating this side.
-            if (_isRotating && rotCol == _rotatingSide)
-                glMultMatrix(rotMatRotating);
-
-
-            Vector3f xAxis(1,0,0);
-            Vector3f firstColPos = getVectorFromColor(rotCol).cast<float>();
-            Vector3f cubePos = firstColPos;
-
-            glTranslate(cubePos*cubieSize);
-
-            // generate rotation so first color is x and second color is y.
-            Matrix3f rotMat;
-            rotMat.col(0) = firstColPos;
-            rotMat.col(1) = Vector3f(firstColPos.y(), firstColPos.z(), firstColPos.x());
-            rotMat.col(2) = rotMat.col(1).cross(firstColPos);
-
-            //printf("trans(%f, %f, %f) %s\n", cubePos.x(), cubePos.y(), cubePos.z(), colorName(it->getColor()[1]).c_str());
-
-            Matrix4f rotMat4 = Matrix4f::Identity();
-            rotMat4.block<3,3>(0,0) = rotMat;
-            glMultMatrix(rotMat4);
-
-            drawCubFace(cubieSize/2.0, 2, rotCol);
-
-            glPopMatrix();
-
-        }
-
     }
 }
 
@@ -378,15 +141,13 @@ public:
 {
     if (!_isRotating && !_moveSeq.empty())
     {
-        ColMove curMove = _moveSeq.front();
+        _currentMove = _moveSeq.front();
         _moveSeq.pop_front();
 
         _isRotating = true;
         _cubeSrc = _cube;
-        _rotatingSide = curMove.first;
-        _curAngle = 0;
-        _dstAngle = curMove.second ? -3.1416/2.0 : 3.1416/2.0;
-        _cube.rotate(curMove.first, curMove.second);
+        _curRotationStep = 0.0f;
+        _cube.rotate(_currentMove.first, _currentMove.second);
     }
 }
 
@@ -607,25 +368,11 @@ public:
 	}
     if (_isRotating)
     {
-        //const float deltaAngle = 0.05;
-        const float deltaAngle = 0.5;
-        if (_dstAngle>_curAngle)
+        _curRotationStep += deltaRotationStep;
+        if (_curRotationStep > 1.0f)
         {
-            _curAngle += deltaAngle;
-            if (_curAngle > _dstAngle)
-            {
-                _isRotating = false;
-                _curAngle = _dstAngle;
-            }
-        }
-        else
-        {
-            _curAngle -= deltaAngle;
-            if (_curAngle < _dstAngle)
-            {
-                _isRotating = false;
-                _curAngle = _dstAngle;
-            }
+            _isRotating = false;
+            _curRotationStep = 1.0f;
         }
 
         [self checkRotationBuffer];
@@ -1051,7 +798,6 @@ public:
 
     [self drawCubies];
 
-	//drawCube (1.5f); // draw scene
     if (fInfo)
 		[self drawInfo];
 

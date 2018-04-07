@@ -7,21 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B7777D716BCA6E700708A32 /* DetectRubik.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B7777D516BCA6E700708A32 /* DetectRubik.mm */; };
 		4B8C549C2071F1330066BAE1 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8C549B2071F1320066BAE1 /* libopencv_core.dylib */; };
 		4B8C549E2071F13E0066BAE1 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8C549D2071F13E0066BAE1 /* libopencv_highgui.dylib */; };
 		4B8C54A02071F14B0066BAE1 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8C549F2071F14B0066BAE1 /* libopencv_features2d.dylib */; };
 		4B8C54A22071F1580066BAE1 /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8C54A12071F1570066BAE1 /* libopencv_imgproc.dylib */; };
 		4B8C54A42071F15C0066BAE1 /* libopencv_imgcodecs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8C54A32071F15C0066BAE1 /* libopencv_imgcodecs.dylib */; };
-		4BB03EEA1E218B96008A4628 /* RubikBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EE91E218B96008A4628 /* RubikBase.cpp */; };
-		4BB03EEE1E219E51008A4628 /* ColorPermutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */; };
-		4BB03EF11E229E28008A4628 /* ColorPermMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */; };
-		4BB03EFC1E22FD86008A4628 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF21E22FD86008A4628 /* Cube.cpp */; };
-		4BB03EFD1E22FD86008A4628 /* CubeHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF41E22FD86008A4628 /* CubeHandler.cpp */; };
-		4BB03EFE1E22FD86008A4628 /* Cubelet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF61E22FD86008A4628 /* Cubelet.cpp */; };
-		4BB03EFF1E22FD86008A4628 /* CubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EF81E22FD86008A4628 /* CubeSolver.cpp */; };
-		4BB03F001E22FD86008A4628 /* DummyCubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03EFA1E22FD86008A4628 /* DummyCubeSolver.cpp */; };
-		4BB03F031E2884DD008A4628 /* FridrichSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB03F011E2884DD008A4628 /* FridrichSolver.cpp */; };
+		4B8C54C7207912240066BAE1 /* DetectRubik.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54AA207912240066BAE1 /* DetectRubik.mm */; };
+		4B8C54C8207912240066BAE1 /* CubeGLDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54AF207912240066BAE1 /* CubeGLDrawer.cpp */; };
+		4B8C54C9207912240066BAE1 /* CubeHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54B0207912240066BAE1 /* CubeHandler.cpp */; };
+		4B8C54CA207912240066BAE1 /* ColorPermMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54B2207912240066BAE1 /* ColorPermMap.cpp */; };
+		4B8C54CB207912240066BAE1 /* FridrichSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54B5207912240066BAE1 /* FridrichSolver.cpp */; };
+		4B8C54CC207912240066BAE1 /* DummyCubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54B7207912240066BAE1 /* DummyCubeSolver.cpp */; };
+		4B8C54CD207912240066BAE1 /* CubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54BA207912240066BAE1 /* CubeSolver.cpp */; };
+		4B8C54CE207912240066BAE1 /* ThistleSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54BC207912240066BAE1 /* ThistleSolver.cpp */; };
+		4B8C54CF207912240066BAE1 /* GenBruteSolve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54BD207912240066BAE1 /* GenBruteSolve.cpp */; };
+		4B8C54D0207912240066BAE1 /* Cubelet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54BF207912240066BAE1 /* Cubelet.cpp */; };
+		4B8C54D1207912240066BAE1 /* RubikBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54C0207912240066BAE1 /* RubikBase.cpp */; };
+		4B8C54D2207912250066BAE1 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54C3207912240066BAE1 /* Cube.cpp */; };
+		4B8C54D3207912250066BAE1 /* ColorPermutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54C6207912240066BAE1 /* ColorPermutation.cpp */; };
 		740959030CC8255A00261DBF /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 740959010CC8255A00261DBF /* AppDelegate.mm */; };
 		7409592A0CC826D800261DBF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 740959290CC826D800261DBF /* Credits.rtf */; };
 		745217950CA98A790067AF41 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 745217940CA98A790067AF41 /* OpenGL.framework */; };
@@ -43,31 +46,38 @@
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Cocoa OpenGL_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Cocoa OpenGL_Prefix.pch"; sourceTree = "<group>"; };
-		4B7777D516BCA6E700708A32 /* DetectRubik.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DetectRubik.mm; sourceTree = "<group>"; };
-		4B7777D616BCA6E700708A32 /* DetectRubik.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectRubik.h; sourceTree = "<group>"; };
 		4B8C549B2071F1320066BAE1 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../usr/local/lib/libopencv_core.dylib; sourceTree = "<group>"; };
 		4B8C549D2071F13E0066BAE1 /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = ../../../../../../usr/local/lib/libopencv_highgui.dylib; sourceTree = "<group>"; };
 		4B8C549F2071F14B0066BAE1 /* libopencv_features2d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.dylib; path = ../../../../../../usr/local/lib/libopencv_features2d.dylib; sourceTree = "<group>"; };
 		4B8C54A12071F1570066BAE1 /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = ../../../../../../usr/local/lib/libopencv_imgproc.dylib; sourceTree = "<group>"; };
 		4B8C54A32071F15C0066BAE1 /* libopencv_imgcodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.dylib; path = ../../../../../../usr/local/lib/libopencv_imgcodecs.dylib; sourceTree = "<group>"; };
-		4BB03EE91E218B96008A4628 /* RubikBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RubikBase.cpp; sourceTree = "<group>"; };
-		4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermutation.cpp; sourceTree = "<group>"; };
-		4BB03EEC1E219E51008A4628 /* ColorPermutation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermutation.h; sourceTree = "<group>"; };
-		4BB03EED1E219E51008A4628 /* RubikBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikBase.h; sourceTree = "<group>"; };
-		4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermMap.cpp; sourceTree = "<group>"; };
-		4BB03EF01E229E28008A4628 /* ColorPermMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermMap.h; sourceTree = "<group>"; };
-		4BB03EF21E22FD86008A4628 /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
-		4BB03EF31E22FD86008A4628 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
-		4BB03EF41E22FD86008A4628 /* CubeHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeHandler.cpp; sourceTree = "<group>"; };
-		4BB03EF51E22FD86008A4628 /* CubeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeHandler.h; sourceTree = "<group>"; };
-		4BB03EF61E22FD86008A4628 /* Cubelet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cubelet.cpp; sourceTree = "<group>"; };
-		4BB03EF71E22FD86008A4628 /* Cubelet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cubelet.h; sourceTree = "<group>"; };
-		4BB03EF81E22FD86008A4628 /* CubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeSolver.cpp; sourceTree = "<group>"; };
-		4BB03EF91E22FD86008A4628 /* CubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeSolver.h; sourceTree = "<group>"; };
-		4BB03EFA1E22FD86008A4628 /* DummyCubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyCubeSolver.cpp; sourceTree = "<group>"; };
-		4BB03EFB1E22FD86008A4628 /* DummyCubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyCubeSolver.h; sourceTree = "<group>"; };
-		4BB03F011E2884DD008A4628 /* FridrichSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FridrichSolver.cpp; sourceTree = "<group>"; };
-		4BB03F021E2884DD008A4628 /* FridrichSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FridrichSolver.h; sourceTree = "<group>"; };
+		4B8C54AA207912240066BAE1 /* DetectRubik.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DetectRubik.mm; sourceTree = "<group>"; };
+		4B8C54AB207912240066BAE1 /* DetectRubik.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectRubik.h; sourceTree = "<group>"; };
+		4B8C54AC207912240066BAE1 /* ColorPermMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermMap.h; sourceTree = "<group>"; };
+		4B8C54AE207912240066BAE1 /* CubeGLDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeGLDrawer.h; sourceTree = "<group>"; };
+		4B8C54AF207912240066BAE1 /* CubeGLDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeGLDrawer.cpp; sourceTree = "<group>"; };
+		4B8C54B0207912240066BAE1 /* CubeHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeHandler.cpp; sourceTree = "<group>"; };
+		4B8C54B1207912240066BAE1 /* CubeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeHandler.h; sourceTree = "<group>"; };
+		4B8C54B2207912240066BAE1 /* ColorPermMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermMap.cpp; sourceTree = "<group>"; };
+		4B8C54B4207912240066BAE1 /* GenBruteSolve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenBruteSolve.h; sourceTree = "<group>"; };
+		4B8C54B5207912240066BAE1 /* FridrichSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FridrichSolver.cpp; sourceTree = "<group>"; };
+		4B8C54B6207912240066BAE1 /* FridrichSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FridrichSolver.h; sourceTree = "<group>"; };
+		4B8C54B7207912240066BAE1 /* DummyCubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyCubeSolver.cpp; sourceTree = "<group>"; };
+		4B8C54B8207912240066BAE1 /* ThistleSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThistleSolver.h; sourceTree = "<group>"; };
+		4B8C54B9207912240066BAE1 /* DummyCubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyCubeSolver.h; sourceTree = "<group>"; };
+		4B8C54BA207912240066BAE1 /* CubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CubeSolver.cpp; sourceTree = "<group>"; };
+		4B8C54BB207912240066BAE1 /* CubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeSolver.h; sourceTree = "<group>"; };
+		4B8C54BC207912240066BAE1 /* ThistleSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThistleSolver.cpp; sourceTree = "<group>"; };
+		4B8C54BD207912240066BAE1 /* GenBruteSolve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenBruteSolve.cpp; sourceTree = "<group>"; };
+		4B8C54BE207912240066BAE1 /* Cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		4B8C54BF207912240066BAE1 /* Cubelet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cubelet.cpp; sourceTree = "<group>"; };
+		4B8C54C0207912240066BAE1 /* RubikBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RubikBase.cpp; sourceTree = "<group>"; };
+		4B8C54C1207912240066BAE1 /* ColorPermutation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPermutation.h; sourceTree = "<group>"; };
+		4B8C54C2207912240066BAE1 /* CubeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CubeUtils.h; sourceTree = "<group>"; };
+		4B8C54C3207912240066BAE1 /* Cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
+		4B8C54C4207912240066BAE1 /* Cubelet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cubelet.h; sourceTree = "<group>"; };
+		4B8C54C5207912240066BAE1 /* RubikBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikBase.h; sourceTree = "<group>"; };
+		4B8C54C6207912240066BAE1 /* ColorPermutation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermutation.cpp; sourceTree = "<group>"; };
 		740959010CC8255A00261DBF /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		740959020CC8255A00261DBF /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		740959290CC826D800261DBF /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -109,22 +119,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4BB03EF21E22FD86008A4628 /* Cube.cpp */,
-				4BB03EF31E22FD86008A4628 /* Cube.h */,
-				4BB03EF41E22FD86008A4628 /* CubeHandler.cpp */,
-				4BB03EF51E22FD86008A4628 /* CubeHandler.h */,
-				4BB03EF61E22FD86008A4628 /* Cubelet.cpp */,
-				4BB03EF71E22FD86008A4628 /* Cubelet.h */,
-				4BB03EF81E22FD86008A4628 /* CubeSolver.cpp */,
-				4BB03EF91E22FD86008A4628 /* CubeSolver.h */,
-				4BB03EFA1E22FD86008A4628 /* DummyCubeSolver.cpp */,
-				4BB03EFB1E22FD86008A4628 /* DummyCubeSolver.h */,
-				4BB03EEF1E229E28008A4628 /* ColorPermMap.cpp */,
-				4BB03EF01E229E28008A4628 /* ColorPermMap.h */,
-				4BB03EEB1E219E51008A4628 /* ColorPermutation.cpp */,
-				4BB03EEC1E219E51008A4628 /* ColorPermutation.h */,
-				4BB03EED1E219E51008A4628 /* RubikBase.h */,
-				4BB03EE91E218B96008A4628 /* RubikBase.cpp */,
+				4B8C54A8207912240066BAE1 /* RubikLib */,
 				74E01FB50CAC4E510030A4D8 /* GL Utilities */,
 				74F0EC5B0CA989F9009E924F /* BasicOpenGLView.mm */,
 				74F0EC5C0CA989F9009E924F /* BasicOpenGLView.h */,
@@ -159,11 +154,7 @@
 		29B97314FDCFA39411CA2CEA /* Cocoa OpenGL */ = {
 			isa = PBXGroup;
 			children = (
-				4BB03F011E2884DD008A4628 /* FridrichSolver.cpp */,
-				4BB03F021E2884DD008A4628 /* FridrichSolver.h */,
 				4B322FC11D73E21D00542254 /* libs */,
-				4B7777D516BCA6E700708A32 /* DetectRubik.mm */,
-				4B7777D616BCA6E700708A32 /* DetectRubik.h */,
 				7439218A0CC944C3009BCC59 /* ReadMe.rtfd */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -216,6 +207,64 @@
 			children = (
 			);
 			name = libs;
+			sourceTree = "<group>";
+		};
+		4B8C54A8207912240066BAE1 /* RubikLib */ = {
+			isa = PBXGroup;
+			children = (
+				4B8C54AD207912240066BAE1 /* Drawer */,
+				4B8C54A9207912240066BAE1 /* Detect */,
+				4B8C54B3207912240066BAE1 /* Solver */,
+				4B8C54AC207912240066BAE1 /* ColorPermMap.h */,
+				4B8C54B0207912240066BAE1 /* CubeHandler.cpp */,
+				4B8C54B1207912240066BAE1 /* CubeHandler.h */,
+				4B8C54B2207912240066BAE1 /* ColorPermMap.cpp */,
+				4B8C54BE207912240066BAE1 /* Cube.h */,
+				4B8C54BF207912240066BAE1 /* Cubelet.cpp */,
+				4B8C54C0207912240066BAE1 /* RubikBase.cpp */,
+				4B8C54C1207912240066BAE1 /* ColorPermutation.h */,
+				4B8C54C2207912240066BAE1 /* CubeUtils.h */,
+				4B8C54C3207912240066BAE1 /* Cube.cpp */,
+				4B8C54C4207912240066BAE1 /* Cubelet.h */,
+				4B8C54C5207912240066BAE1 /* RubikBase.h */,
+				4B8C54C6207912240066BAE1 /* ColorPermutation.cpp */,
+			);
+			path = RubikLib;
+			sourceTree = "<group>";
+		};
+		4B8C54A9207912240066BAE1 /* Detect */ = {
+			isa = PBXGroup;
+			children = (
+				4B8C54AA207912240066BAE1 /* DetectRubik.mm */,
+				4B8C54AB207912240066BAE1 /* DetectRubik.h */,
+			);
+			path = Detect;
+			sourceTree = "<group>";
+		};
+		4B8C54AD207912240066BAE1 /* Drawer */ = {
+			isa = PBXGroup;
+			children = (
+				4B8C54AE207912240066BAE1 /* CubeGLDrawer.h */,
+				4B8C54AF207912240066BAE1 /* CubeGLDrawer.cpp */,
+			);
+			path = Drawer;
+			sourceTree = "<group>";
+		};
+		4B8C54B3207912240066BAE1 /* Solver */ = {
+			isa = PBXGroup;
+			children = (
+				4B8C54B4207912240066BAE1 /* GenBruteSolve.h */,
+				4B8C54B5207912240066BAE1 /* FridrichSolver.cpp */,
+				4B8C54B6207912240066BAE1 /* FridrichSolver.h */,
+				4B8C54B7207912240066BAE1 /* DummyCubeSolver.cpp */,
+				4B8C54B8207912240066BAE1 /* ThistleSolver.h */,
+				4B8C54B9207912240066BAE1 /* DummyCubeSolver.h */,
+				4B8C54BA207912240066BAE1 /* CubeSolver.cpp */,
+				4B8C54BB207912240066BAE1 /* CubeSolver.h */,
+				4B8C54BC207912240066BAE1 /* ThistleSolver.cpp */,
+				4B8C54BD207912240066BAE1 /* GenBruteSolve.cpp */,
+			);
+			path = Solver;
 			sourceTree = "<group>";
 		};
 		74E01FB50CAC4E510030A4D8 /* GL Utilities */ = {
@@ -297,23 +346,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BB03EFF1E22FD86008A4628 /* CubeSolver.cpp in Sources */,
-				4BB03EFC1E22FD86008A4628 /* Cube.cpp in Sources */,
+				4B8C54D1207912240066BAE1 /* RubikBase.cpp in Sources */,
+				4B8C54C8207912240066BAE1 /* CubeGLDrawer.cpp in Sources */,
+				4B8C54CC207912240066BAE1 /* DummyCubeSolver.cpp in Sources */,
+				4B8C54CA207912240066BAE1 /* ColorPermMap.cpp in Sources */,
 				745217CB0CA98B160067AF41 /* drawInfo.mm in Sources */,
 				745217CC0CA98B160067AF41 /* GLCheck.cpp in Sources */,
-				4BB03EFD1E22FD86008A4628 /* CubeHandler.cpp in Sources */,
-				4BB03EFE1E22FD86008A4628 /* Cubelet.cpp in Sources */,
 				745217CD0CA98B160067AF41 /* GLString.mm in Sources */,
 				745217CE0CA98B160067AF41 /* trackball.cpp in Sources */,
-				4BB03EEE1E219E51008A4628 /* ColorPermutation.cpp in Sources */,
-				4BB03F031E2884DD008A4628 /* FridrichSolver.cpp in Sources */,
+				4B8C54CF207912240066BAE1 /* GenBruteSolve.cpp in Sources */,
+				4B8C54C7207912240066BAE1 /* DetectRubik.mm in Sources */,
 				8D11072D0486CEB800E47090 /* main.mm in Sources */,
-				4BB03F001E22FD86008A4628 /* DummyCubeSolver.cpp in Sources */,
-				4BB03EF11E229E28008A4628 /* ColorPermMap.cpp in Sources */,
+				4B8C54D2207912250066BAE1 /* Cube.cpp in Sources */,
 				74F0EC5D0CA989F9009E924F /* BasicOpenGLView.mm in Sources */,
+				4B8C54CB207912240066BAE1 /* FridrichSolver.cpp in Sources */,
+				4B8C54CE207912240066BAE1 /* ThistleSolver.cpp in Sources */,
 				740959030CC8255A00261DBF /* AppDelegate.mm in Sources */,
-				4BB03EEA1E218B96008A4628 /* RubikBase.cpp in Sources */,
-				4B7777D716BCA6E700708A32 /* DetectRubik.mm in Sources */,
+				4B8C54D3207912250066BAE1 /* ColorPermutation.cpp in Sources */,
+				4B8C54C9207912240066BAE1 /* CubeHandler.cpp in Sources */,
+				4B8C54CD207912240066BAE1 /* CubeSolver.cpp in Sources */,
+				4B8C54D0207912240066BAE1 /* Cubelet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +409,7 @@
 					/usr/local/include/eigen3,
 					/usr/local/include/eigen3/unsupported,
 					/opt/local/include,
+					third/cereal/include,
 					.,
 				);
 				INFOPLIST_FILE = Info.plist;
@@ -389,6 +442,7 @@
 					/usr/local/include/eigen3,
 					/usr/local/include/eigen3/unsupported,
 					/opt/local/include,
+					third/cereal/include,
 					.,
 				);
 				INFOPLIST_FILE = Info.plist;

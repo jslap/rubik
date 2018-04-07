@@ -1,3 +1,4 @@
-build
-buildxc
+**/build
+**/build-xc
 xcuserdata
+**/.DS_Store
