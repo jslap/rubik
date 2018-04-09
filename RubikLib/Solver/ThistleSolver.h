@@ -1,5 +1,6 @@
 #include "CubeSolver.h"
 
+#include "Cube.h"
 
 class ThistleSolver: public CubeSolver
 {

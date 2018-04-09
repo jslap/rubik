@@ -1,7 +1,9 @@
 #include "Cube.h"
-#include "CubeHandler.h"
-#include "ColorPermMap.h"
 
+#include "ColorPermMap.h"
+#include "CubeHandler.h"
+
+#include <numeric>
 #include <set>
 
 namespace
@@ -12,14 +14,20 @@ namespace
         RubikColor whiteOrYellowColor = c.getColorIn(white, yellow);
 
         if (c.colorForPosition(whiteOrYellowPos) == whiteOrYellowColor)
+        {
             return 0;
+        }
 
         for (RubikColor posToTurn : c.getPosition())
         {
             if (c.getRotate(posToTurn, true).positionForColor(whiteOrYellowColor) == whiteOrYellowPos)
+            {
                 return 1;
+            }
             if (c.getRotate(posToTurn, false).positionForColor(whiteOrYellowColor) == whiteOrYellowPos)
+            {
                 return 2;
+            }
         }
         RASSERT(false, "Should not happen.");
         return 0;
@@ -56,10 +64,10 @@ namespace
         // we do not care about orientation here, so we can sort position and color independantly if we wish.
         // convert each cubie -> pair of coord : first is the color coord sorted, second is the position coord sorted.
         // In terms of permutation, first is the element (x), second is P(x).
-        typedef typename CubieArrayType::value_type CubieType;
-        typedef typename CubieType::_MyCubeCoord CubieCoord;
-        typedef std::pair<CubieCoord, CubieCoord> PermutationElt;
-        typedef std::vector<PermutationElt> PermutationVec;
+        using CubieType = typename CubieArrayType::value_type;
+        using CubieCoord = typename CubieType::_MyCubeCoord;
+        using PermutationElt = std::pair<CubieCoord, CubieCoord>;
+        using PermutationVec = std::vector<PermutationElt>;
         PermutationVec permutationVector;
         for (CubieType c : cubies)
         {
@@ -74,7 +82,9 @@ namespace
         auto permFunc = [&permutationVector](const CubieCoord& c) -> CubieCoord {
             auto iter = std::find_if(permutationVector.begin(), permutationVector.end(), [&c](const PermutationElt& p){return p.first == c;});
             if (iter != permutationVector.end())
+            {
                 return iter->second;
+            }
 
             RASSERT(false, "should not happen");
             return CubieCoord();
@@ -83,7 +93,9 @@ namespace
         auto getUntreatedElt = [&permutationVector, &treatedCubies] () {
             auto iter = std::find_if(permutationVector.begin(), permutationVector.end(), [&treatedCubies](const PermutationElt& p){return treatedCubies.count(p.first) == 0;});
             if (iter != permutationVector.end())
+            {
                 return iter->first;
+            }
 
             RASSERT(false, "should not happen");
             return CubieCoord();
@@ -109,7 +121,9 @@ namespace
                 curCycle.push_back(curElt);
             }
             if (curCycle.size()%2 == 0)
+            {
                 nbEvenCycle++;
+            }
         }
         return (nbEvenCycle%2 == 1) ? -1 : 1;
     }
@@ -117,35 +131,47 @@ namespace
     bool isRotationOK(const CornerCoord& c1, const CornerCoord& c2)
     {
         if (c1 == c2)
+        {
             return true;
+        }
+
         CornerCoord c1Copy = c1;
         std::rotate(c1Copy.begin(), c1Copy.begin()+1, c1Copy.end());
         if (c1Copy == c2)
+        {
             return true;
+        }
+
         std::rotate(c1Copy.begin(), c1Copy.begin()+1, c1Copy.end());
-        if (c1Copy == c2)
-            return true;
-        return false;
+        return (c1Copy == c2);
     }
 
     CornerCube bringToRightPosition(const CornerCube& cubie)
     {
         CornerCube cubieCopy = cubie;
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()) )
+        {
             return cubieCopy;
+        }
 
         // bring the corner to the right position, regardless of the orientation.
         RubikColor blueOrGreenPos = cubie.getPositionIn(blue, green);
 
         cubieCopy.rotate(blueOrGreenPos, true);
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()))
+        {
             return cubieCopy;
+        }
         cubieCopy.rotate(blueOrGreenPos, true);
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()))
+        {
             return cubieCopy;
+        }
         cubieCopy.rotate(blueOrGreenPos, true);
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()))
+        {
             return cubieCopy;
+        }
 
         //rotate the yellow or white.
         RubikColor yellowOrWhite = cubieCopy.getPositionIn(yellow, white);
@@ -154,19 +180,25 @@ namespace
 
         cubieCopy.rotate(oppositeColor(blueOrGreenPos), true);
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()))
+        {
             return cubieCopy;
+        }
         cubieCopy.rotate(oppositeColor(blueOrGreenPos), true);
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()))
+        {
             return cubieCopy;
+        }
         cubieCopy.rotate(oppositeColor(blueOrGreenPos), true);
         if (isSameCubeColor( cubieCopy.getPosition(),  cubieCopy.getColor()))
+        {
             return cubieCopy;
+        }
 
         RASSERT(false, "Not possible.");
         return cubieCopy;
     }
 
-}
+} // namespace
 
 
 Cube::Cube():
@@ -198,6 +230,12 @@ corners({{
 {
 }
 
+Cube::Cube(const Cube& c):
+    m_PermMapInst(PermutationMap::getInstance()),
+    edges(c.edges),
+    corners(c.corners)
+    {}
+
 const EdgeCube &Cube::getEdge(const EdgeCube& simEdge) const
 {
     return getEdge(simEdge.getColor());
@@ -221,7 +259,9 @@ const CornerCube &Cube::getCorner(const CornerCoord& cornerColor) const
 void Cube::rotate(const ColMove & move, int nbIter)
 {
     for (int i = 0; i<nbIter; i++)
+    {
         rotate(move);
+    }
 }
 
 void Cube::rotate(const ColMove & move)
@@ -232,18 +272,32 @@ void Cube::rotate(const ColMove & move)
 void Cube::apply(const ColMoveSeq & moves)
 {
     for (const auto& m : moves)
+    {
         rotate(m);
+    }
 }
+
+template <class CubieType>
+void rotateCubieIfInPos(const RubikPerm& permutation, CubieType& cubie, RubikColor side, bool clockWise, int nbIter)
+{
+    if (cubie.hasInPosition(side))
+    {
+        cubie.rotate(permutation, side, clockWise, nbIter);
+    }
+}
+
 
 void Cube::rotate(RubikColor side, bool clockWise, int nbIter/*=1*/)
 {
-    const auto& permToUse = m_PermMapInst->permutationBySideRotation(side);
-    for (EdgeCube &e: edges)
-        if (e.hasInPosition(side))
-            e.rotate(permToUse, side, clockWise, nbIter);
-    for (CornerCube &c: corners)
-        if (c.hasInPosition(side))
-            c.rotate(permToUse, side, clockWise, nbIter);
+    const auto& permutationToUse = m_PermMapInst->permutationBySideRotation(side);
+    for (auto &e: edges)
+    {
+        rotateCubieIfInPos(permutationToUse, e, side, clockWise, nbIter);
+    }
+    for (auto &c: corners)
+    {
+        rotateCubieIfInPos(permutationToUse, c, side, clockWise, nbIter);
+    }
 }
 
 bool Cube::isSolved() const
@@ -265,60 +319,74 @@ bool Cube::isValidCube() const
 
     // 1. must have all the cubes color.
     for (const CornerCube &defCorner: defCube.getCorners())
-        if ( std::find_if(getCorners().begin(), getCorners().end(), [&](const CornerCube &c){return isSameCubeColor(defCorner.getColor(), c.getColor());}) == getCorners().end())
+    {
+        if ( std::none_of(getCorners().begin(), getCorners().end(), [&](const CornerCube &c){return isSameCubeColor(defCorner.getColor(), c.getColor());}))
+        {
             return false;
+        }
+    }
     for (const EdgeCube &defEdge: defCube.getEdges())
-        if ( std::find_if(getEdges().begin(), getEdges().end(), [&](const EdgeCube &c){return isSameCubeColor(defEdge.getColor(), c.getColor());}) == getEdges().end())
+    {
+        if ( std::none_of(getEdges().begin(), getEdges().end(), [&](const EdgeCube &c){return isSameCubeColor(defEdge.getColor(), c.getColor());}))
+        {
             return false;
+        }
+    }
+
     // 2. must have all the cubes position.
     for (const CornerCube &defCorner: defCube.getCorners())
-        if ( std::find_if(getCorners().begin(), getCorners().end(), [&](const CornerCube &c){return isSameCubeColor(defCorner.getPosition(), c.getPosition());}) == getCorners().end())
+    {
+        if ( std::none_of(getCorners().begin(), getCorners().end(), [&](const CornerCube &c){return isSameCubeColor(defCorner.getPosition(), c.getPosition());}))
+        {
             return false;
+        }
+    }
     for (const EdgeCube &defEdge: defCube.getEdges())
-        if ( std::find_if(getEdges().begin(), getEdges().end(), [&](const EdgeCube &c){return isSameCubeColor(defEdge.getPosition(), c.getPosition());}) == getEdges().end())
+    {
+        if ( std::none_of(getEdges().begin(), getEdges().end(), [&](const EdgeCube &c){return isSameCubeColor(defEdge.getPosition(), c.getPosition());}))
+        {
             return false;
+        }
+    }
+
     // 3. must have 8 corners and 12 edges.
-    if (getCorners().size() != defCube.getCorners().size())
+    if (getCorners().size() != defCube.getCorners().size() ||
+        getEdges().size() != defCube.getEdges().size())
+    {
         return false;
-    if (getEdges().size() != defCube.getEdges().size())
-        return false;
+    }
 
     // 3.1 corner cubes rotation should not be reversed compare to solved cube.
     for (const CornerCube &c: getCorners())
     {
         CornerCube curCubieatRightPos = bringToRightPosition(c);
 
-        bool isColorRotationOk = isRotationOK(curCubieatRightPos.getPosition(), curCubieatRightPos.getColor());
-
-        if (!isColorRotationOk)
+        if (!isRotationOK(curCubieatRightPos.getPosition(), curCubieatRightPos.getColor()))
+        {
             return false;
+        }
     }
 
 
     // 4. must be solvable.
     // a) check corner orientation parity.
-    int cornerParitySum = 0;
-    for (const CornerCube &c : corners)
-        cornerParitySum += parityForCorner(c);
-
+    int cornerParitySum = std::accumulate(corners.begin(), corners.end(), 0, [](int val, auto &c){return parityForCorner(c)+ val;});
     if (cornerParitySum%3 != 0)
+    {
         return false;
+    }
 
     // b) check the edge orientation parity.
-    int edgeParitySum = 0;
-    for (const EdgeCube &c: edges)
-        edgeParitySum += parityForEdge(c);
-
-        if (edgeParitySum%2 != 0)
-            return false;
+    int edgeParitySum = std::accumulate(edges.begin(), edges.end(), 0, [](int val, auto &e){return parityForEdge(e)+ val;});
+    if (edgeParitySum%2 != 0)
+    {
+        return false;
+    }
 
     // c) check the permutation parity.
     int cornerPermutationParity = permutationParity(corners);
     int edgePermutationParity = permutationParity(edges);
-    if (cornerPermutationParity*edgePermutationParity < 0)
-        return false;
-
-    return true;
+    return (cornerPermutationParity*edgePermutationParity >= 0);
 }
 
 
@@ -347,89 +415,32 @@ bool Cube::operator==(const Cube & rhs) const
     return (that.edges == rhs2.edges) && (that.corners==rhs2.corners);
 }
 
-
-const EdgeCube &Cube::findCubieByColor(const EdgeCoord & col) const
-{
-    for (const EdgeCube &e: edges)
-        if (isSameCubeColor(e.getColor() , col ))
-            return e;
-    RASSERT(false, "Cubie not in Cube.");
-    return edges[0];
-}
-
-const CornerCube &Cube::findCubieByColor(const CornerCoord & col) const
-{
-    for (const CornerCube &c: corners)
-        if (isSameCubeColor(c.getColor() , col ))
-            return c;
-    RASSERT(false, "Cubie not in Cube.");
-    return corners[0];
-}
-
-const EdgeCube &Cube::findCubieByPosition(const EdgeCoord & col) const
-{
-    for (const EdgeCube &e: edges)
-        if (isSameCubeColor(e.getPosition() , col ))
-            return e;
-    RASSERT(false, "Cubie not in Cube.");
-    return edges[0];
-}
-
-const CornerCube &Cube::findCubieByPosition(const CornerCoord & col) const
-{
-    for (const CornerCube &c: corners)
-        if (isSameCubeColor(c.getPosition() , col ))
-            return c;
-    RASSERT(false, "Cubie not in Cube.");
-    return corners[0];
-}
-
-EdgeCube &Cube::_findCubieByColor(const EdgeCoord & col)
-{
-    return const_cast<EdgeCube &>(static_cast<const Cube &>(*this).findCubieByColor(col));
-}
-
-CornerCube &Cube::_findCubieByColor(const CornerCoord & col)
-{
-    return const_cast<CornerCube &>(static_cast<const Cube &>(*this).findCubieByColor(col));
-}
-
-EdgeCube &Cube::_findCubieByPosition(const EdgeCoord & col)
-{
-    return const_cast<EdgeCube &>(static_cast<const Cube &>(*this).findCubieByPosition(col));
-}
-
-CornerCube &Cube::_findCubieByPosition(const CornerCoord & col)
-{
-    return const_cast<CornerCube &>(static_cast<const Cube &>(*this).findCubieByPosition(col));
-}
-
 void Cube::rotateSinglePiece(const CornerCoord & col, bool cw)
 {
-    _findCubieByColor(col).rotateSinglePiece(cw);
+    _findCubieByColor<CornerCube>(col).rotateSinglePiece(cw);
 }
 
 void Cube::swapSinglePiece(const CornerCoord & col)
 {
-    _findCubieByColor(col).swapSinglePiece(col[0], col[1]);
+    _findCubieByColor<CornerCube>(col).swapSinglePiece(col[0], col[1]);
 }
 
 void Cube::flipEdge(const EdgeCoord& col)
 {
-    _findCubieByColor(col).rotateSinglePiece(true);
+    _findCubieByColor<EdgeCube>(col).rotateSinglePiece(true);
 }
 
 void Cube::swapEdges(const EdgeCoord& col1, const EdgeCoord& col2)
 {
-    EdgeCube &col1Cubie = _findCubieByColor(col1);
-    EdgeCube &col2Cubie = _findCubieByColor(col2);
+    auto &col1Cubie = _findCubieByColor<EdgeCube>(col1);
+    auto &col2Cubie = _findCubieByColor<EdgeCube>(col2);
     col1Cubie.swapPositionWith(col2Cubie);
 }
 
 void Cube::swapCorners(const CornerCoord& col1, const CornerCoord& col2)
 {
-    CornerCube &col1Cubie = _findCubieByColor(col1);
-    CornerCube &col2Cubie = _findCubieByColor(col2);
+    auto &col1Cubie = _findCubieByColor<CornerCube>(col1);
+    auto &col2Cubie = _findCubieByColor<CornerCube>(col2);
     col1Cubie.swapPositionWith(col2Cubie);
 }
 
@@ -442,17 +453,25 @@ bool Cube::diff(const Cube & rhs, EdgePosList &edgeDiff, CornerPosList &cornerDi
     Cube that = *this;
     Cube rhs2 = rhs;
 
-    EdgeList::iterator eIter = that.edges.begin();
-    EdgeList::iterator eIterRhs = rhs2.edges.begin();
+    auto eIter = that.edges.begin();
+    auto eIterRhs = rhs2.edges.begin();
     for( ; eIter != that.edges.end(); ++eIter, ++eIterRhs)
+    {
         if (eIter->getColor() != eIterRhs->getColor())
+        {
             edgeDiff.push_back(eIter->getPosition());
+        }
+    }
 
-    CornerList::iterator cornIter = that.corners.begin();
-    CornerList::iterator cornIterRhs = rhs2.corners.begin();
+    auto cornIter = that.corners.begin();
+    auto cornIterRhs = rhs2.corners.begin();
     for( ; cornIter != that.corners.end(); ++cornIter, ++cornIterRhs)
+    {
         if (cornIter->getColor() != cornIterRhs->getColor())
+        {
             cornerDiff.push_back(cornIter->getPosition());
+        }
+    }
 
     return edgeDiff.empty() && cornerDiff.empty();
 }

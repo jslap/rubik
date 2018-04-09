@@ -1,15 +1,25 @@
 #include "CubeHandler.h"
 
-using namespace Eigen;
+using Eigen::Vector3f;
+using Eigen::Matrix3f;
 
-void CubeHandler::generateFromMatrix(Matrix3f rotMat)
+namespace
 {
-    for (auto faceCol : RubikBase::RubikColors)
+    RubikFace getDefaultPositionFaceFromColor(RubikColor col)
+    {
+        return static_cast<RubikFace> (col);
+    } 
+
+} // namespace
+
+void CubeHandler::generateFromMatrix(const Matrix3f &rotMat)
+{
+    for (auto faceCol : RubikBase::RubikColors())
     {
         Vector3f curColVec = getVectorFromColor(faceCol).cast<float>();
         Vector3f transVec = rotMat*curColVec;
         RubikColor dstCol = getColorFromVecf(transVec);
-        RubikFace curColorFaceEquiv = (RubikFace) faceCol;
+        RubikFace curColorFaceEquiv = getDefaultPositionFaceFromColor(faceCol);
         _posToColorMap[curColorFaceEquiv] = dstCol;
     }
 }
@@ -82,11 +92,7 @@ CubeHandler CubeHandler::fromTopRight(RubikColor topFace, RubikColor rightFace)
     return handler;
 }
 
-CubeHandler::CubeHandler()
-{
-}
-
-
+CubeHandler::CubeHandler() = default;
 
 void CubeHandler::rotate(Cube &cube, RubikFace face, bool cw) const
 {
@@ -108,18 +114,18 @@ ColMove CubeHandler::convertMove(PosMove posMove) const
 
 RubikColor CubeHandler::_getCol(RubikFace f) const
 {
-    std::map< RubikFace, RubikColor>::const_iterator it = _posToColorMap.find(f);
+    auto it = _posToColorMap.find(f);
     return it==_posToColorMap.end() ? noColor : it->second;
 }
 
-const EdgeCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, RubikFace face2)
+const EdgeCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, RubikFace face2) const
 {
     EdgeCube edgeCube(_getCol(face1), _getCol(face2));
     EdgeCoord edgeCoord = edgeCube.getPosition();
     return cube.findCubieByPosition(edgeCoord);
 }
 
-const CornerCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, RubikFace face2, RubikFace face3)
+const CornerCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, RubikFace face2, RubikFace face3) const
 {
     CornerCube cornerCube(_getCol(face1), _getCol(face2), _getCol(face3));
     CornerCoord cornerCoord = cornerCube.getPosition();
@@ -130,7 +136,7 @@ std::list< CubeHandler > CubeHandler::genHandlerList;
 bool CubeHandler::listIsInit = false;
 void CubeHandler::_generateAllHandler()
 {
-    // TODO find a less ugly way to do that.
+    // TODO(js) find a less ugly way to do that.
     if (!listIsInit)
     {
         genHandlerList.push_back(CubeHandler::fromTopFront(white, red));
@@ -150,13 +156,14 @@ CubeHandler CubeHandler::genHandler(CornerCube cubie, RubikFace face1, RubikFace
 {
     _generateAllHandler();
 
-    for (std::list< CubeHandler >::iterator it = genHandlerList.begin(); it != genHandlerList.end(); ++it)
+    for (const auto &handler: genHandlerList )
     {
-        Cube aCube;
-        CornerCube cube1 = it->getCubie(aCube, face1, face2, face3);
-        bool cubeIsTheRightOne = (isSameCubeColor(cube1.getPosition(), cubie.getPosition()));
-        if (cubeIsTheRightOne)
-            return *it;
+        Cube defaultCube;
+        CornerCube cube1 = handler.getCubie(defaultCube, face1, face2, face3);
+        if (isSameCubeColor(cube1.getPosition(), cubie.getPosition()))
+        {
+            return handler;
+        }
     }
     RASSERT(false, "");
     return genHandlerList.front();
@@ -166,14 +173,20 @@ CubeHandler CubeHandler::genHandler(EdgeCube cubie, RubikFace face1, RubikFace f
 {
     _generateAllHandler();
 
-    for (std::list< CubeHandler >::iterator it = genHandlerList.begin(); it != genHandlerList.end(); ++it)
+    for (const auto &handler: genHandlerList )
     {
-        CubeHandler & curHandler = *it;
         Cube aCube;
-        EdgeCube cube1 = curHandler.getCubie(aCube, face1, face2);
+        EdgeCube cube1 = handler.getCubie(aCube, face1, face2);
         bool cubeIsTheRightOne = (isSameCubeColor(cube1.getPosition(), cubie.getPosition()));
-        if (cubeIsTheRightOne && (whiteOnTop== (curHandler._posToColorMap[Up]==white)))
-            return curHandler;
+        if (cubeIsTheRightOne)
+        {
+            auto topColorIter = handler._posToColorMap.find(Up);
+            bool whiteIsOnTopForHandler =  (topColorIter != handler._posToColorMap.end() && (topColorIter->second == white));
+            if (whiteIsOnTopForHandler == whiteOnTop)
+            {
+                return handler;
+            }
+        }
     }
     RASSERT(false, "");
     return genHandlerList.front();

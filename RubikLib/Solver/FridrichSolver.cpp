@@ -8,7 +8,8 @@ using namespace CubeUtils;
 
 namespace
 {
-    auto missplacedCrossFilter = [](const EdgeCube& ec){
+    bool missplacedCrossFilter(const EdgeCube& ec)
+    {
         return ec.hasInColor(white) && !ec.isSolved();
     };
 
@@ -226,7 +227,7 @@ void FridrichCubeSolver::bringToCross(EdgeCube c)
             if (!m_CurrentCubeState.findCubieByColor(EdgeCoord({{otherSide, white}})).isSolved()) //if its white side is not placed yet...
             {
                 // just turn it to yellow.
-                auto bringToYellowSide = turnUntill(m_CurrentCubeState, otherSide, [&c, otherCol](const Cube& cu){return cu.getEdge(c).hasInPosition(yellow);});
+                auto bringToYellowSide = turnUntill(m_CurrentCubeState, otherSide, [&c](const Cube& cu){return cu.getEdge(c).hasInPosition(yellow);});
                 _addAndApply(otherSide, bringToYellowSide.first, bringToYellowSide.second);
             }
             else
@@ -274,12 +275,12 @@ void FridrichCubeSolver::bringToCross(EdgeCube c)
 
 void FridrichCubeSolver::computeSolution()
 {
-    m_CurrentCubeState = m_CubeToSolve;
+    m_CurrentCubeState = *m_CubeToSolve;
     fastTopCross();
 }
 
 void FridrichCubeSolver::computeWhiteCross()
 {
-    m_CurrentCubeState = m_CubeToSolve;
+    m_CurrentCubeState = *m_CubeToSolve;
     fastTopCross();
 }

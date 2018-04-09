@@ -22,8 +22,8 @@ public:
         return cubieCopy;
     }
 
-    const EdgeCube& getCubie(const Cube &cube, RubikFace face1, RubikFace face2);
-    const CornerCube& getCubie(const Cube &cube, RubikFace face1, RubikFace face2, RubikFace face3);
+    const EdgeCube& getCubie(const Cube &cube, RubikFace face1, RubikFace face2) const;
+    const CornerCube& getCubie(const Cube &cube, RubikFace face1, RubikFace face2, RubikFace face3) const;
 
 
     ColMoveSeq convertSeq(const PosMoveSeq & posSeq) const;
@@ -33,7 +33,7 @@ public:
 
     RubikColor _getCol(RubikFace) const;
 private:
-    void generateFromMatrix(Eigen::Matrix3f rotMat);
+    void generateFromMatrix(const Eigen::Matrix3f &rotMat);
     CubeHandler();
     static void  _generateAllHandler();
 

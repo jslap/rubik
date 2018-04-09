@@ -1,9 +1,13 @@
 #include "GenBruteSolve.h"
+
 #include <boost/functional/hash.hpp>
 
 namespace
 {
-    static const GenBruteSolve::MovePlus NoMove({{noColor, true}, 0});
+    constexpr GenBruteSolve::MovePlus getNoMove() 
+    {
+        return {{noColor, true}, 0};
+    }
 }
 
 void applyToCube(Cube& c, const GenBruteSolve::MovePlus& m)
@@ -52,7 +56,7 @@ GenBruteSolve::MovePlus reverseMove(const GenBruteSolve::MovePlus& m)
         return retMove;
     }
     RASSERT(false, "Not implemented for this val.");
-    return NoMove;
+    return getNoMove();
 }
 
 GenBruteSolve::GenBruteSolve(const SolvedCondition& cond, const AllowedMoves& allowedMoves):
@@ -78,7 +82,7 @@ GenBruteSolve::GenBruteSolve(const SolvedCondition& cond, const AllowedMoves& al
 
     for (int i = 0; i < m_GeneratedAllowedMoves.size()-1; i++)
         m_NextMoveMap[m_GeneratedAllowedMoves[i]] = m_GeneratedAllowedMoves[i+1];
-    m_NextMoveMap[m_GeneratedAllowedMoves[m_GeneratedAllowedMoves.size()-1]] = NoMove;
+    m_NextMoveMap[m_GeneratedAllowedMoves[m_GeneratedAllowedMoves.size()-1]] = getNoMove();
 }
 
 const GenBruteSolve::MovePlus& GenBruteSolve::nextMove(const GenBruteSolve::MovePlus& m) const
@@ -178,7 +182,7 @@ bool GenBruteSolve::solve(int maxMove)
             MovePlus lastMove = curMove.back();
             MovePlus curNextMove = nextMove(lastMove);
 
-            while (curNextMove == NoMove)
+            while (curNextMove == getNoMove())
             {
                 applyToCube(curCube, reverseMove(lastMove));
                 curMove.pop_back();

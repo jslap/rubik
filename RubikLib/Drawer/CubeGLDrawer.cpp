@@ -161,7 +161,7 @@ void CubeGLDrawer::draw(RubikColor rotatingSide, bool clockwise, float curStep)
         glPopMatrix();
     }
 
-    for (auto rotCol : RubikBase::RubikColors)
+    for (auto rotCol : RubikBase::RubikColors())
     {
         glPushMatrix();
 

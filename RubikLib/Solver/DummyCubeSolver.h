@@ -1,5 +1,8 @@
 #include "CubeSolver.h"
 
+#include "Cube.h"
+
+class CubeHandler;
 class DummyCubeSolver : public CubeSolver
 {
 public:

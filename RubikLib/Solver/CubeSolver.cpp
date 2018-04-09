@@ -1,41 +1,49 @@
 #include "CubeSolver.h"
 
+#include "Cube.h"
+
+void CubeSolver::setStartingCube(const Cube& c)
+{
+    m_CubeToSolve = std::make_unique<Cube>(c);
+    m_StepSolution.clear();
+}
 
 bool CubeSolver::solve()
 {
     m_StepSolution.clear();
-    if (!m_CubeToSolve.isSolved())
+    if (!m_CubeToSolve->isSolved())
     {
         computeSolution();
-        return m_StepSolution.size() > 0;
+        return !m_StepSolution.empty();
     }
-    else
-    {
-        return true;
-    }
+
+    return true;
 }
 
 bool CubeSolver::solveWhiteCross()
 {
     m_StepSolution.clear();
     if (!whiteCrossSolveAvail())
+    {
         return false;
-    else if (!m_CubeToSolve.isSolved())
+    }
+
+    if (!m_CubeToSolve->isSolved())
     {
         computeSolution();
-        return m_StepSolution.size() > 0;
+        return !m_StepSolution.empty();
     }
-    else
-    {
-        return true;
-    }
+
+    return true;
 }
 
 ColMoveSeq CubeSolver::getFullSolution() const
 {
     ColMoveSeq fullSol;
     for (const ColMoveSeq& c : m_StepSolution)
+    {
         fullSol.insert(fullSol.end(), c.begin(), c.end());
+    }
     return fullSol;
 }
 
@@ -47,7 +55,9 @@ int CubeSolver::getNbSteps() const
 ColMoveSeq CubeSolver::getStepSolution(int stepIndex) const
 {
     if (stepIndex < m_StepSolution.size())
+    {
         return m_StepSolution[stepIndex];
-    else
-        return ColMoveSeq();
+    }
+
+    return ColMoveSeq();
 }

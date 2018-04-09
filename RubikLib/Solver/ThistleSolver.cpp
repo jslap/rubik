@@ -192,7 +192,7 @@ void ThistleSolver::computeSolution()
 void ThistleSolver::solvePhaseOne()
 {
     std::cout<< "Solving pahse one" << std::endl;
-    m_CurrentCubeState = m_CubeToSolve;
+    m_CurrentCubeState = *m_CubeToSolve;
 
     GenBruteSolve::AllowedMoves moveAllowed({
         {{green,true},1},
@@ -216,7 +216,7 @@ void ThistleSolver::solvePhaseOne()
 void ThistleSolver::solvePhaseTwo()
 {
     std::cout<< "Solving pahse two" << std::endl;
-    m_CurrentCubeState = m_CubeToSolve;
+    m_CurrentCubeState = *m_CubeToSolve;
 
     GenBruteSolve::AllowedMoves moveAllowed({
         {{green,true},1},
@@ -239,7 +239,7 @@ void ThistleSolver::solvePhaseTwo()
 
 void ThistleSolver::solvePhaseThree()
 {
-    m_CurrentCubeState = m_CubeToSolve;
+    m_CurrentCubeState = *m_CubeToSolve;
 
     GenBruteSolve::AllowedMoves moveAllowed({
         {{orange,true},2},

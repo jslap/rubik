@@ -1,5 +1,7 @@
 #include "CubeSolver.h"
 
+#include "Cube.h"
+
 class FridrichCubeSolver : public CubeSolver
 {
 public:

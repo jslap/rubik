@@ -41,19 +41,25 @@ void Cubelet<cubeDim>::swapPositionWith(_MyCubelet other)
 }
 
 
-template <int cubeDim>
-void Cubelet<cubeDim>::swapSinglePiece(RubikColor c1, RubikColor c2)
+template <>
+void Cubelet<2>::swapSinglePiece(RubikColor /*c1*/, RubikColor /*c2*/)
 {
     // orientation will be screwed after this call.
-    if (cubeDim == 2)
+    std::swap(position[0], position[1]);
+}
+
+template <>
+void Cubelet<3>::swapSinglePiece(RubikColor c1, RubikColor c2)
+{
+    // orientation will be screwed after this call.
+    if ( (color[0] == c1 && color[1] == c2) ||
+        (color[1] == c2 && color[0] == c1))
+    {
         std::swap(position[0], position[1]);
+        }
     else
     {
-        if ( (color[0] == c1 && color[1] == c2) ||
-            (color[1] == c2 && color[0] == c1))
-            std::swap(position[0], position[1]);
-        else
-            std::swap(position[2], position[1]);
+        std::swap(position[2], position[1]);
     }
 }
 

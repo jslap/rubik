@@ -13,8 +13,10 @@ public:
     typedef std::array< EdgeCube, 12 > EdgeList;
     typedef std::array< CornerCube, 8 > CornerList;
 
-    //Default pristine cube.
+    //Default pristine solved cube.
     Cube();
+    // Copy
+    Cube(const Cube& c);
 
     template<class Archive>
     void serialize(Archive & archive)
@@ -54,11 +56,23 @@ public:
 
     bool diff(const Cube & rhs, EdgePosList &edgeDiff, CornerPosList &cornerDiff);
 
-    const EdgeCube & findCubieByColor(const EdgeCoord & col) const;
-    const CornerCube &findCubieByColor(const CornerCoord & col) const;
+    const EdgeCube & findCubieByColor(const typename EdgeCube::_MyCubeCoord & col)  const
+    {
+        return _findCubieByFunc<EdgeCube>(col, &EdgeCube::getColor);
+    }
+    const CornerCube & findCubieByColor(const typename CornerCube::_MyCubeCoord & col)  const
+    {
+        return _findCubieByFunc<CornerCube>(col, &CornerCube::getColor);
+    }
 
-    const EdgeCube &findCubieByPosition(const EdgeCoord & col) const;
-    const CornerCube &findCubieByPosition(const CornerCoord & col) const;
+    const EdgeCube &findCubieByPosition(const typename EdgeCube::_MyCubeCoord & pos) const
+    {
+        return _findCubieByFunc<EdgeCube>(pos, &EdgeCube::getPosition);
+    }
+    const CornerCube &findCubieByPosition(const typename CornerCube::_MyCubeCoord & pos) const
+    {
+        return _findCubieByFunc<CornerCube>(pos, &CornerCube::getPosition);
+    }
 
     /////////////////
     // should not be used except for testing.
@@ -70,14 +84,82 @@ public:
     void swapCorners(const CornerCoord& col1, const CornerCoord& col2);
 
 protected:
-    EdgeCube & _findCubieByColor(const EdgeCoord & col);
-    CornerCube &_findCubieByColor(const CornerCoord & col);
+    template <class CubieType>
+    CubieType & _findCubieByColor(const typename CubieType::_MyCubeCoord & col) 
+    {
+        return _findCubieByFunc<CubieType>(col, &CubieType::getColor);
+    }
 
-    EdgeCube &_findCubieByPosition(const EdgeCoord & col);
-    CornerCube &_findCubieByPosition(const CornerCoord & col);
+    template <class CubieType>
+    CubieType &_findCubieByPosition(const typename CubieType::_MyCubeCoord & pos) 
+    {
+        return _findCubieByFunc(pos, &CubieType::getPosition);
+    }
+
+    template <class CubieType>
+    CubieType & _findCubieByFunc(
+        const typename CubieType::_MyCubeCoord & coord,
+        const typename CubieType::_MyCubeCoord&(CubieType::*func)() const
+        ) 
+    {
+        for (auto &c: getCubies<CubieType>())
+        {
+            if (isSameCubeColor(((&c)->*func)() , coord ))
+            {
+                return c;
+            }
+        }
+        RASSERT(false, "Cubie not in Cube.");
+        return getCubies<CubieType>()[0];
+    }
+
+    template <class CubieType>
+    const CubieType & _findCubieByFunc(
+        const typename CubieType::_MyCubeCoord & coord,
+        const typename CubieType::_MyCubeCoord&(CubieType::*func)() const
+        ) const
+    {
+        for (auto &c: getCubies<CubieType>())
+        {
+            if (isSameCubeColor(((&c)->*func)() , coord ))
+            {
+                return c;
+            }
+        }
+        RASSERT(false, "Cubie not in Cube.");
+        return getCubies<CubieType>()[0];
+    }
+
+    template <class CubieType>
+    auto &getCubies();
+    template <class CubieType>
+    auto &getCubies() const;
+
 
 private:
     PermutationMap * m_PermMapInst;
     EdgeList edges;
     CornerList corners;
 };
+
+template <>
+inline auto &Cube::getCubies<EdgeCube>() 
+{
+    return edges;
+}
+template <>
+inline auto &Cube::getCubies<CornerCube>() 
+{
+    return corners;
+}
+
+template <>
+inline auto &Cube::getCubies<EdgeCube>() const
+{
+    return edges;
+}
+template <>
+inline auto &Cube::getCubies<CornerCube>() const
+{
+    return corners;
+}

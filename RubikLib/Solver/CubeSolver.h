@@ -1,18 +1,15 @@
 #pragma once
 
-#include "Cube.h"
+#include "RubikBase.h"
 
+class Cube;
 class CubeSolver
 {
 public:
-    CubeSolver():m_CubeToSolve() {};
-    virtual ~CubeSolver() {};
+    CubeSolver() = default;;
+    virtual ~CubeSolver() = default;
 
-    void setStartingCube(const Cube& c)
-    {
-        m_CubeToSolve = c;
-        m_StepSolution.clear();
-    }
+    void setStartingCube(const Cube& c);
 
     // clear the results and compute.
     bool solve();
@@ -30,6 +27,6 @@ protected:
     virtual bool whiteCrossSolveAvail() const {return false;};
     virtual void computeWhiteCross() {};
 
-    Cube m_CubeToSolve;
+    std::unique_ptr<Cube> m_CubeToSolve;
     std::vector< ColMoveSeq > m_StepSolution;
 };

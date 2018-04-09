@@ -115,7 +115,7 @@ TEST(CubeTest, solvableTest)
 
 #include <fstream>
 #include <sstream>
-#include <cereal/archives/json.hpp>
+#include <cereal/archives/xml.hpp>
 
 TEST(SerializationCubeTest, SerializeTest)
 {
@@ -130,29 +130,29 @@ TEST(SerializationCubeTest, SerializeTest)
     }
 
     {
-        std::ofstream os("defCube.json");
-        cereal::JSONOutputArchive archive(os);
+        std::ofstream os("defCube.xml");
+        cereal::XMLOutputArchive archive(os);
         archive( defCube);
     }
 
     {
-        std::ofstream os("mixedCube.json");
-        cereal::JSONOutputArchive archive(os);
+        std::ofstream os("mixedCube.xml");
+        cereal::XMLOutputArchive archive(os);
         archive( c);
     }
 
     Cube readDefCube;
     {
-        std::ifstream istr("defCube.json");
-        cereal::JSONInputArchive iarchive(istr); // Create an input archive
+        std::ifstream istr("defCube.xml");
+        cereal::XMLInputArchive iarchive(istr); // Create an input archive
         iarchive(readDefCube); // Read the data from the archive
     }
     EXPECT_EQ(defCube, readDefCube);
 
     Cube readMixedCube;
     {
-        std::ifstream istr("mixedCube.json");
-        cereal::JSONInputArchive iarchive(istr); // Create an input archive
+        std::ifstream istr("mixedCube.xml");
+        cereal::XMLInputArchive iarchive(istr); // Create an input archive
         iarchive(readMixedCube); // Read the data from the archive
     }
     EXPECT_EQ(c, readMixedCube);

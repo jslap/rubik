@@ -6,12 +6,12 @@ using Eigen::Vector3f;
 
 PermutationMap::PermutationMap()
 {
-    m_PermutationBySideRotation.resize(RubikBase::RubikColors.size());
-    for (auto rotCol : RubikBase::RubikColors)
+    m_PermutationBySideRotation.resize(RubikBase::RubikColors().size());
+    for (auto rotCol : RubikBase::RubikColors())
     {
         RubikPerm::Func forwFunc;
         auto ax  = Eigen::AngleAxis<float>(-3.1416/2.0, getVectorFromColor(rotCol).cast<float>());
-        for (auto faceCol : RubikBase::RubikColors)
+        for (auto faceCol : RubikBase::RubikColors())
         {
             Vector3f faceAsVec = getVectorFromColor(faceCol).cast<float>();
             Vector3f resFaceAsVec = ax*faceAsVec;

@@ -30,23 +30,23 @@ else()
 
     # set(LOCAL_WARNING_AS_ERROR "-warnings-as-errors=*")
 
-    # set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks=*${LOCAL_DISABLED_TESTS}")
-    set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks=-*,cert-err58-*")
+    set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks=*${LOCAL_DISABLED_TESTS}")
+    # set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks=-*,-f*")
     # set(DO_CLANG_TIDY_WAE "${DO_CLANG_TIDY}" "${LOCAL_WARNING_AS_ERROR}")
     set(DO_CLANG_TIDY_WAE "${DO_CLANG_TIDY}")
 endif()
 
 
-include_directories ("third/cereal/include")
+include_directories (SYSTEM "third/cereal/include")
 
 find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 MESSAGE( STATUS "EIGEN3_INCLUDE_DIR:         " ${EIGEN3_INCLUDE_DIR} )
 
 MESSAGE( STATUS "CMAKE_SOURCE_DIR:         " ${CMAKE_SOURCE_DIR} )
 
 find_package(boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 MESSAGE( STATUS "Boost_INCLUDE_DIR:         " ${Boost_INCLUDE_DIR} )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")

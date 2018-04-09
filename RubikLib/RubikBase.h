@@ -3,7 +3,7 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <Eigen/Dense>
+#include <Eigen/Core>
 #include <iostream>
 #include <array>
 
@@ -29,9 +29,12 @@ enum RubikOrientation : unsigned char {WellOriented = 0, Twist1, Twist2};
 
 class RubikBase {
 public:
-    static const std::vector< RubikColor > RubikColors;
-    static const std::vector<std::pair< RubikColor, Vector3i >> ColorVecPairs;
-    static const std::map < RubikColor , Vector3i > colorVecMap;
+    static constexpr std::size_t NumberColor = 7;
+    static constexpr std::array< RubikColor, NumberColor > RubikColors() { return {{white, green, red, blue, orange, yellow}}; }
+
+    static const std::vector<std::pair< RubikColor, Vector3i >>& ColorVecPairs();
+    using ColorVecMap = std::map < RubikColor , Vector3i >;
+    static const ColorVecMap& colorVecMap();
 };
 
 inline RubikColor oppositeColor(RubikColor c) { return RubikColor((c + 3) % 6);}
