@@ -1,6 +1,99 @@
 #include "gtest/gtest.h"
 #include "Cube.h"
 
+TEST(EdgeCubeTest, BasicEdgeCubeTest)
+{
+    std::array<RubikColor, 2> whiteRedArray({white, red});
+    std::array<RubikColor, 2> whiteRedFlippedArray({red, white});
+    EdgeCube whiteRed(whiteRedArray);
+    EdgeCube whiteRed2(white, red);
+    EXPECT_EQ(whiteRed, whiteRed2) << "cubelet contructor should be equivalent";
+
+    // up to 4 rotation
+    EdgeCube whiteRedRotateByRed = whiteRed;
+    whiteRedRotateByRed.rotate(red, true, 1);
+    EXPECT_NE(whiteRed, whiteRedRotateByRed) << "cubelet should be rotated";
+    whiteRedRotateByRed.rotate(red, true, 1);
+    EXPECT_NE(whiteRed, whiteRedRotateByRed) << "cubelet should be rotated";
+    whiteRedRotateByRed.rotate(red, true, 1);
+    EXPECT_NE(whiteRed, whiteRedRotateByRed) << "cubelet should be rotated";
+    whiteRedRotateByRed.rotate(red, true, 1);
+    EXPECT_EQ(whiteRed, whiteRedRotateByRed) << "cubelet should be back to origin";
+
+    // Check properties for solved cubelet.
+    EXPECT_TRUE(whiteRed.hasInColor(red)) << "Should have its color in its color";
+    EXPECT_TRUE(whiteRed.hasInColor(white)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInColor(blue)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInColor(orange)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInColor(green)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInColor(yellow)) << "Should have its color in its color";
+    EXPECT_TRUE(whiteRed.hasInPosition(red)) << "Should have its color in its color";
+    EXPECT_TRUE(whiteRed.hasInPosition(white)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInPosition(blue)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInPosition(orange)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInPosition(green)) << "Should have its color in its color";
+    EXPECT_FALSE(whiteRed.hasInPosition(yellow)) << "Should have its color in its color";
+    
+    EXPECT_TRUE(whiteRed.isAtSolvedPosition()) << "Should be at solve pos.";
+    EXPECT_EQ(whiteRed.getPosition(), whiteRedArray) << "position should be as set.";
+    EXPECT_EQ(whiteRed.getColor(), whiteRedArray) << "color should be as set.";
+    EXPECT_EQ(whiteRed.getOrientation(), WellOriented) << "position should be as set.";
+    EXPECT_EQ(whiteRed.positionForColor(white), white) << "pos and color should be same.";
+    EXPECT_EQ(whiteRed.positionForColor(red), red) << "pos and color should be same.";
+    EXPECT_ANY_THROW(whiteRed.positionForColor(blue));
+    EXPECT_EQ(whiteRed.colorForPosition(white), white) << "pos and color should be same.";
+    EXPECT_EQ(whiteRed.colorForPosition(red), red) << "pos and color should be same.";
+    EXPECT_ANY_THROW(whiteRed.colorForPosition(blue));
+    EXPECT_EQ(whiteRed.getColorNot(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRed.getColorNot(red), white) << "pos and color should be same.";
+    EXPECT_TRUE(whiteRed.getColorNot(blue) == white || whiteRed.getColorNot(blue) == red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRed.getPositionNot(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRed.getPositionNot(red), white) << "pos and color should be same.";
+    EXPECT_TRUE(whiteRed.getPositionNot(blue) == white || whiteRed.getPositionNot(blue) == red) << "pos and color should be same.";
+
+
+    //rotate red and check properties. wrong place and all
+    whiteRedRotateByRed = whiteRed;
+    whiteRedRotateByRed.rotate(red, true, 1);
+    EXPECT_FALSE(whiteRedRotateByRed.isAtSolvedPosition()) << "Should be at solve pos.";
+    EXPECT_NE(whiteRedRotateByRed.getPosition(), whiteRedArray) << "position should be as set.";
+    EXPECT_EQ(whiteRedRotateByRed.getColor(), whiteRedArray) << "color should be as set.";
+    EXPECT_EQ(whiteRedRotateByRed.positionForColor(white), green) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.positionForColor(red), red) << "pos and color should be same.";
+    EXPECT_ANY_THROW(whiteRedRotateByRed.positionForColor(blue));
+    EXPECT_EQ(whiteRedRotateByRed.colorForPosition(green), white) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.colorForPosition(red), red) << "pos and color should be same.";
+    EXPECT_ANY_THROW(whiteRedRotateByRed.colorForPosition(white));
+    EXPECT_EQ(whiteRedRotateByRed.getColorNot(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.getColorNot(red), white) << "pos and color should be same.";
+    EXPECT_TRUE(whiteRedRotateByRed.getColorNot(blue) == white || whiteRedRotateByRed.getColorNot(blue) == red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.getPositionNot(green), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.getPositionNot(red), green) << "pos and color should be same.";
+    EXPECT_TRUE(whiteRedRotateByRed.getPositionNot(white) == green || whiteRedRotateByRed.getPositionNot(white) == red) << "pos and color should be same.";
+
+
+    // rotate red - green - white check properties right place bu not oriented.
+    whiteRedRotateByRed = whiteRed;
+    whiteRedRotateByRed.rotate(red, true, 1);
+    whiteRedRotateByRed.rotate(green, true, 1);
+    whiteRedRotateByRed.rotate(white, true, 1);
+    EXPECT_TRUE(whiteRedRotateByRed.isAtSolvedPosition()) << "Should be at solve pos.";
+    EXPECT_EQ(whiteRedRotateByRed.getPosition(), whiteRedFlippedArray) << "position should be as set.";
+    EXPECT_EQ(whiteRedRotateByRed.getColor(), whiteRedArray) << "color should be as set.";
+    EXPECT_NE(whiteRedRotateByRed.getOrientation(), WellOriented) << "position should be as set.";
+    EXPECT_EQ(whiteRedRotateByRed.positionForColor(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.positionForColor(red), white) << "pos and color should be same.";
+    EXPECT_ANY_THROW(whiteRedRotateByRed.positionForColor(blue));
+    EXPECT_EQ(whiteRedRotateByRed.colorForPosition(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.colorForPosition(red), white) << "pos and color should be same.";
+    EXPECT_ANY_THROW(whiteRedRotateByRed.colorForPosition(blue));
+    EXPECT_EQ(whiteRedRotateByRed.getColorNot(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.getColorNot(red), white) << "pos and color should be same.";
+    EXPECT_TRUE(whiteRedRotateByRed.getColorNot(blue) == white || whiteRedRotateByRed.getColorNot(blue) == red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.getPositionNot(white), red) << "pos and color should be same.";
+    EXPECT_EQ(whiteRedRotateByRed.getPositionNot(red), white) << "pos and color should be same.";
+    EXPECT_TRUE(whiteRedRotateByRed.getPositionNot(blue) == white || whiteRedRotateByRed.getPositionNot(blue) == red) << "pos and color should be same.";
+}
 
 TEST(CubeTest, moveCubeTest)
 {

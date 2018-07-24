@@ -17,11 +17,7 @@
 class PermutationMap
 {
 public:
-    static PermutationMap* getInstance()
-    {
-        static PermutationMap instance;
-        return &instance;
-    }
+    static PermutationMap* getInstance();
 
     static const RubikPerm& PermutationBySideRotation(RubikColor col)
     {
@@ -33,8 +29,9 @@ public:
         return m_PermutationBySideRotation[col];
     }
 
-protected:
+    ~PermutationMap();
     PermutationMap();
+protected:
 
 
     std::vector < RubikPerm > m_PermutationBySideRotation;

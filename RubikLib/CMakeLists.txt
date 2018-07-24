@@ -1,22 +1,28 @@
 cmake_minimum_required(VERSION 3.5.1)
 
+SET(COVERAGE OFF CACHE BOOL "Compile tests with coverage info")
+if (COVERAGE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g --coverage -fprofile-arcs -ftest-coverage")
+endif()    
+
 find_program(
         CLANG_TIDY_EXE
         NAMES "clang-tidy" "clang-tidy-6.0"
         DOC "Path to clang-tidy executable"
     )
 
-    if(NOT CLANG_TIDY_EXE)
+#if(NOT CLANG_TIDY_EXE)
+if(CLANG_TIDY_EXE)
     message(STATUS "clang-tidy not found.")
 else()
     message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
 
     set(LOCAL_DISABLED_TESTS "")
-    set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-alpha.*")
+    # set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-alpha.*")
 
     #   Disable on third party, but try to put it back.
-    set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-core.*") # static analyzer could be added after.
-    set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-*") # static analyzer could be added after.
+    # set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-core.*") # static analyzer could be added after.
+    # set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-*") # static analyzer could be added after.
 
     #   ########## disable fuchsia-* not relevant for us.
     set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-fuchsia-*")
@@ -38,12 +44,11 @@ endif()
 
 
 include_directories (SYSTEM "third/cereal/include")
+include_directories (SYSTEM "third/range/include")
 
 find_package(Eigen3 REQUIRED)
 include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 MESSAGE( STATUS "EIGEN3_INCLUDE_DIR:         " ${EIGEN3_INCLUDE_DIR} )
-
-MESSAGE( STATUS "CMAKE_SOURCE_DIR:         " ${CMAKE_SOURCE_DIR} )
 
 find_package(boost REQUIRED)
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
@@ -56,6 +61,7 @@ include_directories (".")
 
 
 add_library(RubikLib
+    RubikAssert.cpp
     RubikBase.cpp
     ColorPermutation.cpp
     ColorPermMap.cpp

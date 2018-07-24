@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "core": "cpp",
+        "openglsupport": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "dense": "cpp",
+        "random": "cpp",
+        "iterator": "cpp",
+        "slist": "cpp",
+        "*.ipp": "cpp",
+        "__bit_reference": "cpp",
+        "algorithm": "cpp"
+    }
+}

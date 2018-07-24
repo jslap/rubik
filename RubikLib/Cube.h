@@ -1,7 +1,9 @@
 #pragma once
 
+#include "RubikAssert.h"
 #include "RubikBase.h"
 #include "Cubelet.h"
+
 #include "cereal/types/vector.hpp"
 
 class CubeHandler;
@@ -40,12 +42,8 @@ public:
 
     bool isSolved() const;
     bool isCrossSolved(RubikColor col) const;
+    bool isTopCrossSolved() const {return isCrossSolved(white);}
     bool isValidCube() const;
-
-    // technically does not change the cube, make it easier to compare.
-    // void makeCanon();
-    //
-    // Cube canon() const;
 
     bool operator!=(const Cube & rhs) const
     {

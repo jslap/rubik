@@ -389,25 +389,6 @@ bool Cube::isValidCube() const
     return (cornerPermutationParity*edgePermutationParity >= 0);
 }
 
-
-
-// Cube Cube::canon() const
-// {
-//     Cube ret = *this;
-//     ret.makeCanon();
-//     return ret;
-// }
-//
-// void Cube::makeCanon()
-// {
-//     for (EdgeCube &e: edges)
-//         e.makeCanon();
-//     std::sort(edges.begin(), edges.end());
-//     for (CornerCube &c: corners)
-//         c.makeCanon();
-//     std::sort(corners.begin(), corners.end());
-// }
-
 bool Cube::operator==(const Cube & rhs) const
 {
     Cube that = *this;

@@ -1,5 +1,7 @@
 #include "GenBruteSolve.h"
 
+#include "RubikAssert.h"
+
 #include <boost/functional/hash.hpp>
 
 namespace

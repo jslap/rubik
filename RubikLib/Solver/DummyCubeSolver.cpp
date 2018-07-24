@@ -1,9 +1,16 @@
 #include "DummyCubeSolver.h"
+
+#include "RubikAssert.h"
 #include "CubeHandler.h"
 
 DummyCubeSolver::DummyCubeSolver() = default;
 
 DummyCubeSolver::~DummyCubeSolver() = default;
+
+bool DummyCubeSolver::whiteCrossSolveAvail() const 
+{
+    return true;
+}
 
 void DummyCubeSolver::computeSolution()
 {
@@ -324,10 +331,7 @@ ColMoveSeq DummyCubeSolver::_solveStepMiddleLayerElt(const EdgeCoord& piece)
         CubeHandler handler = CubeHandler::genHandler(curCubie, Front, Up, false);
 
         RubikColor colorOnYellowFace = curCubie.colorForPosition(yellow);
-        Vector3i colorOnYellowFaceVec = getVectorFromColor(colorOnYellowFace);
-        Vector3i yellowFaceVec = getVectorFromColor(yellow);
-        Vector3f crossProd = colorOnYellowFaceVec.cast<float>().cross(yellowFaceVec.cast<float>());
-        Vector3i crossProdi = roundVec(crossProd);
+        Vector3i crossProdi = colorVectorCroosProd(colorOnYellowFace, yellow);
 
         RubikColor frontColor = handler._getCol(Front);
         Vector3i frontVector = getVectorFromColor(frontColor);
@@ -408,9 +412,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCross()
         }
         else if (goodOrientation.size() == 2)
         {
-            Vector3i goodOrientVector0 = getVectorFromColor(goodOrientation[0]);
-            Vector3i goodOrientVector1 = getVectorFromColor(goodOrientation[1]);
-            Vector3i crossProd01 = roundVec(goodOrientVector0.cast<float>().cross(goodOrientVector1.cast<float>()));
+            Vector3i crossProd01 = colorVectorCroosProd(goodOrientation[0], goodOrientation[1]);
 
             if (crossProd01 == Vector3i::Zero()) // the two good orient are oposite cross product?
             {
@@ -582,7 +584,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCornersPos()
             goodCornerVec1.y() = 0;
             Vector3i goodCornerVec2 = getVectorFromCoord<3>(goodCorner2.getPosition());
             goodCornerVec2.y() = 0;
-            Vector3i crossProd01 = roundVec(goodCornerVec1.cast<float>().cross(goodCornerVec2.cast<float>()));
+            Vector3i crossProd01 = intCrossProduct(goodCornerVec2, goodCornerVec1);
 
 
             //if they are diagonaly opposite.

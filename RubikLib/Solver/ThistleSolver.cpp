@@ -1,6 +1,8 @@
 #include "ThistleSolver.h"
-#include "GenBruteSolve.h"
+
 #include "CubeUtils.h"
+#include "GenBruteSolve.h"
+#include "RubikAssert.h"
 
 
 namespace

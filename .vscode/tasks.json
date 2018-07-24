@@ -6,9 +6,9 @@
         {
             "label": "build-tests",
             "type": "shell",
-            "command": "mkdir -p ${workspaceFolder}/tests/build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j4",
+            "command": "mkdir -p ${workspaceFolder}/tests/build-nocov && cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j4",
             "options": {
-                "cwd": "${workspaceFolder}/tests/build"
+                "cwd": "${workspaceFolder}/tests/build-nocov"
             },
             "problemMatcher": {
                 "base": "$gcc",

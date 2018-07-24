@@ -11,7 +11,7 @@ public:
 
 protected:
     virtual void computeSolution();
-    virtual bool whiteCrossSolveAvail() const {return true;};
+    virtual bool whiteCrossSolveAvail() const;
     virtual void computeWhiteCross();
 
 private:

@@ -2,7 +2,7 @@
 #include "ColorPermutation.h"
 
 
-TEST(PermutationTest, TestIdentityPerm) {
+TEST(ColorPermutationTest, TestIdentityPerm) {
     RubikPerm ident;
     EXPECT_EQ(white, ident.nextColor(white));
     EXPECT_EQ(yellow, ident.nextColor(yellow));
@@ -19,7 +19,7 @@ TEST(PermutationTest, TestIdentityPerm) {
     EXPECT_EQ(orange, ident.prevColor(orange));
 }
 
-TEST(PermutationTest, TestFwdBwdPerm) {
+TEST(ColorPermutationTest, TestFwdBwdPerm) {
     RubikPerm::Func f({
         {white, yellow},
         {yellow, white},

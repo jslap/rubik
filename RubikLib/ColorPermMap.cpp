@@ -4,6 +4,12 @@
 
 using Eigen::Vector3f;
 
+PermutationMap* PermutationMap::getInstance()
+{
+    static auto instance = std::make_unique<PermutationMap>();
+    return instance.get();
+}
+
 PermutationMap::PermutationMap()
 {
     m_PermutationBySideRotation.resize(RubikBase::RubikColors().size());
@@ -22,3 +28,5 @@ PermutationMap::PermutationMap()
         m_PermutationBySideRotation[rotCol].setForward(forwFunc);
     }
 }
+
+PermutationMap::~PermutationMap() = default;

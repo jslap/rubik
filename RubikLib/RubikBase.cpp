@@ -2,7 +2,7 @@
 
 #include <boost/assign.hpp>
 #include <boost/bimap.hpp>
-
+#include <Eigen/Dense>
 
 const std::vector<std::pair< RubikColor, Vector3i >> & RubikBase::ColorVecPairs()
 { 
@@ -15,7 +15,7 @@ const std::vector<std::pair< RubikColor, Vector3i >> & RubikBase::ColorVecPairs(
         std::make_pair(blue,    Vector3i(-1,    0,  0))
     });
     return _ColorVecPairs;
-}
+} // LCOV_EXCL_LINE
 
 const RubikBase::ColorVecMap& RubikBase::colorVecMap()
 {
@@ -23,7 +23,7 @@ const RubikBase::ColorVecMap& RubikBase::colorVecMap()
         std::begin(RubikBase::ColorVecPairs()),
         std::end(RubikBase::ColorVecPairs())});
     return _colorVecMap;
-}
+} // LCOV_EXCL_LINE
 
 namespace
 {
@@ -39,19 +39,25 @@ namespace
             ( red,      "red")
             ( noColor,  "no Color");
         return _colorNameBimap;
+    } // LCOV_EXCL_LINE
+
+    Vector3i roundVec(const Vector3f & rhs)
+    {
+        Vector3i ret(
+                    round(rhs.x()),
+                    round(rhs.y()),
+                    round(rhs.z())
+                    );
+        return ret;
     }
+
 } //namespace
 
 std::string colorName( RubikColor col)
 {
     auto iter = colorNameBimap().left.find(col);
-    if (iter != colorNameBimap().left.end())
-    {
-        return iter->second;
-    }
-
-    RASSERT(false, "undefined color.");
-    return "error";
+    RASSERT(iter != colorNameBimap().left.end(), "undefined color.");
+    return iter->second;
 }
 
 std::string orientationName( RubikOrientation o)
@@ -59,25 +65,20 @@ std::string orientationName( RubikOrientation o)
     switch(o)
     {
         case WellOriented:
-            return "WellOrient";
+            return "WellOriented";
         case Twist1:
             return "Twist1";
         case Twist2:
             return "Twist2";
     }
-    return "noOrientation";
+    RASSERT(false, "undefined orientation.");
 }
 
 RubikColor colorFromName( const std::string& s)
 {
     auto iter = colorNameBimap().right.find(s);
-    if (iter != colorNameBimap().right.end())
-    {
-        return iter->second;
-    }
-
-    RASSERT(false, "undefined color.");
-    return noColor;
+    RASSERT(iter != colorNameBimap().right.end(), "undefined color.");
+    return iter->second;
 }
 
 
@@ -100,13 +101,16 @@ RubikColor getColorFromVeci(const Vector3i &vec)
     return (foundIter != RubikBase::colorVecMap().end()) ? foundIter->first : noColor;
 }
 
-
-Vector3i roundVec(const Vector3f & rhs)
+Vector3i intCrossProduct(const Vector3i& v1, const Vector3i& v2)
 {
-    Vector3i ret(
-                 round(rhs.x()),
-                 round(rhs.y()),
-                 round(rhs.z())
-                 );
-    return ret;
+    Vector3f crossProd;  v1.cast<float>().cross(v2.cast<float>());
+    return roundVec(crossProd);
 }
+
+Vector3i colorVectorCroosProd(RubikColor col1, RubikColor col2)
+{
+    Vector3i col1Vec = getVectorFromColor(col1);
+    Vector3i col2Vec = getVectorFromColor(col2);
+    return intCrossProduct(col1Vec, col2Vec);
+}
+

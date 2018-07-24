@@ -4,3 +4,6 @@
 [submodule "third/cereal"]
 	path = third/cereal
 	url = https://github.com/USCiLab/cereal.git
+[submodule "third/range"]
+	path = third/range
+	url = git@github.com:ericniebler/range-v3.git

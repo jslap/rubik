@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "RubikAssert.h"
 #include "RubikBase.h"
 
 

@@ -1,10 +1,12 @@
 #include "FridrichSolver.h"
+
 #include "CubeHandler.h"
 #include "CubeUtils.h"
 
 #include <iostream>
-using namespace std;
-using namespace CubeUtils;
+
+using std::vector;
+using CubeUtils::turnUntill;
 
 namespace
 {
@@ -20,22 +22,18 @@ namespace
         std::copy_if(c.getEdges().begin(), c.getEdges().end(), back_inserter(crossCubies), f);
         return crossCubies;
     }
-}
+} // namespace
 
-FridrichCubeSolver::FridrichCubeSolver()
-{
+FridrichCubeSolver::FridrichCubeSolver() = default;
 
-}
-
-FridrichCubeSolver::~FridrichCubeSolver()
-{
-
-}
+FridrichCubeSolver::~FridrichCubeSolver() = default;
 
 void FridrichCubeSolver::_addAndApply(RubikColor col, bool direction, int nbTurn)
 {
     for (int i = 0; i < nbTurn; i++)
+    {
         _addAndApply(ColMove(col, direction));
+    }
 }
 
 void FridrichCubeSolver::_addAndApply(ColMove aMove)

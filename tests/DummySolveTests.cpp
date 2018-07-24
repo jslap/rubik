@@ -221,48 +221,116 @@ TEST(DISABLED_GenBruteSolveTest, testSomePhases)
 
 }
 
-TEST(FridrichSolveTest, solveOne)
+::testing::AssertionResult isCubeFridrichTopCrossSolvable(Cube mixedCube) 
 {
-    const Cube defaultCube;
-
-    Cube mixedCube;
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-
-
     FridrichCubeSolver solver;
     solver.setStartingCube(mixedCube);
     bool solveResult = solver.solveWhiteCross();
-    EXPECT_TRUE(solveResult);
+    if (!solveResult)
+    {
+        return ::testing::AssertionFailure() << "Solve returned False";
+    }
 
     Cube solvedCube = mixedCube;
+    EXPECT_FALSE(mixedCube.isCrossSolved(white));
+    if (mixedCube.isCrossSolved(white))
+    {
+        return ::testing::AssertionFailure() << "Cube was solved before solving";
+    }
     solvedCube.apply(solver.getFullSolution());
     EXPECT_TRUE(solvedCube.isCrossSolved(white));
+    if (!mixedCube.isCrossSolved(white))
+    {
+        return ::testing::AssertionFailure() << "Cube has not been solve";
+    }
+
+    return ::testing::AssertionSuccess();
 }
 
-TEST(DummySolverTest, solveCubeTest) {
+TEST(FridrichSolveTest, solveOne)
+{
+    Cube mixedCube1;
+    mixedCube1.rotate(white, true);
+    mixedCube1.rotate(red, true);
+    mixedCube1.rotate(blue, true);
+    mixedCube1.rotate(white, true);
+    mixedCube1.rotate(red, true);
+    mixedCube1.rotate(blue, true);
+    mixedCube1.rotate(white, true);
+    mixedCube1.rotate(red, true);
+    mixedCube1.rotate(blue, true);
+    // isCubeFridrichTopCrossSolvable(mixedCube1);
+
+    Cube mixedCube2;
+    mixedCube2.rotate(red, true);
+    // isCubeFridrichTopCrossSolvable(mixedCube2);
+}
+
+class BaseSolverTest : public testing::Test {
+protected:
+    virtual void SetUp() 
+    {
+        c1.rotate(white, true);
+        c1.rotate(red, true);
+        c1.rotate(blue, true);
+        c1.rotate(white, true);
+        c1.rotate(red, true);
+        c1.rotate(blue, true);
+        c1.rotate(white, true);
+        c1.rotate(red, true);
+        c1.rotate(blue, true);
+
+        for (int i = 0; i <5; i ++)
+        {
+            c2.rotate(white, false);
+            c2.rotate(red, true);
+            c2.rotate(blue, false);
+        }
+        for (int i = 0; i <5; i ++)
+        {
+            c3.rotate(white, false);
+            c3.rotate(orange, true);
+            c3.rotate(blue, false);
+        }
+
+    }
+
+    void doSolveTest(const Cube& cube)
+    {
+        DummyCubeSolver solver;
+        solver.setStartingCube(cube);
+        bool solveResult = solver.solve();
+
+        EXPECT_TRUE(solveResult);
+
+        ColMoveSeq fullRes = solver.getFullSolution();
+
+        // for (int i = 0; i< solver.getNbSteps(); i++)
+        //     printf("step: %lu\n", solver.getStepSolution(i).size());
+        EXPECT_NE(fullRes.size(), 0) << "Should need some move to solve.";
+
+        Cube solvedCube = cube;
+        solvedCube.apply(fullRes);
+        EXPECT_EQ(solvedCube, defaultCube) << "cube should be solved";
+
+        ColMoveSeq alteredResult = fullRes;
+        alteredResult.erase(std::next(alteredResult.begin(), alteredResult.size()/2));
+        Cube unsolvedCube = cube;
+        unsolvedCube.apply(alteredResult);
+        EXPECT_NE(unsolvedCube, defaultCube) << "cube should not be solved";
+    }
+
     const Cube defaultCube;
+    Cube c1;
+    Cube c2;
+    Cube c3;
+};
 
-    Cube mixedCube;
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
-    mixedCube.rotate(white, true);
-    mixedCube.rotate(red, true);
-    mixedCube.rotate(blue, true);
 
+TEST_F(BaseSolverTest, dummyDefaultSolveCubeTest) 
+{
     DummyCubeSolver solver;
-    solver.setStartingCube(mixedCube);
+    solver.setStartingCube(defaultCube);
     bool solveResult = solver.solve();
 
     EXPECT_TRUE(solveResult);
@@ -271,16 +339,12 @@ TEST(DummySolverTest, solveCubeTest) {
 
     // for (int i = 0; i< solver.getNbSteps(); i++)
     //     printf("step: %lu\n", solver.getStepSolution(i).size());
-    EXPECT_NE(fullRes.size(), 0) << "Should need some move to solve.";
+    EXPECT_EQ(fullRes.size(), 0) << "Should need no move to solve.";
+}
 
-    Cube solvedCube = mixedCube;
-    solvedCube.apply(fullRes);
-    EXPECT_EQ(solvedCube, defaultCube) << "cube should be solved";
-
-    ColMoveSeq alteredResult = fullRes;
-    alteredResult.erase(std::next(alteredResult.begin(), alteredResult.size()/2));
-    Cube unsolvedCube = mixedCube;
-    unsolvedCube.apply(alteredResult);
-    EXPECT_NE(unsolvedCube, defaultCube) << "cube should not be solved";
-
+TEST_F(BaseSolverTest, solveCubeTest) 
+{
+    doSolveTest(c1);
+    doSolveTest(c2);
+    doSolveTest(c3);
 }

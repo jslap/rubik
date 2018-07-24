@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RubikAssert.h"
 #include "RubikBase.h"
 #include "ColorPermMap.h"
 #include "cereal/types/array.hpp"
@@ -19,7 +20,8 @@ public:
     friend std::ostream& operator <<(std::ostream& out, const Cubelet<n>& v);
 
     // invalid cubelet.
-    Cubelet():orientation(WellOriented) {position.fill(noColor); color.fill(noColor);}
+    // Cubelet():orientation(WellOriented) {position.fill(noColor); color.fill(noColor);}
+    
     // Default cubelet for given color, they are in the "right" position, tha facet color is on the cube face color.
     Cubelet(const _MyCubeCoord& pos):
         position(pos),

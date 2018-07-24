@@ -1,4 +1,4 @@
-
+#include "RubikAssert.h"
 
 namespace CubeUtils
 {

@@ -1,23 +1,13 @@
 #pragma once
 
+#include "RubikAssert.h"
+
 #include <vector>
 #include <list>
 #include <map>
 #include <Eigen/Core>
 #include <iostream>
 #include <array>
-
-template <class F, class L>
-inline void AsertFunc(const std::string & reason, F&& f, L&& l)
-{
-    std::cout << "Assert at " << f << ":" << l << " ; " << reason << std::endl;; 
-    assert(false);
-}
-#ifdef NDEBUG
-#define RASSERT(pred, str) nullptr
-#else // NDEBUG
-#define RASSERT(pred, str) if (!(pred)) {AsertFunc(str, __FILE__, __LINE__);}
-#endif // NDEBUG
 
 using Eigen::Vector3i;
 using Eigen::Vector3f;
@@ -29,7 +19,7 @@ enum RubikOrientation : unsigned char {WellOriented = 0, Twist1, Twist2};
 
 class RubikBase {
 public:
-    static constexpr std::size_t NumberColor = 7;
+    static constexpr std::size_t NumberColor = 6;
     static constexpr std::array< RubikColor, NumberColor > RubikColors() { return {{white, green, red, blue, orange, yellow}}; }
 
     static const std::vector<std::pair< RubikColor, Vector3i >>& ColorVecPairs();
@@ -62,18 +52,19 @@ namespace cereal
 
 Vector3i getVectorFromColor(RubikColor col);
 
-Vector3i roundVec(const Vector3f & rhs);
+Vector3i colorVectorCroosProd(RubikColor col1, RubikColor col2);
+Vector3i intCrossProduct(const Vector3i& v1, const Vector3i& v2);
 RubikColor getColorFromVeci(const Vector3i &vec);
 RubikColor getColorFromVecf(const Vector3f &vec);
 
-template <int cubeDim>
+template <std::size_t cubeDim>
 using CubeCoord = std::array<RubikColor, cubeDim>;
 
 
 typedef CubeCoord< 2 >  EdgeCoord;
 typedef CubeCoord< 3 >  CornerCoord;
 
-template <int cubeDim>
+template <std::size_t cubeDim>
 CubeCoord<cubeDim> getInvalidCoord()
 {
     CubeCoord<cubeDim> c;
@@ -81,7 +72,7 @@ CubeCoord<cubeDim> getInvalidCoord()
     return c;
 }
 
-template <int cubeDim>
+template <std::size_t cubeDim>
 Vector3i getVectorFromCoord(CubeCoord< cubeDim > coord)
 {
     Vector3i retVal = Vector3i::Zero();

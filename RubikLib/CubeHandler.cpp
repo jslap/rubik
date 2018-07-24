@@ -1,5 +1,7 @@
 #include "CubeHandler.h"
 
+#include "RubikAssert.h"
+
 using Eigen::Vector3f;
 using Eigen::Matrix3f;
 
