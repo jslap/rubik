@@ -1,6 +1,6 @@
 #include "Cubelet.h"
-#include "ColorPermMap.h"
 
+#include "ColorPermMap.h"
 
 template <int cubeDim>
 Cubelet<cubeDim> Cubelet<cubeDim>::getRotate(RubikColor side, bool clockWise) const

@@ -1,28 +1,28 @@
 cmake_minimum_required(VERSION 3.5.1)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
+
 SET(COVERAGE OFF CACHE BOOL "Compile tests with coverage info")
 if (COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g --coverage -fprofile-arcs -ftest-coverage")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 --coverage -fprofile-arcs -ftest-coverage")
 endif()    
 
-find_program(
-        CLANG_TIDY_EXE
-        NAMES "clang-tidy" "clang-tidy-6.0"
-        DOC "Path to clang-tidy executable"
-    )
+SET(TIDY OFF CACHE BOOL "Compile tests with clang tidy")
 
-#if(NOT CLANG_TIDY_EXE)
-if(CLANG_TIDY_EXE)
+if(TIDY)
+    find_program(
+            CLANG_TIDY_EXE
+            NAMES "clang-tidy" "clang-tidy-6.0"
+            DOC "Path to clang-tidy executable"
+        )
+endif()
+
+if(NOT CLANG_TIDY_EXE)
     message(STATUS "clang-tidy not found.")
 else()
     message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
 
     set(LOCAL_DISABLED_TESTS "")
-    # set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-alpha.*")
-
-    #   Disable on third party, but try to put it back.
-    # set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-core.*") # static analyzer could be added after.
-    # set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-clang-analyzer-*") # static analyzer could be added after.
 
     #   ########## disable fuchsia-* not relevant for us.
     set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-fuchsia-*")
@@ -34,12 +34,11 @@ else()
     # OK.
     set(LOCAL_DISABLED_TESTS "${LOCAL_DISABLED_TESTS},-google-runtime-references")
 
-    # set(LOCAL_WARNING_AS_ERROR "-warnings-as-errors=*")
+    set(LOCAL_WARNING_AS_ERROR "-warnings-as-errors=*")
 
     set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks=*${LOCAL_DISABLED_TESTS}")
-    # set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-checks=-*,-f*")
-    # set(DO_CLANG_TIDY_WAE "${DO_CLANG_TIDY}" "${LOCAL_WARNING_AS_ERROR}")
-    set(DO_CLANG_TIDY_WAE "${DO_CLANG_TIDY}")
+    set(DO_CLANG_TIDY_WAE "${DO_CLANG_TIDY}" "${LOCAL_WARNING_AS_ERROR}")
+    # set(DO_CLANG_TIDY_WAE "${DO_CLANG_TIDY}")
 endif()
 
 
@@ -70,9 +69,6 @@ add_library(RubikLib
     CubeHandler.cpp
     Solver/CubeSolver.cpp
     Solver/DummyCubeSolver.cpp
-    Solver/FridrichSolver.cpp
-    Solver/GenBruteSolve.cpp
-    Solver/ThistleSolver.cpp
     RubikBase.h
     ColorPermutation.h
     ColorPermMap.h
@@ -81,10 +77,15 @@ add_library(RubikLib
     CubeHandler.h
     Solver/CubeSolver.h
     Solver/DummyCubeSolver.h
-    Solver/FridrichSolver.h
-    Solver/GenBruteSolve.h
-    Solver/ThistleSolver.h
 )
+
+# Solver/FridrichSolver.h
+# Solver/GenBruteSolve.h
+# Solver/ThistleSolver.h
+# Solver/FridrichSolver.cpp
+# Solver/GenBruteSolve.cpp
+# Solver/ThistleSolver.cpp
+
 
 if(CLANG_TIDY_EXE)
   set_target_properties(

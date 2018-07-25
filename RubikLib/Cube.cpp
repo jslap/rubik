@@ -4,6 +4,7 @@
 #include "CubeHandler.h"
 
 #include <numeric>
+#include <range/v3/all.hpp>
 #include <set>
 
 namespace
@@ -303,13 +304,13 @@ void Cube::rotate(RubikColor side, bool clockWise, int nbIter/*=1*/)
 bool Cube::isSolved() const
 {
     return
-        std::all_of(edges.begin(), edges.end(), std::mem_fn(&EdgeCube::isSolved)) &&
-        std::all_of(corners.begin(), corners.end(), std::mem_fn(&CornerCube::isSolved));
+        ranges::all_of(edges, &EdgeCube::isSolved) &&
+        ranges::all_of(corners, &CornerCube::isSolved);
 }
 
 bool Cube::isCrossSolved(RubikColor col) const
 {
-    return std::all_of(edges.begin(), edges.end(), [col](const EdgeCube& c) {return !c.hasInColor(col) || c.isSolved();});
+    return ranges::all_of(edges, [col](const EdgeCube& c) {return !c.hasInColor(col) || c.isSolved();});
 }
 
 
@@ -370,14 +371,14 @@ bool Cube::isValidCube() const
 
     // 4. must be solvable.
     // a) check corner orientation parity.
-    int cornerParitySum = std::accumulate(corners.begin(), corners.end(), 0, [](int val, auto &c){return parityForCorner(c)+ val;});
+    int cornerParitySum = ranges::accumulate(corners | ranges::view::transform(&parityForCorner), 0 );
     if (cornerParitySum%3 != 0)
     {
         return false;
     }
 
     // b) check the edge orientation parity.
-    int edgeParitySum = std::accumulate(edges.begin(), edges.end(), 0, [](int val, auto &e){return parityForEdge(e)+ val;});
+    int edgeParitySum = ranges::accumulate(edges | ranges::view::transform(&parityForEdge), 0 );
     if (edgeParitySum%2 != 0)
     {
         return false;
@@ -391,9 +392,7 @@ bool Cube::isValidCube() const
 
 bool Cube::operator==(const Cube & rhs) const
 {
-    Cube that = *this;
-    Cube rhs2 = rhs;
-    return (that.edges == rhs2.edges) && (that.corners==rhs2.corners);
+    return (edges == rhs.edges) && (corners==rhs.corners);
 }
 
 void Cube::rotateSinglePiece(const CornerCoord & col, bool cw)

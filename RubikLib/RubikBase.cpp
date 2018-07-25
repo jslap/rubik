@@ -1,8 +1,8 @@
 #include "RubikBase.h"
 
+#include <Eigen/Dense>
 #include <boost/assign.hpp>
 #include <boost/bimap.hpp>
-#include <Eigen/Dense>
 
 const std::vector<std::pair< RubikColor, Vector3i >> & RubikBase::ColorVecPairs()
 { 
@@ -103,7 +103,7 @@ RubikColor getColorFromVeci(const Vector3i &vec)
 
 Vector3i intCrossProduct(const Vector3i& v1, const Vector3i& v2)
 {
-    Vector3f crossProd;  v1.cast<float>().cross(v2.cast<float>());
+    Vector3f crossProd = v1.cast<float>().cross(v2.cast<float>());
     return roundVec(crossProd);
 }
 

@@ -5,6 +5,9 @@
 #include "ColorPermMap.h"
 #include "cereal/types/array.hpp"
 
+#define StatAssertDim static_assert(cubeDim == 2 || cubeDim == 3, "cubeDim in {2, 3}");
+#define OnlyForSize(aSize) template <typename Dummy = void, typename Dummy2 = std::enable_if_t<cubeDim == aSize, Dummy>>
+
 // A cubelet has 2 or 3 sides.
 // It is defined by the color of the facet, that appear on the cubelet, and the position it has in the cube.
 // the two facet must be different color.
@@ -18,9 +21,6 @@ public:
 
     template<int n>
     friend std::ostream& operator <<(std::ostream& out, const Cubelet<n>& v);
-
-    // invalid cubelet.
-    // Cubelet():orientation(WellOriented) {position.fill(noColor); color.fill(noColor);}
     
     // Default cubelet for given color, they are in the "right" position, tha facet color is on the cube face color.
     Cubelet(const _MyCubeCoord& pos):
@@ -29,19 +29,19 @@ public:
         orientation(WellOriented)
     {
     }
+
+    OnlyForSize(2)
     Cubelet(RubikColor p0, RubikColor p1): // starting pos
         orientation(WellOriented)
     {
-        RASSERT(cubeDim == 2, "cubeDim != 2");
-
         position[0] = color[0] = p0;
         position[1] = color[1] = p1;
     }
+
+    OnlyForSize(3)
     Cubelet(RubikColor p0, RubikColor p1, RubikColor p2) : // starting pos
         orientation(WellOriented)
     {
-        RASSERT(cubeDim == 3, "cubeDim != 3");
-
         position[0] = color[0] = p0;
         position[1] = color[1] = p1;
         position[2] = color[2] = p2;
@@ -65,8 +65,7 @@ public:
         for (int i = 0; i<cubeDim; i++)
             if (color[i] == col)
                 return position[i];
-        RASSERT(false, "Color not in cubie.");
-        return noColor;
+        Throw("Color not in cubie.");
     }
 
     RubikColor colorForPosition(RubikColor col) const
@@ -74,8 +73,7 @@ public:
         for (int i = 0; i<cubeDim; i++)
             if (position[i] == col)
                 return color[i];
-        RASSERT(false, "Color not in cubie.");
-        return noColor;
+        Throw("Color not in cubie.");
     }
 
     RubikColor getColorNot(RubikColor notThisColor) const
@@ -83,8 +81,7 @@ public:
         for (int i = 0; i<cubeDim; i++)
             if (color[i] != notThisColor)
                 return color[i];
-        RASSERT(false, "Color is in all cubie pos..");
-        return noColor;
+        Throw("Color is in all cubie pos..");
     }
 
     RubikColor getPositionNot(RubikColor notThisPos) const
@@ -92,8 +89,7 @@ public:
         for (int i = 0; i<cubeDim; i++)
             if (position[i] != notThisPos)
                 return position[i];
-        RASSERT(false, "Color is in all cubie pos..");
-        return noColor;
+        Throw("Color is in all cubie pos..");
     }
 
     RubikColor getPositionNot(RubikColor notThisPos, RubikColor orThatPos) const
@@ -101,54 +97,46 @@ public:
         for (int i = 0; i<cubeDim; i++)
             if (position[i] != notThisPos && position[i] != orThatPos)
                 return position[i];
-        RASSERT(false, "Color is in all cubie pos..");
-        return noColor;
+        Throw("Color is in all cubie pos..");
     }
 
     RubikColor getColorIn(RubikColor thisPos, RubikColor thatPos) const
     {
-        RASSERT(hasInColor(thisPos)||hasInColor(thatPos), "Precondition");
         return _getValIn(thisPos, thatPos, color);
     }
 
     RubikColor getPositionIn(RubikColor thisPos, RubikColor thatPos) const
     {
-        RASSERT(hasInPosition(thisPos)||hasInPosition(thatPos), "Precondition");
         return _getValIn(thisPos, thatPos, position);
     }
 
     bool isAtSolvedPosition() const
     {
+        StatAssertDim;
         if (cubeDim == 2)
         {
             return hasInColor(position[0]) && hasInColor(position[1]);
         }
-        else if (cubeDim == 3)
+        else // if (cubeDim == 3)
         {
             return hasInColor(position[0]) && hasInColor(position[1]) && hasInColor(position[2]);
         }
-        RASSERT(false, "Invalid dim");
-        return false;
     }
 
     bool hasInPosition(RubikColor col) const
     {
         if (cubeDim==2)
             return position[0] == col || position[1] == col;
-        else if (cubeDim==3)
+        else // if (cubeDim==3)
             return position[0] == col || position[1] == col || position[2] == col;
-        RASSERT(false, "Invalid dim");
-        return false;
     }
 
     bool hasInColor(RubikColor col) const
     {
         if (cubeDim==2)
             return color[0] == col || color[1] == col;
-        else if (cubeDim==3)
+        else // if (cubeDim==3)
             return color[0] == col || color[1] == col || color[2] == col;
-        RASSERT(false, "Invalid dim");
-        return false;
     }
 
 
@@ -185,8 +173,7 @@ private:
         auto thatIter = std::find(begin(toCheck), end(toCheck), thatPos);
         if (thatIter != end(toCheck))
             return thatPos;
-        RASSERT(false, "should not happen.");
-        return noColor;
+        Throw("should not happen.");
     }
 
     RubikColor rotateCubeletPos(const RubikPerm& permutation, bool clockWise, RubikColor cubeletPosMoving, int nbIter = 1) const

@@ -51,6 +51,16 @@ TEST(RubikBaseTest, TestColorVectors) {
     EXPECT_EQ(colorName(noColor), "no Color");
     EXPECT_ANY_THROW(colorName((RubikColor)99));
 
+    EXPECT_EQ(colorFromName("green"), green);
+    EXPECT_EQ(colorFromName("blue"), blue);
+    EXPECT_EQ(colorFromName("white"), white);
+    EXPECT_EQ(colorFromName("yellow"), yellow);
+    EXPECT_EQ(colorFromName("red"), red);
+    EXPECT_EQ(colorFromName("orange"), orange);
+    EXPECT_EQ(colorFromName("no Color"), noColor);
+    EXPECT_ANY_THROW(colorFromName("patate"));
+
+
     EXPECT_EQ(oppositeColor(green), blue);
     EXPECT_EQ(oppositeColor(blue), green);
     EXPECT_EQ(oppositeColor(white), yellow);

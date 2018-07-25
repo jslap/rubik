@@ -8,7 +8,7 @@ PermutationMap* PermutationMap::getInstance()
 {
     static auto instance = std::make_unique<PermutationMap>();
     return instance.get();
-}
+} // LCOV_EXCL_LINE
 
 PermutationMap::PermutationMap()
 {

@@ -14,7 +14,7 @@ make -j4
 # find . -type f -name "*.gcno" -exec sh -c 'touch -a "${1%.gcno}.gcda"' _ {} \;
 
 lcov --base-directory ../../ --directory . --capture --output-file coverage-raw.info
-lcov --remove coverage-raw.info '*tests/*' '/usr/*' '*third/*' '/Applications/Xcode.app/*'  --output-file coverage-clean.info
+lcov --remove coverage-raw.info '*tests/*' '/usr/*' '*third/*' '/Applications/Xcode*.app/*'  --output-file coverage-clean.info
 
 
 rm -rf ./outHtml

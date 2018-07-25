@@ -1,7 +1,7 @@
 #include "DummyCubeSolver.h"
 
-#include "RubikAssert.h"
 #include "CubeHandler.h"
+#include "RubikAssert.h"
 
 DummyCubeSolver::DummyCubeSolver() = default;
 
@@ -584,7 +584,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopCornersPos()
             goodCornerVec1.y() = 0;
             Vector3i goodCornerVec2 = getVectorFromCoord<3>(goodCorner2.getPosition());
             goodCornerVec2.y() = 0;
-            Vector3i crossProd01 = intCrossProduct(goodCornerVec2, goodCornerVec1);
+            Vector3i crossProd01 = intCrossProduct(goodCornerVec1, goodCornerVec2);
 
 
             //if they are diagonaly opposite.

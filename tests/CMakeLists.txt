@@ -5,6 +5,8 @@ include_directories ("../third/cereal/include")
 include_directories ("../third/range/include")
 include_directories ("../RubikLib")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
+
 SET(COVERAGE OFF CACHE BOOL "Compile tests with coverage info")
 
 if (COVERAGE)
