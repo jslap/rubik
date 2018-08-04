@@ -10,7 +10,7 @@ using namespace Eigen;
 
 #include "CubeHandler.h"
 #include "DummyCubeSolver.h"
-#include "FridrichSolver.h"
+#include "ExportCubeSolver.h"
 #include "CubeGLDrawer.h"
 
 const float nbFramePerRotation = 30.0f;
@@ -592,21 +592,36 @@ GLenum glReportError (void)
             }
                 break;
 
-            case 's':
             case 'S':
             {
                 DummyCubeSolver solverDummy;
-                FridrichCubeSolver solver;
+                ExportCubeSolver solver;
                 solver.setStartingCube(_cube);
                 solverDummy.setStartingCube(_cube);
                 bool solveResult = solver.solve();
                 bool solveResult2 = solverDummy.solve();
+                printf("Export: %lu  Dummy: %lu \n", solver.getFullSolution().size(), solverDummy.getFullSolution().size());
+                auto fullSol = solver.getFullSolution();
+                for (const auto & m : fullSol)
+                    [self rotateCubeFace:m.first withCW:m.second];
+
+
+            }
+                break;
+            case 's':
+            {
+                DummyCubeSolver solverDummy;
+//                ExportCubeSolver solver;
+//                solver.setStartingCube(_cube);
+                solverDummy.setStartingCube(_cube);
+//                bool solveResult = solver.solve();
+                bool solveResult2 = solverDummy.solve();
 
                 if (solverDummy.getNbSteps() > 0)
                 {
-                    ColMoveSeq solveSeq = solver.getStepSolution(0);
+//                    ColMoveSeq solveSeq = solver.getStepSolution(0);
                     ColMoveSeq solveSeq2 = solverDummy.getStepSolution(0);
-                    printf("Fridrich: %llu  Dummy: %llu \n", solveSeq.size(), solveSeq2.size());
+//                    printf("Fridrich: %lu  Dummy: %lu \n", solveSeq.size(), solveSeq2.size());
                     for (const auto & m : solveSeq2)
                         [self rotateCubeFace:m.first withCW:m.second];
                 }

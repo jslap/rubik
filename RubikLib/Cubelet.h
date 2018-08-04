@@ -18,6 +18,7 @@ class Cubelet
 public:
     typedef CubeCoord< cubeDim > _MyCubeCoord;
     typedef Cubelet< cubeDim > _MyCubelet;
+    static constexpr int dim() noexcept { return cubeDim; }
 
     template<int n>
     friend std::ostream& operator <<(std::ostream& out, const Cubelet<n>& v);
@@ -62,42 +63,54 @@ public:
     // pre-cond: color must be in the cubelet.
     RubikColor positionForColor(RubikColor col) const
     {
-        for (int i = 0; i<cubeDim; i++)
-            if (color[i] == col)
-                return position[i];
-        Throw("Color not in cubie.");
+        auto zipRange = ranges::view::zip(color, position);
+        auto found = ranges::find_if(zipRange, [&col](const auto& aPair){return aPair.first == col;});
+        if (found == std::end(zipRange))
+        {
+            Throw("Color is in all cubie pos..");
+        }
+        return (*found).second;
     }
 
     RubikColor colorForPosition(RubikColor col) const
     {
-        for (int i = 0; i<cubeDim; i++)
-            if (position[i] == col)
-                return color[i];
-        Throw("Color not in cubie.");
+        auto zipRange = ranges::view::zip(color, position);
+        auto found = ranges::find_if(zipRange, [&col](const auto& aPair){return aPair.second == col;});
+        if (found == std::end(zipRange))
+        {
+            Throw("Color is in all cubie pos..");
+        }
+        return (*found).first;
     }
 
     RubikColor getColorNot(RubikColor notThisColor) const
     {
-        for (int i = 0; i<cubeDim; i++)
-            if (color[i] != notThisColor)
-                return color[i];
-        Throw("Color is in all cubie pos..");
+        auto found = ranges::find_if(color, [&notThisColor](RubikColor c){return c != notThisColor;});
+        if (found == std::end(color))
+        {
+            Throw("Color is in all cubie pos..");
+        }
+        return *found;
     }
 
     RubikColor getPositionNot(RubikColor notThisPos) const
     {
-        for (int i = 0; i<cubeDim; i++)
-            if (position[i] != notThisPos)
-                return position[i];
-        Throw("Color is in all cubie pos..");
+        auto found = ranges::find_if(position, [&notThisPos](RubikColor c){return c != notThisPos;});
+        if (found == std::end(position))
+        {
+            Throw("Pos is in all cubie pos..");
+        }
+        return *found;
     }
 
     RubikColor getPositionNot(RubikColor notThisPos, RubikColor orThatPos) const
     {
-        for (int i = 0; i<cubeDim; i++)
-            if (position[i] != notThisPos && position[i] != orThatPos)
-                return position[i];
-        Throw("Color is in all cubie pos..");
+        auto found = ranges::find_if(position, [&notThisPos, &orThatPos](RubikColor c){return c != notThisPos && c != orThatPos;});
+        if (found == std::end(position))
+        {
+            Throw("Pos is in all cubie pos..");
+        }
+        return *found;
     }
 
     RubikColor getColorIn(RubikColor thisPos, RubikColor thatPos) const
@@ -208,14 +221,12 @@ inline void Cubelet<3>::_rotateOrientation(RubikColor side, bool clockWise)
 {
     if (side != green && side != blue)
     {
-        bool isSpecCorner = (
-            (hasInPosition(white) && hasInPosition(blue)) ||
-            (hasInPosition(yellow) && hasInPosition(green))
-        );
-        unsigned char val = (isSpecCorner) ? 1 : 2;
+        int sideOdity = (side%3 == 0) ? 0 : 1;
+        auto cubieOddSum = sideOdity + getPosition()[0] + getPosition()[1] + getPosition()[2];
+        bool isOddCorner = (cubieOddSum%2) != 0;
+        unsigned char val = isOddCorner ? 1 : 2;
         orientation = (RubikOrientation)((orientation+val)%3);
     }
-    // std::cout << *this << std::endl;
 }
 
 template <>

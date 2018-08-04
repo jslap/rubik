@@ -42,7 +42,10 @@ namespace CubeUtils
             if (f(c1))
                 return c1;
             c1.rotate(ColMove(col, false));
-            RASSERT(f(c1), "");
+            if (!f(c1))
+            {
+                Throw("Cant acheive condition");
+            }
             return c1;
         }
     }

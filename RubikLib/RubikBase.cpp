@@ -43,12 +43,11 @@ namespace
 
     Vector3i roundVec(const Vector3f & rhs)
     {
-        Vector3i ret(
+        return Vector3i (
                     round(rhs.x()),
                     round(rhs.y()),
                     round(rhs.z())
                     );
-        return ret;
     }
 
 } //namespace
@@ -113,4 +112,3 @@ Vector3i colorVectorCroosProd(RubikColor col1, RubikColor col2)
     Vector3i col2Vec = getVectorFromColor(col2);
     return intCrossProduct(col1Vec, col2Vec);
 }
-

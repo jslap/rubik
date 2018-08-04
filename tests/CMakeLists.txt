@@ -33,6 +33,7 @@ add_executable (Rubik-Test
     RubikBaseTests.cpp
     CubeTests.cpp 
     DummySolveTests.cpp 
+    ExportSolveTests.cpp 
     ColorPermutationTests.cpp 
     ColorPermMapTests.cpp)
 target_link_libraries (Rubik-Test RubikLib)

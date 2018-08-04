@@ -26,6 +26,8 @@
 		4B8C54D2207912250066BAE1 /* Cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54C3207912240066BAE1 /* Cube.cpp */; };
 		4B8C54D3207912250066BAE1 /* ColorPermutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B8C54C6207912240066BAE1 /* ColorPermutation.cpp */; };
 		4BA114F5208D7215008726BC /* RubikAssert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA114F3208D7214008726BC /* RubikAssert.cpp */; };
+		4BF73868211616A9003CBA7C /* ExportCubeSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BF73866211616A9003CBA7C /* ExportCubeSolver.cpp */; };
+		4BF73869211616A9003CBA7C /* ExportSolverConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BF73867211616A9003CBA7C /* ExportSolverConvert.cpp */; };
 		740959030CC8255A00261DBF /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 740959010CC8255A00261DBF /* AppDelegate.mm */; };
 		7409592A0CC826D800261DBF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 740959290CC826D800261DBF /* Credits.rtf */; };
 		745217950CA98A790067AF41 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 745217940CA98A790067AF41 /* OpenGL.framework */; };
@@ -81,6 +83,10 @@
 		4B8C54C6207912240066BAE1 /* ColorPermutation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPermutation.cpp; sourceTree = "<group>"; };
 		4BA114F3208D7214008726BC /* RubikAssert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RubikAssert.cpp; sourceTree = "<group>"; };
 		4BA114F4208D7215008726BC /* RubikAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubikAssert.h; sourceTree = "<group>"; };
+		4BF73864211616A9003CBA7C /* ExportCubeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportCubeSolver.h; sourceTree = "<group>"; };
+		4BF73865211616A9003CBA7C /* ExportSolverConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportSolverConvert.h; sourceTree = "<group>"; };
+		4BF73866211616A9003CBA7C /* ExportCubeSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExportCubeSolver.cpp; sourceTree = "<group>"; };
+		4BF73867211616A9003CBA7C /* ExportSolverConvert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExportSolverConvert.cpp; sourceTree = "<group>"; };
 		740959010CC8255A00261DBF /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		740959020CC8255A00261DBF /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		740959290CC826D800261DBF /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -258,6 +264,10 @@
 		4B8C54B3207912240066BAE1 /* Solver */ = {
 			isa = PBXGroup;
 			children = (
+				4BF73866211616A9003CBA7C /* ExportCubeSolver.cpp */,
+				4BF73864211616A9003CBA7C /* ExportCubeSolver.h */,
+				4BF73867211616A9003CBA7C /* ExportSolverConvert.cpp */,
+				4BF73865211616A9003CBA7C /* ExportSolverConvert.h */,
 				4B8C54B4207912240066BAE1 /* GenBruteSolve.h */,
 				4B8C54B5207912240066BAE1 /* FridrichSolver.cpp */,
 				4B8C54B6207912240066BAE1 /* FridrichSolver.h */,
@@ -364,8 +374,10 @@
 				8D11072D0486CEB800E47090 /* main.mm in Sources */,
 				4B8C54D2207912250066BAE1 /* Cube.cpp in Sources */,
 				74F0EC5D0CA989F9009E924F /* BasicOpenGLView.mm in Sources */,
+				4BF73869211616A9003CBA7C /* ExportSolverConvert.cpp in Sources */,
 				4B8C54CB207912240066BAE1 /* FridrichSolver.cpp in Sources */,
 				4B8C54CE207912240066BAE1 /* ThistleSolver.cpp in Sources */,
+				4BF73868211616A9003CBA7C /* ExportCubeSolver.cpp in Sources */,
 				740959030CC8255A00261DBF /* AppDelegate.mm in Sources */,
 				4B8C54D3207912250066BAE1 /* ColorPermutation.cpp in Sources */,
 				4BA114F5208D7215008726BC /* RubikAssert.cpp in Sources */,
@@ -415,6 +427,7 @@
 					/usr/local/include/eigen3,
 					/usr/local/include/eigen3/unsupported,
 					/opt/local/include,
+					third/range/include,
 					third/cereal/include,
 					.,
 				);
@@ -448,6 +461,7 @@
 					/usr/local/include/eigen3,
 					/usr/local/include/eigen3/unsupported,
 					/opt/local/include,
+					third/range/include,
 					third/cereal/include,
 					.,
 				);
