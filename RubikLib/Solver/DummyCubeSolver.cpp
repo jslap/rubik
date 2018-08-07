@@ -7,6 +7,12 @@ DummyCubeSolver::DummyCubeSolver() = default;
 
 DummyCubeSolver::~DummyCubeSolver() = default;
 
+void DummyCubeSolver::_resetSolution()
+{
+    m_CurrentCubeState = *m_CubeToSolve;
+    m_StepSolution.clear();
+}
+
 bool DummyCubeSolver::whiteCrossSolveAvail() const 
 {
     return true;
@@ -14,7 +20,7 @@ bool DummyCubeSolver::whiteCrossSolveAvail() const
 
 void DummyCubeSolver::computeSolution()
 {
-    m_CurrentCubeState = *m_CubeToSolve;
+    _resetSolution();
 
     ColMoveSeq stepSol;
     stepSol = _solveStepCross();
@@ -90,15 +96,11 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
     ColMoveSeq retVal;
 
     RubikColor otherCol = col;
-    EdgeCube fisrtElt = defCube.findCubieByColor(EdgeCoord({{white, otherCol}}));
-    EdgeCube curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
-    if (curCubie != fisrtElt)
+    const EdgeCoord cubieColor({{white, otherCol}});
+    EdgeCube curCubie = m_CurrentCubeState.findCubieByColor(cubieColor);
+    if (!curCubie.isSolved())
     {
-        if (curCubie.hasInPosition(white) && curCubie.hasInPosition(otherCol))
-        {
-            //do nothing, we are ok.
-        }
-        else
+        if (!curCubie.isAtSolvedPosition())
         {
             // put the cube in the yellow face.
             if (!curCubie.hasInPosition(yellow))
@@ -115,7 +117,7 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
                     RubikColor otherFacePos = curCubie.getPosition()[0];
 
                     cubeCopy.rotate(otherFacePos, true);
-                    bool clockwiseOk = cubeCopy.findCubieByColor(fisrtElt.getColor()).hasInPosition(yellow);
+                    bool clockwiseOk = cubeCopy.findCubieByColor(cubieColor).hasInPosition(yellow);
 
 
                     _addAndApply(ColMove(otherFacePos, clockwiseOk), retVal);
@@ -125,20 +127,20 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
                 }
             }
 
-            curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
-            RASSERT(m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(yellow), "");
+            curCubie = m_CurrentCubeState.findCubieByColor(cubieColor);
+            RASSERT(curCubie.hasInPosition(yellow), "");
 
             // turn yellow face untill it is on the right side.
             while (!curCubie.hasInPosition(otherCol))
             {
                 _addAndApply(ColMove(yellow, true), retVal);
 
-                curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
+                curCubie = m_CurrentCubeState.findCubieByColor(cubieColor);
             }
 
-            curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
-            RASSERT(m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(otherCol) &&
-                    m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(yellow),
+            curCubie = m_CurrentCubeState.findCubieByColor(cubieColor);
+            RASSERT(m_CurrentCubeState.findCubieByColor(cubieColor).hasInPosition(otherCol) &&
+                    m_CurrentCubeState.findCubieByColor(cubieColor).hasInPosition(yellow),
                     "");
 
             // make it on the white side;
@@ -146,11 +148,11 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
             _addAndApply(ColMove(otherCol, true), retVal);
         }
 
-        curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
-        RASSERT(m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(otherCol) &&
-            m_CurrentCubeState.findCubieByColor(fisrtElt.getColor()).hasInPosition(white),"");
+        curCubie = m_CurrentCubeState.findCubieByColor(cubieColor);
+        RASSERT(m_CurrentCubeState.findCubieByColor(cubieColor).hasInPosition(otherCol) &&
+            m_CurrentCubeState.findCubieByColor(cubieColor).hasInPosition(white),"");
 
-        if (curCubie != fisrtElt)
+        if (!curCubie.isSolved())
         {
             CubeHandler handler = CubeHandler::fromTopRight(white, otherCol);
             _addAndApply(handler, PosMove(Right, false), retVal);
@@ -159,8 +161,8 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
             _addAndApply(handler, PosMove(Up, false), retVal);
         }
 
-        curCubie = m_CurrentCubeState.findCubieByColor(fisrtElt.getColor());
-        RASSERT(curCubie == fisrtElt,"");
+        curCubie = m_CurrentCubeState.findCubieByColor(cubieColor);
+        RASSERT(curCubie.isSolved(),"");
     }
 
     return retVal;
@@ -170,18 +172,19 @@ ColMoveSeq DummyCubeSolver::_solveStepCrossElt(RubikColor col)
 
 ColMoveSeq DummyCubeSolver::_solveStepCross()
 {
-    ColMoveSeq retVal;
+    const std::vector< RubikColor > colorVec = {blue, orange, green, red};
 
-    std::vector< RubikColor > colorVec = {blue, orange, green, red};
-
-    for (RubikColor col : colorVec)
-    {
-        ColMoveSeq tmpMoveSeq = _solveStepCrossElt(col);
-        retVal.insert(retVal.end(), tmpMoveSeq.begin(), tmpMoveSeq.end());
-    }
-
-    return retVal;
-
+    return 
+        colorVec | 
+        ranges::view::transform([this] (RubikColor col) {return DummyCubeSolver::_solveStepCrossElt(col);}) | 
+        ranges::move | 
+        ranges::action::join;
+}
+bool DummyCubeSolver::isWhiteCrossSolved(const Cube& cube)
+{
+    auto isWhiteEdge = [] (const EdgeCube& c) {return c.hasInColor(white);};
+    auto whiteEdges = cube.getEdges() | ranges::view::remove_if(ranges::not_fn(isWhiteEdge));
+    return ranges::all_of(whiteEdges , &EdgeCube::isSolved);
 }
 
 ColMoveSeq DummyCubeSolver::_solveStepWhiteLayer()
@@ -673,7 +676,7 @@ ColMoveSeq DummyCubeSolver::_solveStepTopEdges()
         }
         else // if == 1
         {
-            RASSERT(goodOrientation.size() == 1, "");
+            //RASSERT(goodOrientation.size() == 1, "");
 
             handler = CubeHandler::fromTopBack(yellow, goodOrientation[0]);
         }

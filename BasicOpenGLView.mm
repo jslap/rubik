@@ -13,7 +13,7 @@ using namespace Eigen;
 #include "ExportCubeSolver.h"
 #include "CubeGLDrawer.h"
 
-const float nbFramePerRotation = 30.0f;
+const float nbFramePerRotation = 3.0f;
 const float deltaRotationStep = 1.0f/nbFramePerRotation;
 
 // ==================================

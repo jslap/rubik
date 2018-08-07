@@ -141,3 +141,13 @@ private:
     EdgeList edges;
     CornerList corners;
 };
+
+inline std::ostream& operator<<(std::ostream& out, const Cube& cube) {
+    out << "(";
+    for (auto c : cube.getCorners())
+        out << c << ", ";
+    for (auto c : cube.getEdges())
+        out << c << ", ";
+    out << ")";
+   return out;
+}
