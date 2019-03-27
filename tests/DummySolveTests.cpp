@@ -95,7 +95,7 @@ TEST_F(DummySolverTest, oneMoveSolveCubeTest)
 }
 
 
-TEST_F(DummySolverTest, solveCubeTest) 
+TEST_F(DummySolverTest, DISABLED_solveCubeTest) 
 {
     doSolveTest(c1);
     doSolveTest(c2);

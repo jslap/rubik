@@ -1,4 +1,7 @@
+#pragma once
+
 #include "RubikAssert.h"
+#include "RubikBase.h"
 
 namespace CubeUtils
 {

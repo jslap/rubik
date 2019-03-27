@@ -100,7 +100,7 @@ TEST(EdgeCubeTest, BasicEdgeCubeTest)
 TEST(CornerCubeTest, BasicCornerCubeTest)
 {
     std::array<RubikColor, 3> blueWhiteRedArray({blue, white, red});
-    std::array<RubikColor, 3> blueWhiteRedFlippedArray({blue, red, white});
+    //std::array<RubikColor, 3> blueWhiteRedFlippedArray({blue, red, white});
     CornerCube blueWhiteRed(blueWhiteRedArray);
     CornerCube blueWhiteRed2(blue, white, red);
     EXPECT_EQ(blueWhiteRed, blueWhiteRed2) << "cubelet contructor should be equivalent";

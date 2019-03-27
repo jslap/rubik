@@ -56,6 +56,8 @@
 
 #include "Cube.h"
 
+#include <deque>
+
 
 typedef struct {
    GLdouble x,y,z;
@@ -111,7 +113,7 @@ typedef struct {
     Cube _cube;
 
     // cube move animation
-    ColMoveSeq _moveSeq;
+    std::deque< ColMove > _moveSeq;
     bool _isRotating;
     Cube _cubeSrc;
     ColMove _currentMove;

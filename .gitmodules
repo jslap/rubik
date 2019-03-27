@@ -7,3 +7,6 @@
 [submodule "third/range"]
 	path = third/range
 	url = git@github.com:ericniebler/range-v3.git
+[submodule "cmake/CMakePCHCompiler"]
+	path = cmake/CMakePCHCompiler
+	url = git@github.com:nanoant/CMakePCHCompiler.git

@@ -18,7 +18,8 @@ public:
 
     //Getting the results
     ColMoveSeq getFullSolution() const;
-    int getNbSteps() const;
+    const std::vector< ColMoveSeq >& getFullStepsSolution() const;
+    std::size_t getNbSteps() const;
     ColMoveSeq getStepSolution(int stepIndex) const;
 
 protected:

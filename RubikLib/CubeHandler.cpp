@@ -134,7 +134,7 @@ const CornerCube& CubeHandler::getCubie(const Cube &cube, RubikFace face1, Rubik
     return cube.findCubieByPosition(cornerCoord);
 }
 
-std::list< CubeHandler > CubeHandler::genHandlerList;
+std::vector< CubeHandler > CubeHandler::genHandlerList;
 bool CubeHandler::listIsInit = false;
 void CubeHandler::_generateAllHandler()
 {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 void AsertFunc(const std::string & reason, const std::string & f, unsigned int l);

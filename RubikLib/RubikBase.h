@@ -5,7 +5,6 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <range/v3/all.hpp>
 #include <Eigen/Core>
 #include <iostream>
 #include <array>
@@ -74,18 +73,15 @@ CubeCoord<cubeDim> getInvalidCoord()
 }
 
 template <std::size_t cubeDim>
-Vector3i getVectorFromCoord(CubeCoord< cubeDim > coord)
-{
-    return ranges::accumulate( (coord | ranges::view::transform(&getVectorFromColor)) , Vector3i(Vector3i::Zero()));
-}
+Vector3i getVectorFromCoord(CubeCoord< cubeDim > coord);
 
 typedef std::vector< EdgeCoord > EdgePosList;
 typedef std::vector< CornerCoord > CornerPosList;
 
 typedef std::pair< RubikFace , bool > PosMove;
 typedef std::pair< RubikColor , bool > ColMove;
-typedef std::list< PosMove > PosMoveSeq;
-typedef std::list< ColMove > ColMoveSeq;
+typedef std::vector< PosMove > PosMoveSeq;
+typedef std::vector< ColMove > ColMoveSeq;
 
 inline std::ostream& operator<<(std::ostream & os, ColMoveSeq seq) 
 {

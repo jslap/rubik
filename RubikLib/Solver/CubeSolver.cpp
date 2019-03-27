@@ -47,7 +47,12 @@ ColMoveSeq CubeSolver::getFullSolution() const
     return fullSol;
 }
 
-int CubeSolver::getNbSteps() const
+const std::vector< ColMoveSeq >& CubeSolver::getFullStepsSolution() const
+{
+    return m_StepSolution;
+}
+
+std::size_t CubeSolver::getNbSteps() const
 {
     return m_StepSolution.size();
 }

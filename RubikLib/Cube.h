@@ -6,37 +6,6 @@
 
 #include "cereal/types/vector.hpp"
 
-namespace
-{
-    template <typename CubieType>
-    struct IsSameColorFun
-    {
-        typename CubieType::_MyCubeCoord coord;
-        IsSameColorFun(typename CubieType::_MyCubeCoord _coord): coord(_coord) {}
-        bool operator() (typename CubieType::_MyCubeCoord rhs) const {return isSameCubeColor(coord, rhs);}
-    };
-
-    template <class CubieType, class CubieVec>
-    auto _findCubieByFunc(
-        const typename CubieType::_MyCubeCoord & coordToFind,
-        const typename CubieType::_MyCubeCoord&(CubieType::*getPosOrColor)() const,
-        CubieVec& cubieVec 
-        ) -> decltype(cubieVec.front())
-    {
-        auto isSameCoordRange = cubieVec | 
-            ranges::view::transform(getPosOrColor) |
-            ranges::view::transform(IsSameColorFun<CubieType>(coordToFind));
-
-        auto onlySameCoordRange = ranges::view::zip(cubieVec, isSameCoordRange) | ranges::view::filter([](auto elem){return elem.second;});
-        if (onlySameCoordRange.empty())
-        {
-            Throw("Not found in Cubies");
-        }
-        return onlySameCoordRange.front().first;
-    }
-
-} // namespace
-
 class CubeHandler;
 class PermutationMap;
 
@@ -85,23 +54,11 @@ public:
 
     bool diff(const Cube & rhs, EdgePosList &edgeDiff, CornerPosList &cornerDiff);
 
-    const EdgeCube & findCubieByColor(const typename EdgeCube::_MyCubeCoord & col)  const
-    {
-        return _findCubieByFunc<EdgeCube>(col, &EdgeCube::getColor, edges);
-    }
-    const CornerCube & findCubieByColor(const typename CornerCube::_MyCubeCoord & col)  const
-    {
-        return _findCubieByFunc<CornerCube>(col, &CornerCube::getColor, corners);
-    }
+    const EdgeCube & findCubieByColor(const typename EdgeCube::_MyCubeCoord & col)  const;
+    const CornerCube & findCubieByColor(const typename CornerCube::_MyCubeCoord & col)  const;
 
-    const EdgeCube &findCubieByPosition(const typename EdgeCube::_MyCubeCoord & pos) const
-    {
-        return _findCubieByFunc<EdgeCube>(pos, &EdgeCube::getPosition, edges);
-    }
-    const CornerCube &findCubieByPosition(const typename CornerCube::_MyCubeCoord & pos) const
-    {
-        return _findCubieByFunc<CornerCube>(pos, &CornerCube::getPosition, corners);
-    }
+    const EdgeCube &findCubieByPosition(const typename EdgeCube::_MyCubeCoord & pos) const;
+    const CornerCube &findCubieByPosition(const typename CornerCube::_MyCubeCoord & pos) const;
 
     /////////////////
     // should not be used except for testing.
@@ -125,16 +82,10 @@ protected:
     }
 
     template <class CubieType>
-    CubieType & _findCubieByColor(const typename CubieType::_MyCubeCoord & col)
-    {
-        return _findCubieByFunc<CubieType>(col, &CubieType::getColor, getCubies<CubieType>());
-    }
+    CubieType & _findCubieByColor(const typename CubieType::_MyCubeCoord & col);
 
     template <class CubieType>
-    CubieType &_findCubieByPosition(const typename CubieType::_MyCubeCoord & pos)
-    {
-        return _findCubieByFunc<CubieType>(pos, &CubieType::getPosition, getCubies<CubieType>());
-    }
+    CubieType &_findCubieByPosition(const typename CubieType::_MyCubeCoord & pos);
 
 private:
     PermutationMap * m_PermMapInst;

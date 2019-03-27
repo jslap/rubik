@@ -61,57 +61,11 @@ public:
     RubikOrientation getOrientation() const {return orientation;}
 
     // pre-cond: color must be in the cubelet.
-    RubikColor positionForColor(RubikColor col) const
-    {
-        auto zipRange = ranges::view::zip(color, position);
-        auto found = ranges::find_if(zipRange, [&col](const auto& aPair){return aPair.first == col;});
-        if (found == std::end(zipRange))
-        {
-            Throw("Color is in all cubie pos..");
-        }
-        return (*found).second;
-    }
-
-    RubikColor colorForPosition(RubikColor col) const
-    {
-        auto zipRange = ranges::view::zip(color, position);
-        auto found = ranges::find_if(zipRange, [&col](const auto& aPair){return aPair.second == col;});
-        if (found == std::end(zipRange))
-        {
-            Throw("Color is in all cubie pos..");
-        }
-        return (*found).first;
-    }
-
-    RubikColor getColorNot(RubikColor notThisColor) const
-    {
-        auto found = ranges::find_if(color, [&notThisColor](RubikColor c){return c != notThisColor;});
-        if (found == std::end(color))
-        {
-            Throw("Color is in all cubie pos..");
-        }
-        return *found;
-    }
-
-    RubikColor getPositionNot(RubikColor notThisPos) const
-    {
-        auto found = ranges::find_if(position, [&notThisPos](RubikColor c){return c != notThisPos;});
-        if (found == std::end(position))
-        {
-            Throw("Pos is in all cubie pos..");
-        }
-        return *found;
-    }
-
-    RubikColor getPositionNot(RubikColor notThisPos, RubikColor orThatPos) const
-    {
-        auto found = ranges::find_if(position, [&notThisPos, &orThatPos](RubikColor c){return c != notThisPos && c != orThatPos;});
-        if (found == std::end(position))
-        {
-            Throw("Pos is in all cubie pos..");
-        }
-        return *found;
-    }
+    RubikColor positionForColor(RubikColor col) const;
+    RubikColor colorForPosition(RubikColor col) const;
+    RubikColor getColorNot(RubikColor notThisColor) const;
+    RubikColor getPositionNot(RubikColor notThisPos) const;
+    RubikColor getPositionNot(RubikColor notThisPos, RubikColor orThatPos) const;
 
     RubikColor getColorIn(RubikColor thisPos, RubikColor thatPos) const
     {

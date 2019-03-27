@@ -1,8 +1,11 @@
 #include "RubikBase.h"
 
-#include <Eigen/Dense>
+// #include <Eigen/Dense>
 #include <boost/assign.hpp>
 #include <boost/bimap.hpp>
+
+#include <range/v3/numeric/accumulate.hpp>
+#include <range/v3/view/transform.hpp>
 
 const std::vector<std::pair< RubikColor, Vector3i >> & RubikBase::ColorVecPairs()
 { 
@@ -102,7 +105,9 @@ RubikColor getColorFromVeci(const Vector3i &vec)
 
 Vector3i intCrossProduct(const Vector3i& v1, const Vector3i& v2)
 {
-    Vector3f crossProd = v1.cast<float>().cross(v2.cast<float>());
+    const Vector3f v1f = v1.cast<float>();
+    const Vector3f v2f = v2.cast<float>();
+    Vector3f crossProd = v1f.cross(v2f);
     return roundVec(crossProd);
 }
 
@@ -112,3 +117,14 @@ Vector3i colorVectorCroosProd(RubikColor col1, RubikColor col2)
     Vector3i col2Vec = getVectorFromColor(col2);
     return intCrossProduct(col1Vec, col2Vec);
 }
+
+template <std::size_t cubeDim>
+Vector3i getVectorFromCoord(CubeCoord< cubeDim > coord)
+{
+    return ranges::accumulate( (coord | ranges::view::transform(&getVectorFromColor)) , Vector3i(Vector3i::Zero()));
+}
+
+template
+Vector3i getVectorFromCoord<2>(CubeCoord< 2 > coord);
+template
+Vector3i getVectorFromCoord<3>(CubeCoord< 3 > coord);

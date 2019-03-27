@@ -4,11 +4,44 @@
 #include "CubeHandler.h"
 
 #include <numeric>
-#include <range/v3/all.hpp>
 #include <set>
+
+#include <range/v3/numeric/accumulate.hpp>
+#include <range/v3/algorithm/all_of.hpp>
+#include <range/v3/view/transform.hpp>
+#include <range/v3/view/zip.hpp>
+
+#include <range/v3/view/filter.hpp>
 
 namespace
 {
+    template <typename CubieType>
+    struct IsSameColorFun
+    {
+        typename CubieType::_MyCubeCoord coord;
+        IsSameColorFun(typename CubieType::_MyCubeCoord _coord): coord(_coord) {}
+        bool operator() (typename CubieType::_MyCubeCoord rhs) const {return isSameCubeColor(coord, rhs);}
+    };
+
+    template <class CubieType, class CubieVec>
+    auto _findCubieByFunc(
+        const typename CubieType::_MyCubeCoord & coordToFind,
+        const typename CubieType::_MyCubeCoord&(CubieType::*getPosOrColor)() const,
+        CubieVec& cubieVec 
+        ) -> decltype(cubieVec.front())
+    {
+        auto isSameCoordRange = cubieVec | 
+            ranges::view::transform(getPosOrColor) |
+            ranges::view::transform(IsSameColorFun<CubieType>(coordToFind));
+
+        auto onlySameCoordRange = ranges::view::zip(cubieVec, isSameCoordRange) | ranges::view::filter([](auto elem){return elem.second;});
+        if (onlySameCoordRange.empty())
+        {
+            Throw("Not found in Cubies");
+        }
+        return onlySameCoordRange.front().first;
+    }
+
     int parityForCorner(const CornerCube& c)
     {
         RubikColor whiteOrYellowPos = c.getPositionIn(white, yellow);
@@ -454,4 +487,34 @@ bool Cube::diff(const Cube & rhs, EdgePosList &edgeDiff, CornerPosList &cornerDi
     }
 
     return edgeDiff.empty() && cornerDiff.empty();
+}
+
+const EdgeCube & Cube::findCubieByColor(const typename EdgeCube::_MyCubeCoord & col)  const
+{
+    return _findCubieByFunc<EdgeCube>(col, &EdgeCube::getColor, edges);
+}
+const CornerCube & Cube::findCubieByColor(const typename CornerCube::_MyCubeCoord & col)  const
+{
+    return _findCubieByFunc<CornerCube>(col, &CornerCube::getColor, corners);
+}
+
+const EdgeCube &Cube::findCubieByPosition(const typename EdgeCube::_MyCubeCoord & pos) const
+{
+    return _findCubieByFunc<EdgeCube>(pos, &EdgeCube::getPosition, edges);
+}
+const CornerCube &Cube::findCubieByPosition(const typename CornerCube::_MyCubeCoord & pos) const
+{
+    return _findCubieByFunc<CornerCube>(pos, &CornerCube::getPosition, corners);
+}
+
+template <class CubieType>
+CubieType & Cube::_findCubieByColor(const typename CubieType::_MyCubeCoord & col)
+{
+    return _findCubieByFunc<CubieType>(col, &CubieType::getColor, getCubies<CubieType>());
+}
+
+template <class CubieType>
+CubieType &Cube::_findCubieByPosition(const typename CubieType::_MyCubeCoord & pos)
+{
+    return _findCubieByFunc<CubieType>(pos, &CubieType::getPosition, getCubies<CubieType>());
 }

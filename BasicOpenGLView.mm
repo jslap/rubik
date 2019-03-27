@@ -13,7 +13,7 @@ using namespace Eigen;
 #include "ExportCubeSolver.h"
 #include "CubeGLDrawer.h"
 
-const float nbFramePerRotation = 3.0f;
+const float nbFramePerRotation = 1.0f;
 const float deltaRotationStep = 1.0f/nbFramePerRotation;
 
 // ==================================
@@ -598,10 +598,10 @@ GLenum glReportError (void)
                 ExportCubeSolver solver;
                 solver.setStartingCube(_cube);
                 solverDummy.setStartingCube(_cube);
-                bool solveResult = solver.solve();
-                bool solveResult2 = solverDummy.solve();
-                printf("Export: %lu  Dummy: %lu \n", solver.getFullSolution().size(), solverDummy.getFullSolution().size());
-                auto fullSol = solver.getFullSolution();
+                //bool solveResult = solver.solve();
+                bool solveDummyResult = solverDummy.solve();
+                //printf("Export: %lu  Dummy: %lu \n", solver.getFullSolution().size(), solverDummy.getFullSolution().size());
+                auto fullSol = solverDummy.getFullSolution();
                 for (const auto & m : fullSol)
                     [self rotateCubeFace:m.first withCW:m.second];
 

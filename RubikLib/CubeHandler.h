@@ -1,3 +1,5 @@
+#pragma once
+
 #include "RubikBase.h"
 #include "Cube.h"
 
@@ -37,7 +39,7 @@ private:
     CubeHandler();
     static void  _generateAllHandler();
 
-    static std::list< CubeHandler > genHandlerList;
+    static std::vector< CubeHandler > genHandlerList;
     static bool listIsInit;
 
 
