@@ -107,7 +107,9 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
         //--- Compute ids for current and goal state, skip phase if equal.
         CubeVecInt currentId = computeId( currentState ), goalId = computeId( goalState );
         if( currentId == goalId )
-        continue;
+        {
+            continue;
+        }
         
         //--- Initialize the BFS queue.
         std::queue<CubeVecInt> q;
@@ -121,7 +123,8 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
         direction[ goalId ] = 2;
         
         //--- Dance the funky bidirectional BFS...
-        while( 1 )
+        bool foundConnection = false;
+        while( !foundConnection )
         {
         
             //--- Get state from queue, compute its ID and get its direction.
@@ -131,7 +134,7 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
             int& oldDir = direction[oldId];
         
             //--- Apply all applicable moves to it and handle the new state.
-            for( int move=0; move<18; move++ )
+            for( int move=0; move<18 && !foundConnection; move++ )
             {
                 if( applicableMoves[phase] & (1 << move) )
                 {
@@ -145,6 +148,7 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
                     //--- I.e. have we found a connection?
                     if( newDir  &&  newDir != oldDir )
                     {
+                        foundConnection = true;
             
                         //--- Make oldId represent the forwards and newId the backwards search state.
                         if( oldDir > 1 )
@@ -167,10 +171,12 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
                         }
             
                         //--- Print and apply the algorithm.
-                        for( int i=0; i<(int)algorithm.size(); i++ )
+                        for (const auto& curAlg : algorithm)
                         {
-                            auto turnFace = ExportSolverConvert::fromCode("UDFBLR"[algorithm[i]/3]);
-                            switch (algorithm[i]%3+1)
+                            const auto curFaceId = curAlg/3;
+                            const auto curNbRot = 1 + curAlg%3;
+                            auto turnFace = ExportSolverConvert::fromCode("UDFBLR"[curFaceId]);
+                            switch (curNbRot)
                             {
                                 case 1:
                                     outMoves.push_back(ColMove(turnFace, true));
@@ -183,18 +189,13 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
                                     outMoves.push_back(ColMove(turnFace, false));
                                     break;
                             }
-                            // outMoves += "UDFBLR"[algorithm[i]/3];
-                            // outMoves += ('0' + algorithm[i]%3+1);
-                            // cout << "UDFBLR"[algorithm[i]/3] << algorithm[i]%3+1;
-                            currentState = ExportSolverConvert::applyMove( algorithm[i], currentState );
+
+                            currentState = ExportSolverConvert::applyMove( curAlg, currentState );
                         }
-            
-                        //--- Jump to the next phase.
-                        goto nextPhasePlease;
                     }
         
                     //--- If we've never seen this state (computeId) before, visit it.
-                    if( ! newDir )
+                    if( !foundConnection &&  !newDir )
                     {
                         q.push( newState );
                         newDir = oldDir;
@@ -204,8 +205,6 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
                 }
             }
         }
-        nextPhasePlease:
-        ;
     }
     return outMoves;
 }

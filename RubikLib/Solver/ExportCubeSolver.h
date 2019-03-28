@@ -17,7 +17,7 @@ protected:
     virtual void computeWhiteCross() {};
 
 private:
-    int phase;
+    int phase{};
     ColMoveSeq dosolve( const ExportSolverConvert::CubeVecInt startState ) ;
     ExportSolverConvert::CubeVecInt computeId ( ExportSolverConvert::CubeVecInt state ) ;
 };

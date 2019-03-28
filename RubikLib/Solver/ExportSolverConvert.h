@@ -14,6 +14,7 @@ namespace ExportSolverConvert
 typedef std::vector<int> CubeVecInt;
 
 CubeVecInt cubeToExport(const Cube& c);
+Cube cubeFromExport(const CubeVecInt& c);
 
 CubeVecInt applyMove ( int move, CubeVecInt state ) ;
 

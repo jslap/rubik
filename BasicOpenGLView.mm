@@ -598,9 +598,9 @@ GLenum glReportError (void)
                 ExportCubeSolver solver;
                 solver.setStartingCube(_cube);
                 solverDummy.setStartingCube(_cube);
-                //bool solveResult = solver.solve();
+                bool solveResult = solver.solve();
                 bool solveDummyResult = solverDummy.solve();
-                //printf("Export: %lu  Dummy: %lu \n", solver.getFullSolution().size(), solverDummy.getFullSolution().size());
+                printf("Export: %lu  Dummy: %lu \n", solver.getFullSolution().size(), solverDummy.getFullSolution().size());
                 auto fullSol = solverDummy.getFullSolution();
                 for (const auto & m : fullSol)
                     [self rotateCubeFace:m.first withCW:m.second];
