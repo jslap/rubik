@@ -518,3 +518,13 @@ CubieType &Cube::_findCubieByPosition(const typename CubieType::_MyCubeCoord & p
 {
     return _findCubieByFunc<CubieType>(pos, &CubieType::getPosition, getCubies<CubieType>());
 }
+
+void Cube::setEdge(const EdgeCube& edge)
+{
+    _findCubieByColor<EdgeCube>(edge.getColor()) = edge;
+}
+
+void Cube::setCorner(const CornerCube& corner)
+{
+    _findCubieByColor<CornerCube>(corner.getColor()) = corner;
+}

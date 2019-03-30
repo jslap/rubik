@@ -12,7 +12,15 @@ protected:
         return std::unique_ptr<CubeSolver>(new ExportCubeSolver());
     }
 
-
+    void testExport(const Cube& c) 
+    {
+        auto convC1 = ExportSolverConvert::cubeToExport(c1);
+        auto convConvC1 = ExportSolverConvert::cubeFromExport(convC1);
+        EXPECT_TRUE(convConvC1.isValidCube()) << "Conversion is not valid: " << c;
+        EXPECT_EQ(convConvC1.getEdges(), c1.getEdges()) << "Conversion edges are not good";
+        EXPECT_EQ(convConvC1.getCorners(), c1.getCorners()) << "Conversion corners are not good";
+        EXPECT_EQ(convConvC1, c1) << "Conversion is not good";
+    }
 
     int convertMove(const ColMove& move)
     {
@@ -116,4 +124,14 @@ TEST_F(ExportSolverTest, solveCubeTest)
     doSolveTest(c1);
     doSolveTest(c2);
     doSolveTest(c3);
+}
+
+TEST_F(ExportSolverTest, cubeConvertTest)
+{
+    for (const auto& testCube : mCubeToTest)
+    {
+        SCOPED_TRACE("Exporting " + testCube.first);
+
+        testExport(testCube.second);
+    }
 }

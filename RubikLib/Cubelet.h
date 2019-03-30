@@ -31,6 +31,14 @@ public:
     {
     }
 
+    // Unsafe Cubelet constructor. For advanced users only
+    Cubelet(const _MyCubeCoord& pos, const _MyCubeCoord& col, RubikOrientation orient):
+        position(pos),
+        color(col),
+        orientation(orient)
+    {
+    }
+
     OnlyForSize(2)
     Cubelet(RubikColor p0, RubikColor p1): // starting pos
         orientation(WellOriented)

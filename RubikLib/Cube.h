@@ -30,6 +30,11 @@ public:
     const EdgeList &getEdges() const {return edges;};
     const CornerList &getCorners() const {return corners;}
 
+    // Advanced users only, could mees up the cube.
+    void setEdge(const EdgeCube& edge);
+    void setCorner(const CornerCube& corner);
+
+
     const EdgeCube &getEdge(const EdgeCube& simEdge) const;
     const EdgeCube &getEdge(const EdgeCoord& edgeColor) const;
     const CornerCube &getCorner(const CornerCube& simCorner) const;

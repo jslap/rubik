@@ -11,7 +11,7 @@ class Cube;
 namespace ExportSolverConvert
 {
 
-typedef std::vector<int> CubeVecInt;
+using CubeVecInt = std::vector<int>;
 
 CubeVecInt cubeToExport(const Cube& c);
 Cube cubeFromExport(const CubeVecInt& c);
@@ -19,7 +19,7 @@ Cube cubeFromExport(const CubeVecInt& c);
 CubeVecInt applyMove ( int move, CubeVecInt state ) ;
 
 std::string::value_type colorToCode(RubikColor c);
-RubikColor fromCode(std::string::value_type c);
+RubikColor colorFromCode(std::string::value_type c);
 
 const EdgeCube& getEdgeByStrCode(const Cube& cube, const std::string& s);
 

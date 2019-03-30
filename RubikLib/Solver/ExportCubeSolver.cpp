@@ -141,6 +141,7 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
         
                     //--- Apply the move.
                     CubeVecInt newState = ExportSolverConvert::applyMove( move, oldState );
+
                     CubeVecInt newId = computeId( newState );
                     int& newDir = direction[newId];
         
@@ -170,12 +171,13 @@ ColMoveSeq ExportCubeSolver::dosolve( const CubeVecInt startState )
                             newId = predecessor[ newId ];
                         }
             
+
                         //--- Print and apply the algorithm.
                         for (const auto& curAlg : algorithm)
                         {
                             const auto curFaceId = curAlg/3;
                             const auto curNbRot = 1 + curAlg%3;
-                            auto turnFace = ExportSolverConvert::fromCode("UDFBLR"[curFaceId]);
+                            auto turnFace = ExportSolverConvert::colorFromCode("UDFBLR"[curFaceId]);
                             switch (curNbRot)
                             {
                                 case 1:

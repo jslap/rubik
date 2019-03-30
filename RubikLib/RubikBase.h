@@ -31,7 +31,7 @@ inline RubikColor oppositeColor(RubikColor c) { return RubikColor((c + 3) % 6);}
 
 std::string colorName( RubikColor col);
 RubikColor colorFromName( const std::string& s);
-inline std::ostream& operator<<(std::ostream & os, RubikColor c) {os << "col(" << colorName(c) << ")"; return os;}
+inline std::ostream& operator<<(std::ostream & os, RubikColor c) {os << colorName(c); return os;}
 std::string orientationName( RubikOrientation o);
 inline std::ostream& operator<<(std::ostream & os,  RubikOrientation o) {os << orientationName(o); return os;}
 

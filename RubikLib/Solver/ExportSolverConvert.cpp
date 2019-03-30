@@ -21,6 +21,60 @@ const std::string goal[] = { "UF", "UR", "UB", "UL", "DF", "DR", "DB", "DL", "FR
 
 } // namespace
 
+Cube ExportSolverConvert::cubeFromExport(const CubeVecInt& c)
+{
+    Cube retVal;
+    for( int edgeInd=0; edgeInd<12; edgeInd++ )
+    {
+        auto curEdgePos = goal[edgeInd];
+        auto curEdgeCol = goal[c[edgeInd]];
+        EdgeCube::_MyCubeCoord coordPos = {colorFromCode(curEdgePos[0]), colorFromCode(curEdgePos[1])}; 
+        EdgeCube::_MyCubeCoord coordCol = {colorFromCode(curEdgeCol[0]), colorFromCode(curEdgeCol[1])}; 
+        auto oldEdge = retVal.findCubieByColor(coordCol);
+        while (oldEdge.getColor() != coordCol)
+        {
+            std::rotate(coordPos.begin(), coordPos.begin()+1, coordPos.end());
+            std::rotate(coordCol.begin(), coordCol.begin()+1, coordCol.end());
+        }
+        for (int i = 0; i < c[edgeInd + 20]; i++)
+        {
+            std::rotate(coordPos.begin(), coordPos.begin()+1, coordPos.end());
+        }
+        EdgeCube curCube{coordPos, coordCol, static_cast<RubikOrientation>(c[edgeInd + 20])};
+        retVal.setEdge(curCube);
+    }
+    for( int cornerInd=0; cornerInd<8; cornerInd++ )
+    {
+        auto curCornerPos = goal[cornerInd+12];
+        auto curCornerCol = goal[c[cornerInd+12]];
+        CornerCube::_MyCubeCoord coordPos = {colorFromCode(curCornerPos[0]), colorFromCode(curCornerPos[1]), colorFromCode(curCornerPos[2])}; 
+        CornerCube::_MyCubeCoord coordCol = {colorFromCode(curCornerCol[0]), colorFromCode(curCornerCol[1]), colorFromCode(curCornerCol[2])}; 
+        auto oldCorner = retVal.findCubieByColor(coordCol);
+        for (int i = 0; i < 3 ; i++)
+        {
+            auto curColorToFind = oldCorner.getColor()[i];
+            auto foundIter = std::find(coordCol.begin(), coordCol.end(), curColorToFind);
+            auto foundPos = std::distance(coordCol.begin(), foundIter);
+            if (i != foundPos)
+            {
+                std::swap(coordCol[i], coordCol[foundPos]);
+                std::swap(coordPos[i], coordPos[foundPos]);
+            }
+        }
+
+        for (int i = 0; i < c[cornerInd+12 + 20]; i++)
+        {
+            std::rotate(coordPos.begin(), coordPos.begin()+2, coordPos.end());
+        }
+        CornerCube curCube{coordPos, coordCol, static_cast<RubikOrientation>(c[cornerInd+12 + 20])};
+        retVal.setCorner(curCube);
+    }
+
+    return retVal;
+}
+
+
+
 CubeVecInt ExportSolverConvert::cubeToExport(const Cube& cubeToConvert)
 {
     CubeVecInt stateToUse( 40 );
@@ -37,7 +91,7 @@ CubeVecInt ExportSolverConvert::cubeToExport(const Cube& cubeToConvert)
                 auto curPermElem = goal[permIndex];
                 if (curPermElem.length() != 2)
                     continue;
-                if (isSameCubeColor(curEdge.getColor(), {ExportSolverConvert::fromCode(curPermElem[0]), ExportSolverConvert::fromCode(curPermElem[1])}))
+                if (isSameCubeColor(curEdge.getColor(), {ExportSolverConvert::colorFromCode(curPermElem[0]), ExportSolverConvert::colorFromCode(curPermElem[1])}))
                 {
                     stateToUse[i] = permIndex;
                     break;
@@ -55,9 +109,9 @@ CubeVecInt ExportSolverConvert::cubeToExport(const Cube& cubeToConvert)
                 if (curPermElem.length() != 3)
                     continue;
                 if (isSameCubeColor(curCorner.getColor(), {
-                        ExportSolverConvert::fromCode(curPermElem[0]), 
-                        ExportSolverConvert::fromCode(curPermElem[1]), 
-                        ExportSolverConvert::fromCode(curPermElem[2])}))
+                        ExportSolverConvert::colorFromCode(curPermElem[0]), 
+                        ExportSolverConvert::colorFromCode(curPermElem[1]), 
+                        ExportSolverConvert::colorFromCode(curPermElem[2])}))
                 {
                     stateToUse[i] = permIndex;
                     break;
@@ -68,6 +122,7 @@ CubeVecInt ExportSolverConvert::cubeToExport(const Cube& cubeToConvert)
     }
     return stateToUse;
 }
+
 
 CubeVecInt ExportSolverConvert::applyMove ( int move, CubeVecInt state ) 
 {
@@ -147,7 +202,7 @@ std::string::value_type ExportSolverConvert::colorToCode(RubikColor c)
 // L red
 // R orange
 
-RubikColor ExportSolverConvert::fromCode(std::string::value_type c)
+RubikColor ExportSolverConvert::colorFromCode(std::string::value_type c)
 {
     switch (c)
     {
@@ -161,15 +216,27 @@ RubikColor ExportSolverConvert::fromCode(std::string::value_type c)
     Throw("No such color.");
 }
 
+// enum class ThistleMoves
+// {
+//     //"UDFBLR"
+//     Green1 = 0, Green2 = 1, Green3 = 2// "U"
+//     Blue1 = 3+0, Blue2 = 3+1, Blue3 = 3+2, // "D"
+//     Yellow1 = 6+0, Yellow2 = 6+1, Yellow3 = 6+2, // "F"
+//     White1 = 9+0, White2 = 9+1, White3 = 9+2, // "B"
+//     Red1 = 12+0, Red2 = 12+1, Red3 = 12+2, // "L"
+//     Orange1 = 15+0, Orange2 = 15+1, Orange3 = 15+2, // "R"
+// };
+
+
 const EdgeCube& ExportSolverConvert::getEdgeByStrCode(const Cube& cube, const std::string& s)
 {
-    EdgeCube::_MyCubeCoord coord = {fromCode(s[0]), fromCode(s[1])}; 
+    EdgeCube::_MyCubeCoord coord = {colorFromCode(s[0]), colorFromCode(s[1])}; 
     return cube.findCubieByPosition(coord);
 }
 
 const CornerCube& ExportSolverConvert::getCornerByStrCode(const Cube& cube, const std::string& s)
 {
-    CornerCube::_MyCubeCoord coord = {fromCode(s[0]), fromCode(s[1]), fromCode(s[2])}; 
+    CornerCube::_MyCubeCoord coord = {colorFromCode(s[0]), colorFromCode(s[1]), colorFromCode(s[2])}; 
     return cube.findCubieByPosition(coord);
 }
 

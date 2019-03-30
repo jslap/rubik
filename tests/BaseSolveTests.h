@@ -6,14 +6,20 @@ class BaseSolverTest : public testing::Test {
 protected:
     virtual void SetUp() 
     {
-        oneMoveSolveSeq = {{white, true}, {white, true}};
-        oneMoveSolve.apply(oneMoveSolveSeq);
+        Cube aCube{};
+        mCubeToTest["default"] = aCube;
+        aCube.rotate({white, true});
+        mCubeToTest["oneMove"] = aCube;
+        aCube.rotate({white, true});
+        mCubeToTest["twoMove"] = aCube;
+        oneMoveSolve = aCube;
         
         moveSeq1 = {
                 {white, true},{red, true},{blue, true},
                 {white, true},{red, true},{blue, true},
                 {white, true},{red, true},{blue, true}};
         c1.apply(moveSeq1);
+        mCubeToTest["c1"] = c1;
 
         for (int i = 0; i <5; i ++)
         {
@@ -22,6 +28,7 @@ protected:
             moveSeq2.push_back({blue, false});
         }
         c2.apply(moveSeq2);
+        mCubeToTest["c2"] = c2;
 
         for (int i = 0; i <5; i ++)
         {
@@ -30,6 +37,7 @@ protected:
             moveSeq3.push_back({blue, false});
         }
         c3.apply(moveSeq3);
+        mCubeToTest["c3"] = c3;
     }
 
     virtual std::unique_ptr<CubeSolver> createSolver() = 0;
@@ -68,4 +76,6 @@ protected:
 
     ColMoveSeq oneMoveSolveSeq;
     Cube oneMoveSolve;
+
+    std::map<std::string, Cube> mCubeToTest;
 };
